@@ -32,7 +32,7 @@ p:not(:last-child) {
 }
 
 h1, h2, h3 {
-  margin: 5px 0;
+  margin: 0;
 }
 
 #topbar {
@@ -54,9 +54,30 @@ h1, h2, h3 {
 }
 #title h1 {
   font-size: 1.5em;
+  padding-bottom: 5px;
 }
 #title h2 {
   font-size: 1em;
+  padding-bottom: 5px;
+}
+
+#tabs {
+  display: flex;
+  flex-flow: row;
+}
+
+.tab {
+  background-color: lightgrey;
+  border: 1px solid black;
+  padding: 5px;
+}
+.tab.active {
+  background-color: white;
+  border-bottom: 0;
+}
+
+#locations {
+  padding: 5px;
 }
 
 /*# sourceMappingURL=main.css.map */

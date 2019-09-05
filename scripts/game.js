@@ -4,5 +4,8 @@ var game = {
 	level: 0,
 	yellowCoins: 0,
     greenCoins: 0,
-    blueCoins: 0
+    blueCoins: 0,
+    kingdom: {
+        unlocked: false
+    },
 };

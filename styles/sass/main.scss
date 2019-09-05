@@ -11,18 +11,18 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	font-size: $primary-font-size;
-	font-family: "Arial";
+	font-family: $primary-font;
 	letter-spacing: 0.2px;
 }
 
 button {
 	font-size: $primary-font-size;
-	font-family: "Arial";
+	font-family: $primary-font;
 }
 
 input {
 	font-size: $primary-font-size;
-	font-family: "Arial";
+	font-family: $primary-font;
 }
 
 p {
@@ -34,7 +34,7 @@ p:not(:last-child){
 }
 
 h1, h2, h3 {
-	margin: 5px 0;
+	margin: 0;
 }
 
 #topbar {
@@ -56,10 +56,32 @@ h1, h2, h3 {
 	}
 
 	h1 {
-		font-size: 1.5em;
+        font-size: 1.5em;
+        padding-bottom: 5px;
 	}
 
 	h2 {
-		font-size: 1em;
+        font-size: 1em;
+        padding-bottom: 5px;
 	}
+}
+
+#tabs {
+    display: flex;
+	flex-flow: row;
+}
+
+.tab {
+    background-color: lightgrey;
+    border: 1px solid black;
+    padding: 5px;
+
+    &.active {
+        background-color: white;
+        border-bottom: 0;
+    }
+}
+
+#locations {
+    padding: 5px;
 }

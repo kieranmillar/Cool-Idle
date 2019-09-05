@@ -8,6 +8,7 @@
   border: 1px solid black;
   border-radius: 4px;
   padding: 2px;
+  cursor: pointer;
 }
 #loc_shop .shop_item .cost {
   font-weight: bold;

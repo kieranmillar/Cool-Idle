@@ -8,6 +8,7 @@
   border: 1px solid black;
   border-radius: 4px;
   padding: 2px;
+  cursor: pointer;
 }
 #loc_shop .shop_item .cost {
   font-weight: bold;
@@ -55,6 +56,10 @@ h1, h2, h3 {
   margin-top: 5px;
 }
 
+p, span, li {
+  line-height: 140%;
+}
+
 #topbar {
   min-height: 70px;
   color: black;
@@ -90,6 +95,7 @@ h1, h2, h3 {
   background-color: lightgrey;
   border: 1px solid black;
   padding: 5px;
+  cursor: pointer;
 }
 .tab.active {
   background-color: white;

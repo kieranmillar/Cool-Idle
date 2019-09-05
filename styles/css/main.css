@@ -1,3 +1,22 @@
+#loc_shop {
+  display: flex;
+  flex-flow: row;
+}
+#loc_shop .shop_item {
+  background-color: white;
+  width: 200px;
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 2px;
+}
+#loc_shop .shop_item .cost {
+  font-weight: bold;
+}
+#loc_shop .shop_item.purchased {
+  opacity: 0.5;
+  background-color: lightgrey;
+}
+
 body {
   background-color: #FFFFFF;
   height: 100vh;
@@ -33,10 +52,11 @@ p:not(:last-child) {
 
 h1, h2, h3 {
   margin: 0;
+  margin-top: 5px;
 }
 
 #topbar {
-  min-height: 60px;
+  min-height: 70px;
   color: black;
   text-align: left;
   padding: 0;

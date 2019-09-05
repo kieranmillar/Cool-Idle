@@ -1,10 +1,14 @@
 var ticks = 0; // browsers sometimes slow down execution of javascript when not in focus, so there may exist times where we need to execute multiple ticks
 var maxTicks = 60;
-var activeTab = "welcome";
+var activeTab = "help";
+
+function getTick() {
+    return Math.floor (Date.now() / 1000);
+}
 
 function gameLoop ()
 {
-	let currentTick = Math.floor (Date.now() / 1000);
+	let currentTick = getTick();
 	ticks = currentTick - game.previousTick;
 	if (ticks > maxTicks)
 	{
@@ -13,7 +17,9 @@ function gameLoop ()
 	while (ticks > 0)
 	{
         // Per second stuff goes here
-        
+        if (game.kingdom.unlocked) {
+            kingdom_tick();
+        }
         ticks --;
 	}
 	game.previousTick = currentTick;
@@ -21,16 +27,18 @@ function gameLoop ()
 
 function goToLocation (location)
 {
+    activeTab = location;
     $(".location").hide();
     $(".tab").removeClass("active");
 	switch (location) {
-		case "welcome":
-            $("#loc_welcome").show();
-            $("#tab_welcome").addClass("active");
+		case "help":
+            $("#loc_help").show();
+            $("#tab_help").addClass("active");
 			break;
 		case "shop":
             $("#loc_shop").show();
             $("#tab_shop").addClass("active");
+            redrawShop();
 			break;
 		case "kingdom":
             $("#loc_kingdom").show();
@@ -39,9 +47,20 @@ function goToLocation (location)
     }
 }
 
+function displayFeatures() {
+    $(".tab").hide();
+    $("#tab_help").show();
+    $("#tab_shop").show();
+    $(".help").hide();
+    if (game.kingdom.unlocked) {
+        $("#tab_kingdom").show();
+        $("#help_kingdom").show();
+    }
+}
+
 $(document).ready(function(){
-    game.previousTick = Math.floor (Date.now() / 1000);
+    game.previousTick = getTick();
+    displayFeatures();
+    goToLocation ("help");
     setInterval (gameLoop, 1000);
-    goToLocation ("welcome");
-    $("#tab_kingdom").hide();
 });

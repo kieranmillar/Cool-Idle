@@ -1,4 +1,5 @@
 @import '_variables.scss';
+@import 'shop.scss';
 
 body {
 	background-color: #FFFFFF;
@@ -34,11 +35,12 @@ p:not(:last-child){
 }
 
 h1, h2, h3 {
-	margin: 0;
+    margin: 0;
+    margin-top: 5px;
 }
 
 #topbar {
-	min-height: 60px;
+	min-height: 70px;
 	color: black;
 	text-align: left;
 	padding: 0;

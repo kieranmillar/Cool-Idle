@@ -33,6 +33,16 @@
 					A game by Kieran Millar
 				</h2>
 			</div>
+			<div id="expBar">
+				<p>Level: <span id="level"></span></p>
+				<p>Exp: <span id="exp"></span> / <span id="maxExp"></span></p>
+				<progress id="expProgress" value="0" max="1"></progress>
+			</div>
+			<div id="coinList">
+				<p>Yellow Coins: <span id="yellowCoins"></span></p>
+				<p>Green Coins: <span id="greenCoins"></span></p>
+				<p>Blue Coins: <span id="blueCoins"></span></p>
+			</div>
 		</div>
 		<div id="tabs">
 			<h3 id="tab_help" class="tab active" onclick="goToLocation('help')">Help</h3>
@@ -57,7 +67,7 @@
 				<ul>
 					<li>Yellow coins: A common currency you can earn in each feature.</li>
 					<li>Green coins: A rarer currency that you only earn in features by performing more difficult tasks.</li>
-					<li>Blue coins: These coins can only be earned by levelling up. When you level up you earn a number of blue coins equal to the level you just left, e.g. when levelling up from level 4 to level 5, you earn 4 blue coins.</li>
+					<li>Blue coins: These coins can only be earned by levelling up. When you level up you earn a number of blue coins equal to the level you just completed, e.g. when levelling up from level 4 to level 5, you earn 4 blue coins.</li>
 				</ul>
 				<p>Coins are spent in Cool-Mart to unlock and upgrade game features!</p>
 

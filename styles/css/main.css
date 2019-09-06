@@ -79,7 +79,9 @@ p, span, li {
 }
 
 #topbar {
-  min-height: 70px;
+  display: flex;
+  flex-direction: row;
+  min-height: 85px;
   color: black;
   text-align: left;
   padding: 0;
@@ -91,6 +93,7 @@ p, span, li {
   float: left;
   width: auto;
   height: 100%;
+  flex-grow: 0;
 }
 #title::after {
   clear: both;
@@ -102,6 +105,28 @@ p, span, li {
 #title h2 {
   font-size: 1em;
   padding-bottom: 5px;
+}
+
+#expBar {
+  width: 100%;
+  flex-grow: 1;
+}
+#expBar progress[value] {
+  -webkit-appearance: none;
+  width: calc(100% - 10px);
+  height: 10px;
+  margin: 2px;
+}
+#expBar progress[value]::-webkit-progress-value {
+  background-color: green;
+}
+#expBar progress[value]::-moz-progress-bar {
+  background-color: green;
+}
+
+#coinList {
+  width: 200px;
+  flex-grow: 0;
 }
 
 #tabs {
@@ -122,6 +147,7 @@ p, span, li {
 
 #locations {
   padding: 5px;
+  overflow: auto;
 }
 
 /*# sourceMappingURL=main.css.map */

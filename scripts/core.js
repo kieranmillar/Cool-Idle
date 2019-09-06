@@ -22,7 +22,8 @@ function gameLoop ()
         }
         ticks --;
 	}
-	game.previousTick = currentTick;
+    game.previousTick = currentTick;
+    console.log ("EXP: " + game.exp);
 }
 
 function goToLocation (location)
@@ -59,9 +60,31 @@ function displayFeatures() {
     }
 }
 
+function gainExp (amount) {
+    game.exp += amount;
+    while (game.exp >= Math.pow(game.level, 2) * 100) {
+        gainBlueCoins (game.level);
+        game.exp -= Math.pow(game.level, 2) * 100;
+        game.level ++;
+    }
+}
+
+function gainYellowCoins (amount) {
+    game.yellowCoins += amount;
+}
+
+function gainGreenCoins (amount) {
+    game.greenCoins += amount;
+}
+
+function gainBlueCoins (amount) {
+    game.blueCoins += amount;
+}
+
 $(document).ready(function(){
     game.previousTick = getTick();
     displayFeatures();
+    kingdom_calculateOutput();
     goToLocation ("help");
     setInterval (gameLoop, 1000);
 });

@@ -1,10 +1,8 @@
-function kingdom_redraw ()
-{
+function kingdom_redraw () {
     kingdom_populateTileImages ();
 }
 
-function kingdom_populateTileImages ()
-{
+function kingdom_populateTileImages () {
 	for (let i = 0; i < kingdom_cells.length; i++)
 	{
 		kingdom_cells[i].style.opacity = "1";
@@ -18,9 +16,9 @@ function kingdom_populateTileImages ()
 		// {
 		// 	kingdom_cells[i].style.opacity = "0.5";
 		// }
-		if (kingdom_constructions[i] != EMPTY)
+		if (game.kingdom.constructions[i] != kingdom_buildingEnum.EMPTY)
 		{
-			let y = kingdom_constructions[i];
+			let y = game.kingdom.constructions[i];
 			kingdom_cells[i].innerHTML = "<img src = \"./images/kingdom/" + kingdom_buildings[y].imageLink + "\" alt=\"" + kingdom_buildings[y].name + "\">";
 		}
 		else

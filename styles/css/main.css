@@ -83,7 +83,7 @@ p, span, li {
   color: black;
   text-align: left;
   padding: 0;
-  overflow: auto;
+  overflow: hidden;
   border-bottom: 2px solid black;
 }
 

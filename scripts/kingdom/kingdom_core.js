@@ -1,5 +1,5 @@
 var kingdom_cells;
-var kingdom_currentCell = 0;
+var kingdom_currentCell = 40;
 
 function kingdom_init() {
     //Dynamically create resource list
@@ -147,7 +147,8 @@ function kingdom_getConstructionWest(currentTile) {
 }
 
 function kingdom_mousedOverCell(x) {
-	kingdom_currentCell = x;
+    kingdom_currentCell = x;
+    kingdom_updateinfoPanel ();
 }
 
 function kingdom_clickedCell() {

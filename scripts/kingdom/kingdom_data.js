@@ -40,15 +40,18 @@ const kingdom_terrainEnum = {
 const kingdom_terrain = [
 	{
 		name: "",
-		imageLink: ""
+		imageLink: "",
+		description: ""
 	},
 	{
 		name: "Plains",
-		imageLink: "tile_plains.png"
+		imageLink: "tile_plains.png",
+		description: "<p>Just plain boring.</p>"
 	},
 	{
 		name: "Forest",
-		imageLink: "tile_forest.png"
+		imageLink: "tile_forest.png",
+		description: "<p>Wood you believe it, there's trees growing here!</p><p>A good source of wood.</p>"
 	}
 ];
 
@@ -83,7 +86,8 @@ var kingdom_buildings = [
 		idNumber: kingdom_buildingEnum.EMPTY,
 		name: "",
 		imageLink: "",
-		unlocked: false
+		unlocked: false,
+		description: ""
 	},
 	{
 		idNumber: kingdom_buildingEnum.CASTLE,
@@ -94,7 +98,11 @@ var kingdom_buildings = [
             kingdom_outputs.yellowCoins += 1;
             kingdom_outputs.exp += 1;
 		},
-		unlocked: false
+		unlocked: false,
+		description: "<p>You rule your kingdom from your trusty castle. This building cannot be removed or relocated.</p>",
+		outputInfo: function () {
+			return "<p>Labour Force + 1</p><p>Yellow Coins + 1</p><p>Exp + 1</p>";
+		}
 	},
 	{
 		idNumber: kingdom_buildingEnum.WOODCUTTER,
@@ -127,7 +135,14 @@ var kingdom_buildings = [
 				kingdom_outputs.wood += 1;
 			}
 		},
-		unlocked: true
+		unlocked: true,
+		description: "<p>How much wood could a woodcutter cut if the woodcutter could cut wood?</p><p>Depends on how much wood is nearby.</p><p>Can only be placed on forest.</p>",
+		outputInfo: function () {
+			return "<p>Wood + 1</p>";
+		},
+		adjacencyInfo: function () {
+			return "<p>Wood + 1 for each adjacent forest.</p>";
+		}
 	}
 ];
 

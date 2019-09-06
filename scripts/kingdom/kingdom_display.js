@@ -1,6 +1,12 @@
+const kingdom_infoTitle = $("#kingdom_infoTitle");
+const kingdom_infoDescription = $("#kingdom_infoDescription");
+const kingdom_infoOutput = $("#kingdom_infoOutput");
+const kingdom_infoAdjacency = $("#kingdom_infoAdjacency");
+
 function kingdom_redraw () {
 	kingdom_updateResources ();
 	kingdom_populateTileImages ();
+	kingdom_updateinfoPanel ();
 	kingdom_updateBuildings ();
 }
 
@@ -44,6 +50,37 @@ function kingdom_updateResources () {
 	if (game.kingdom.resource.wood > 0) {
 		kingdom_resources[kingdom_resourceEnum.WOOD].valueLink.html(game.kingdom.resource.wood);
 		kingdom_resources[kingdom_resourceEnum.WOOD].idLink.show();
+	}
+}
+
+function kingdom_updateinfoPanel () {
+	if (game.kingdom.constructions[kingdom_currentCell] == kingdom_buildingEnum.EMPTY) {
+		// Show Terrain
+		var terrain = kingdom_landscape[kingdom_currentCell];
+		kingdom_infoTitle.html("<img src = './images/kingdom/" + kingdom_terrain[terrain].imageLink + "' alt='" + kingdom_terrain[terrain].name + "'>" + kingdom_terrain[terrain].name);
+		kingdom_infoDescription.html(kingdom_terrain[terrain].description);
+		kingdom_infoOutput.hide();
+		kingdom_infoAdjacency.hide();
+	}
+	else {
+		//Show Building
+		var building = game.kingdom.constructions[kingdom_currentCell];
+		kingdom_infoTitle.html("<img src = './images/kingdom/" + kingdom_buildings[building].imageLink + "' alt='" + kingdom_buildings[building].name + "'>" + kingdom_buildings[building].name);
+		kingdom_infoDescription.html(kingdom_buildings[building].description);
+		if (kingdom_buildings[building].hasOwnProperty("outputInfo")) {
+			kingdom_infoOutput.html(kingdom_buildings[building].outputInfo());
+			kingdom_infoOutput.show();
+		}
+		else {
+			kingdom_infoOutput.hide();
+		}
+		if (kingdom_buildings[building].hasOwnProperty("adjacencyInfo")) {
+			kingdom_infoAdjacency.html(kingdom_buildings[building].adjacencyInfo());
+			kingdom_infoAdjacency.show();
+		}
+		else {
+			kingdom_infoAdjacency.hide();
+		}
 	}
 }
 

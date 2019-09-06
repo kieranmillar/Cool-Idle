@@ -48,5 +48,9 @@ function kingdom_updateResources () {
 }
 
 function kingdom_updateBuildings () {
-
+	$(".kingdom_building").hide();
+	if (kingdom_buildings[kingdom_buildingEnum.WOODCUTTER].unlocked) {
+		kingdom_buildings[kingdom_buildingEnum.WOODCUTTER].valueLink.html(game.kingdom.building.woodcutter);
+		kingdom_buildings[kingdom_buildingEnum.WOODCUTTER].idLink.show();
+	}
 }

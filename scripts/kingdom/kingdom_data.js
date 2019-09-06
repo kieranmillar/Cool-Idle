@@ -80,21 +80,30 @@ const kingdom_buildingEnum = {
 
 var kingdom_buildings = [
 	{
+		idNumber: kingdom_buildingEnum.EMPTY,
 		name: "",
-		imageLink: ""
+		imageLink: "",
+		unlocked: false
 	},
 	{
+		idNumber: kingdom_buildingEnum.CASTLE,
 		name: "Castle",
 		imageLink: "building_castle.png",
         output: function (i) {
             kingdom_outputs.labour += 1;
             kingdom_outputs.yellowCoins += 1;
             kingdom_outputs.exp += 1;
-        }
+		},
+		unlocked: false
 	},
 	{
+		idNumber: kingdom_buildingEnum.WOODCUTTER,
 		name: "Woodcutter's Hut",
+		id: "kingdom_woodcutter",
 		imageLink: "building_woodcutter.png",
+		value: "kingdom_woodcutter_spares",
+		idLink: null,
+		valueLink: null,
 		requirement: kingdom_terrainEnum.FOREST,
 		cost: [
 			{
@@ -117,7 +126,8 @@ var kingdom_buildings = [
 			if (kingdom_getTerrainWest(i) == kingdom_terrainEnum.FOREST) {
 				kingdom_outputs.wood += 1;
 			}
-        }
+		},
+		unlocked: true
 	}
 ];
 

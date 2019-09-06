@@ -32,6 +32,18 @@ function kingdom_init() {
     kingdom_cells = $(".kingdom_tileCell");
 
     //Dynamically create building list
+    kingdom_buildings.forEach(building => {
+        if (building.name == "Castle" || building.name == "") {
+            return;
+        }
+        var newElement = $('<div></div>');
+        newElement.attr('id', building.id);
+		newElement.addClass("kingdom_building");
+		newElement.html("<img src = './images/kingdom/" + building.imageLink + "' alt='" + building.name + "'></img><span id='" + building.value + "'></span> " + building.name + "<button type='button' class='kingdom_buildButton button' onclick='kingdom_build(" + building.idNumber + ")'>Build</button> <button type='button' class='kingdom_placeButton button' onclick='kingdom_place(" + building.idNumber + ")'>Place</button>");
+        $("#kingdom_purchasePanel").append(newElement);
+        building.idLink = $("#" + building.id);
+        building.valueLink = $("#" + building.value);
+    });
 
     kingdom_calculateOutput();
 }
@@ -145,4 +157,12 @@ function kingdom_clickedCell() {
 	else {
 		//the cell is unbuilt terrain
 	}
+}
+
+function kingdom_build(x) {
+
+}
+
+function kingdom_place(x) {
+
 }

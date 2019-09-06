@@ -60,6 +60,8 @@ p, span, li {
     width: auto;
 	height: 100%;
 	flex-grow: 0;
+	flex-shrink: 0;
+	padding-right: 5px;
 
 	&::after {
 		clear: both;
@@ -77,8 +79,8 @@ p, span, li {
 }
 
 #expBar {
-	width: 100%;
 	flex-grow: 1;
+	flex-shrink: 0;
 
 	progress[value] {
 		-webkit-appearance: none;
@@ -101,6 +103,7 @@ p, span, li {
 #coinList {
 	width: 200px;
 	flex-grow: 0;
+	flex-shrink: 0;
 }
 
 #tabs {

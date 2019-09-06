@@ -1,5 +1,7 @@
 function kingdom_redraw () {
-    kingdom_populateTileImages ();
+	kingdom_updateResources ();
+	kingdom_populateTileImages ();
+	kingdom_updateBuildings ();
 }
 
 function kingdom_populateTileImages () {
@@ -19,12 +21,32 @@ function kingdom_populateTileImages () {
 		if (game.kingdom.constructions[i] != kingdom_buildingEnum.EMPTY)
 		{
 			let y = game.kingdom.constructions[i];
-			kingdom_cells[i].innerHTML = "<img src = \"./images/kingdom/" + kingdom_buildings[y].imageLink + "\" alt=\"" + kingdom_buildings[y].name + "\">";
+			kingdom_cells.eq(i).html("<img src = './images/kingdom/" + kingdom_buildings[y].imageLink + "' alt='" + kingdom_buildings[y].name + "'>");
 		}
 		else
 		{
 			let y = kingdom_landscape[i];
-			kingdom_cells[i].innerHTML = "<img src = \"./images/kingdom/" + kingdom_terrain[y].imageLink + "\" alt=\"" + kingdom_terrain[y].name + "\">";
+			kingdom_cells.eq(i).html("<img src = './images/kingdom/" + kingdom_terrain[y].imageLink + "' alt='" + kingdom_terrain[y].name + "'>");
 		}
 	}
+}
+
+function kingdom_updateResources () {
+	$(".kingdom_resource").hide();
+	if (game.kingdom.resource.research > 0) {
+		kingdom_resources[kingdom_resourceEnum.RESEARCH].valueLink.html(game.kingdom.resource.research);
+		kingdom_resources[kingdom_resourceEnum.RESEARCH].idLink.show();
+	}
+	if (game.kingdom.resource.labour > 0) {
+		kingdom_resources[kingdom_resourceEnum.LABOUR].valueLink.html(game.kingdom.resource.labour);
+		kingdom_resources[kingdom_resourceEnum.LABOUR].idLink.show();
+	}
+	if (game.kingdom.resource.wood > 0) {
+		kingdom_resources[kingdom_resourceEnum.WOOD].valueLink.html(game.kingdom.resource.wood);
+		kingdom_resources[kingdom_resourceEnum.WOOD].idLink.show();
+	}
+}
+
+function kingdom_updateBuildings () {
+
 }

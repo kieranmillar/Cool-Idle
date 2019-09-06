@@ -16,6 +16,7 @@
 #loc_shop .shop_item.purchased {
   opacity: 0.5;
   background-color: lightgrey;
+  cursor: default;
 }
 
 /*# sourceMappingURL=shop.css.map */

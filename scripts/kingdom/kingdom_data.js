@@ -1,36 +1,47 @@
 const kingdom_resourceEnum = {
-    RESEARCH: 0,
-    LABOUR: 1,
-    WOOD: 2
+	RESEARCH: 0,
+	LABOUR: 1,
+	WOOD: 2
 }
 
 var kingdom_resources = [
 	{
 		name: "Research",
+		id: "kingdom_research",
 		imageLink: "resource_research.png",
-		amount: 0,
-		income: 0
+		value: "kingdom_research_amount",
+		idLink: null,
+		valueLink: null
 	},
 	{
 		name: "Labour Force",
+		id: "kingdom_labour",
 		imageLink: "resource_labour.png",
-		amount: 0,
-		income: 0
+		value: "kingdom_labour_amount",
+		idLink: null,
+		valueLink: null
 	},
 	{
 		name: "Wood",
+		id: "kingdom_wood",
 		imageLink: "resource_wood.png",
-		amount: 0,
-		income: 0
+		value: "kingdom_wood_amount",
+		idLink: null,
+		valueLink: null
 	}
 ];
 
 const kingdom_terrainEnum = {
-    PLAINS: 0,
-    FOREST: 1
+	INVALID: 0,
+    PLAINS: 1,
+    FOREST: 2
 }
 
-var kingdom_terrain = [
+const kingdom_terrain = [
+	{
+		name: "",
+		imageLink: ""
+	},
 	{
 		name: "Plains",
 		imageLink: "tile_plains.png"
@@ -69,15 +80,13 @@ const kingdom_buildingEnum = {
 
 var kingdom_buildings = [
 	{
-		name: "N/A",
-		imageLink: "N/A",
-        amountOwned: 0
+		name: "",
+		imageLink: ""
 	},
 	{
 		name: "Castle",
 		imageLink: "building_castle.png",
-        amountOwned: 0,
-        output: function () {
+        output: function (i) {
             kingdom_outputs.labour += 1;
             kingdom_outputs.yellowCoins += 1;
             kingdom_outputs.exp += 1;
@@ -86,9 +95,28 @@ var kingdom_buildings = [
 	{
 		name: "Woodcutter's Hut",
 		imageLink: "building_woodcutter.png",
-        amountOwned: 0,
-        output: function () {
-            kingdom_outputs.wood += 1;
+		requirement: kingdom_terrainEnum.FOREST,
+		cost: [
+			{
+				type: kingdom_resourceEnum.LABOUR,
+				amount: 10,
+				scale: 1.2
+			}
+		],
+        output: function (i) {
+			kingdom_outputs.wood += 1;
+			if (kingdom_getTerrainNorth(i) == kingdom_terrainEnum.FOREST) {
+				kingdom_outputs.wood += 1;
+			}
+			if (kingdom_getTerrainEast(i) == kingdom_terrainEnum.FOREST) {
+				kingdom_outputs.wood += 1;
+			}
+			if (kingdom_getTerrainSouth(i) == kingdom_terrainEnum.FOREST) {
+				kingdom_outputs.wood += 1;
+			}
+			if (kingdom_getTerrainWest(i) == kingdom_terrainEnum.FOREST) {
+				kingdom_outputs.wood += 1;
+			}
         }
 	}
 ];

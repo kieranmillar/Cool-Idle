@@ -16,10 +16,34 @@
 #loc_shop .shop_item.purchased {
   opacity: 0.5;
   background-color: lightgrey;
+  cursor: default;
 }
 
-#loc_kingdom #kingdom_mainGrid {
+#loc_kingdom {
   width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+#loc_kingdom #kingdom_resourcePanel {
+  width: 200px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+#loc_kingdom #kingdom_resourcePanel .kingdom_resource {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-shrink: 1;
+}
+#loc_kingdom #kingdom_resourcePanel .kingdom_resource img {
+  height: 30px;
+  width: 30px;
+  flex: 0 0 30px;
+}
+#loc_kingdom #kingdom_mainGrid {
+  flex-grow: 1;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
 }
@@ -34,6 +58,23 @@
   height: 40px;
   padding: 0;
   margin: 0;
+}
+#loc_kingdom #kingdom_purchasePanel {
+  width: 200px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+#loc_kingdom #kingdom_purchasePanel .kingdom_building {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-shrink: 1;
+}
+#loc_kingdom #kingdom_purchasePanel .kingdom_building img {
+  height: 40px;
+  width: 40px;
+  flex: 0 0 40px;
 }
 
 body {
@@ -94,6 +135,8 @@ p, span, li {
   width: auto;
   height: 100%;
   flex-grow: 0;
+  flex-shrink: 0;
+  padding-right: 5px;
 }
 #title::after {
   clear: both;
@@ -108,8 +151,8 @@ p, span, li {
 }
 
 #expBar {
-  width: 100%;
   flex-grow: 1;
+  flex-shrink: 0;
 }
 #expBar progress[value] {
   -webkit-appearance: none;
@@ -127,6 +170,7 @@ p, span, li {
 #coinList {
   width: 200px;
   flex-grow: 0;
+  flex-shrink: 0;
 }
 
 #tabs {

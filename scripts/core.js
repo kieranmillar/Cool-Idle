@@ -38,11 +38,12 @@ function goToLocation (location)
 		case "shop":
             $("#loc_shop").show();
             $("#tab_shop").addClass("active");
-            redrawShop();
+            shop_redraw ();
 			break;
 		case "kingdom":
             $("#loc_kingdom").show();
             $("#tab_kingdom").addClass("active");
+            kingdom_redraw ();
 			break;
     }
 }

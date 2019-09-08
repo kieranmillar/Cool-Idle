@@ -99,10 +99,7 @@ var kingdom_buildings = [
             kingdom_outputs.exp += 1;
 		},
 		unlocked: false,
-		description: "<p>You rule your kingdom from your trusty castle. This building cannot be removed or relocated.</p>",
-		outputInfo: function () {
-			return "<p>Labour Force + 1</p><p>Yellow Coins + 1</p><p>Exp + 1</p>";
-		}
+		description: "<p>You rule your kingdom from your trusty castle. This building cannot be removed or relocated.</p><p>Labour Force + 1</p><p>Yellow Coins + 1</p><p>Exp + 1</p>"
 	},
 	{
 		idNumber: kingdom_buildingEnum.WOODCUTTER,
@@ -136,13 +133,7 @@ var kingdom_buildings = [
 			}
 		},
 		unlocked: true,
-		description: "<p>How much wood could a woodcutter cut if the woodcutter could cut wood?</p><p>Depends on how much wood is nearby.</p><p>Can only be placed on forest.</p>",
-		outputInfo: function () {
-			return "<p>Wood + 1</p>";
-		},
-		adjacencyInfo: function () {
-			return "<p>Wood + 1 for each adjacent forest.</p>";
-		}
+		description: "<p>How much wood could a woodcutter cut if the woodcutter could cut wood?</p><p>Depends on how much wood is nearby.</p><p>Can only be placed on forest.</p><p>Wood + 1</p><p>Wood + 1 for each adjacent forest.</p>"
 	}
 ];
 

@@ -1,5 +1,7 @@
 var ticks = 0; // browsers sometimes slow down execution of javascript when not in focus, so there may exist times where we need to execute multiple ticks
-var maxTicks = 60;
+const maxTicks = 60;
+var ticksSinceSave = 0;
+const ticksToSave = 20;
 var activeTab = "help";
 var id_level = $("#level");
 var id_exp = $("#exp");
@@ -32,6 +34,7 @@ function gameLoop ()
             }
         }
         ticks --;
+        ticksSinceSave ++;
     }
     id_level.html(game.level);
     id_exp.html(game.exp);
@@ -44,6 +47,10 @@ function gameLoop ()
     id_greenCoins.html(game.greenCoins);
     id_blueCoins.html(game.blueCoins);
     game.previousTick = currentTick;
+    if (ticksSinceSave >= ticksToSave) {
+        save();
+        ticksSinceSave = 0;
+    }
 }
 
 function goToLocation (location)
@@ -55,7 +62,11 @@ function goToLocation (location)
 		case "help":
             $("#loc_help").show();
             $("#tab_help").addClass("active");
-			break;
+            break;
+        case "settings":
+            $("#loc_settings").show();
+            $("#tab_settings").addClass("active");
+            break;
 		case "shop":
             $("#loc_shop").show();
             $("#tab_shop").addClass("active");
@@ -72,6 +83,7 @@ function goToLocation (location)
 function displayFeatures() {
     $(".tab").hide();
     $("#tab_help").show();
+    $("#tab_settings").show();
     $("#tab_shop").show();
     $(".help").hide();
     if (game.kingdom.unlocked) {
@@ -106,7 +118,7 @@ function gainBlueCoins (amount) {
 }
 
 $(document).ready(function(){
-    game.previousTick = getTick();
+    load();
     displayFeatures();
     kingdom_init();
     goToLocation ("help");

@@ -15,4 +15,5 @@ function shop_buy (item) {
 			break;
     }
     shop_redraw ();
+    save();
 }

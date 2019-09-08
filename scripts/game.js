@@ -37,3 +37,28 @@ var game = {
         ]
     }
 };
+
+function save()
+{
+	localStorage.setItem("gameStored", JSON.stringify(game));
+}
+
+function load()
+{
+    if (localStorage.getItem("gameStored") != null)
+	{
+		loadedGame = JSON.parse(localStorage.getItem("gameStored"));
+        game = { ...loadedGame };
+    }
+    else {
+        game.previousTick = getTick(); 
+    }
+}
+
+function wipe() {
+	var confirmation = confirm("Are you sure you want to permanently erase your savefile?");
+	if(confirmation === true){
+		localStorage.clear();
+		location.reload(); 
+	}
+}

@@ -48,6 +48,7 @@
 		</div>
 		<div id="tabs">
 			<h3 id="tab_help" class="tab active" onclick="goToLocation('help')">Help</h3>
+			<h3 id="tab_settings" class="tab" onclick="goToLocation('settings')">Settings</h3>
 			<h3 id="tab_shop" class="tab" onclick="goToLocation('shop')">Cool-Mart</h3>
 			<h3 id="tab_kingdom" class="tab" onclick="goToLocation('kingdom')">Kingdom</h3>
 		</div>
@@ -83,6 +84,15 @@
 
 			</div>
 
+			<div id="loc_settings" class="location">
+				<button type="button" onclick="save()">
+					Manually save the game (autosaves every 20 seconds or after you do something important)
+				</button>
+				<button type="button" onclick="wipe()">
+					Delete save file and hard reset (Don't press this!)
+				</button>
+			</div>
+
 			<div id="loc_shop" class="location">
 				<div id="shop_kingdom" class="shop_item" onclick="shop_buy('kingdom')">
 					<h2>Kingdom</h2>
@@ -98,8 +108,6 @@
 					<div id="kingdom_infoPanel">
 						<div id="kingdom_infoTitle" class="kingdom_infoPanel"></div>
 						<div id="kingdom_infoDescription" class="kingdom_infoPanel"></div>
-						<div id="kingdom_infoOutput" class="kingdom_infoPanel"></div>
-						<div id="kingdom_infoAdjacency" class="kingdom_infoPanel"></div>
 					</div>
 				</div>
 				<div id="kingdom_purchasePanel"></div>

@@ -40,7 +40,7 @@ function kingdom_init() {
         newElement.attr('id', building.id);
         newElement.addClass("kingdom_building");
         newElement.mouseenter({ value: building.idNumber }, function (event) {kingdom_mousedOverBuilding(event.data.value)});
-		newElement.html("<img src = './images/kingdom/" + building.imageLink + "' alt='" + building.name + "'></img><span id='" + building.value + "'></span> " + building.name + "<button type='button' class='kingdom_buildButton button' onclick='kingdom_build(" + building.idNumber + ")'>Build</button> <button type='button' class='kingdom_placeButton button' onclick='kingdom_place(" + building.idNumber + ")'>Place</button>");
+		newElement.html("<span id='" + building.value + "' class='kingdom_buildingStock'></span><img src = './images/kingdom/" + building.imageLink + "' alt='" + building.name + "'></img><span class='kingdom_buildingName'>" + building.name + "</span><button type='button' class='kingdom_buildButton button' onclick='kingdom_build(" + building.idNumber + ")'>Build</button> <button type='button' class='kingdom_placeButton button' onclick='kingdom_place(" + building.idNumber + ")'>Place</button>");
         $("#kingdom_purchasePanel").append(newElement);
         building.idLink = $("#" + building.id);
         building.valueLink = $("#" + building.value);

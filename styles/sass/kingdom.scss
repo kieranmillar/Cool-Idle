@@ -87,10 +87,20 @@
             padding: 2px;
             margin: 2px;
 
+            .kingdom_buildingStock {
+                flex: 0 0 50px;
+                font-size: 24px;
+            }
+
             img {
                 height: 40px;
                 width: 40px;
                 flex: 0 0 40px;
+            }
+
+            .kingdom_buildingName {
+                padding-left: 3px;
+                flex: 1 1 0px;
             }
 
             // .kingdom_buildButton {

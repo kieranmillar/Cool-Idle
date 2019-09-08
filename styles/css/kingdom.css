@@ -77,10 +77,18 @@
   padding: 2px;
   margin: 2px;
 }
+#loc_kingdom #kingdom_purchasePanel .kingdom_building .kingdom_buildingStock {
+  flex: 0 0 50px;
+  font-size: 24px;
+}
 #loc_kingdom #kingdom_purchasePanel .kingdom_building img {
   height: 40px;
   width: 40px;
   flex: 0 0 40px;
+}
+#loc_kingdom #kingdom_purchasePanel .kingdom_building .kingdom_buildingName {
+  padding-left: 3px;
+  flex: 1 1 0px;
 }
 
 /*# sourceMappingURL=kingdom.css.map */

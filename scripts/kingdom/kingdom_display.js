@@ -82,8 +82,28 @@ function kingdom_updateinfoPanel_building (building) {
 
 function kingdom_updateBuildings () {
 	$(".kingdom_building").hide();
-	if (kingdom_buildings[kingdom_buildingEnum.WOODCUTTER].unlocked) {
-		kingdom_buildings[kingdom_buildingEnum.WOODCUTTER].valueLink.html(game.kingdom.building.woodcutter);
-		kingdom_buildings[kingdom_buildingEnum.WOODCUTTER].idLink.show();
+	for (i = 0; i < kingdom_buildings.length; i++) {
+		if (kingdom_buildings[i].unlocked) {
+			kingdom_buildings[i].valueLink.html(game.kingdom.building[i]);
+			kingdom_buildings[i].costLink.html(kingdom_buildings[i].costDescription());
+			kingdom_buildings[i].idLink.show();
+			if (kingdom_buildings[i].canAfford()) {
+				$(kingdom_buildings[i].buildButtonLink).prop('disabled', false);
+				$(kingdom_buildings[i].buildButtonLink).addClass('clickable');
+			}
+			else {
+				$(kingdom_buildings[i].buildButtonLink).prop('disabled', true);
+				$(kingdom_buildings[i].buildButtonLink).removeClass('clickable');
+			}
+			if (game.kingdom.building[i] > 0) {
+				$(kingdom_buildings[i].placeButtonLink).prop('disabled', false);
+				$(kingdom_buildings[i].placeButtonLink).addClass('clickable');
+			}
+			else {
+				$(kingdom_buildings[i].placeButtonLink).prop('disabled', true);
+				$(kingdom_buildings[i].placeButtonLink).removeClass('clickable');
+			}
+		}
 	}
+	
 }

@@ -13,9 +13,7 @@ var game = {
             labour: 0,
             wood: 0
         },
-        building: {
-            woodcutter: 0
-        },
+        building: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         constructions: [
             kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY,
 

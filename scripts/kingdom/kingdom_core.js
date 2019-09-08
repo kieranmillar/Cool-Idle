@@ -8,7 +8,7 @@ function kingdom_init() {
         var newElement = $('<div></div>');
         newElement.attr('id', resource.id);
 		newElement.addClass("kingdom_resource");
-		newElement.html("<img src = './images/kingdom/" + resource.imageLink + "' alt='" + resource.name + "'></img><span id='" + resource.value + "'></span>");
+		newElement.html("<img src = './images/kingdom/" + resource.imageLink + "' alt='" + resource.name + "'/><span id='" + resource.value + "'/></span>");
         $("#kingdom_resourcePanel").append(newElement);
         resource.idLink = $("#" + resource.id);
         resource.valueLink = $("#" + resource.value);
@@ -40,10 +40,16 @@ function kingdom_init() {
         newElement.attr('id', building.id);
         newElement.addClass("kingdom_building");
         newElement.mouseenter({ value: building.idNumber }, function (event) {kingdom_mousedOverBuilding(event.data.value)});
-		newElement.html("<span id='" + building.value + "' class='kingdom_buildingStock'></span><img src = './images/kingdom/" + building.imageLink + "' alt='" + building.name + "'></img><span class='kingdom_buildingName'>" + building.name + "</span><button type='button' class='kingdom_buildButton button' onclick='kingdom_build(" + building.idNumber + ")'>Build</button> <button type='button' class='kingdom_placeButton button' onclick='kingdom_place(" + building.idNumber + ")'>Place</button>");
+        let htmlText = "<div class='kingdom_building_row'><span id='" + building.id + "Stock' class='kingdom_buildingStock'></span><img src = './images/kingdom/" + building.imageLink + "' alt='" + building.name + "' class='kingdom_buildingImage'/><span class='kingdom_buildingName'>" + building.name + "</span><button type='button' id='" + building.id + "PlaceButton' class='kingdom_placeButton button' onclick='kingdom_place(" + building.idNumber + ")' disabled>Place</button></div>";
+        htmlText += "<div class='kingdom_building_row'><span id='" + building.id + "Cost' class='kingdom_buildingCost'>" + building.costDescription() + "</span><button type='button' id='" + building.id + "BuildButton' class='kingdom_buildButton button' onclick='kingdom_build(" + building.idNumber + ")' disabled>Build</button></div>";
+		newElement.html(htmlText);
+        
         $("#kingdom_purchasePanel").append(newElement);
         building.idLink = $("#" + building.id);
-        building.valueLink = $("#" + building.value);
+        building.valueLink = $("#" + building.id + "Stock");
+        building.costLink = $("#" + building.id + "Cost");
+        building.buildButtonLink = $("#" + building.id + "BuildButton");
+        building.placeButtonLink = $("#" + building.id + "PlaceButton");
     });
 
     kingdom_calculateOutput();
@@ -192,7 +198,10 @@ function kingdom_mousedOverBuilding(x) {
 }
 
 function kingdom_build(x) {
-
+    kingdom_buildings[x].purchase();
+    save();
+    kingdom_updateResources ();
+    kingdom_updateBuildings();
 }
 
 function kingdom_place(x) {

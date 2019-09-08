@@ -91,24 +91,31 @@
 }
 #loc_kingdom #kingdom_purchasePanel .kingdom_building {
   width: 396px;
-  display: flex;
+  display: column;
   flex-direction: row;
   align-items: center;
   border: 1px solid black;
   padding: 2px;
   margin: 2px;
 }
-#loc_kingdom #kingdom_purchasePanel .kingdom_building .kingdom_buildingStock {
+#loc_kingdom #kingdom_purchasePanel .kingdom_building .kingdom_building_row {
+  display: flex;
+  flex-direction: row;
+}
+#loc_kingdom #kingdom_purchasePanel .kingdom_building .kingdom_building_row .kingdom_buildingStock {
   flex: 0 0 50px;
   font-size: 24px;
 }
-#loc_kingdom #kingdom_purchasePanel .kingdom_building img {
+#loc_kingdom #kingdom_purchasePanel .kingdom_building .kingdom_building_row .kingdom_buildingImage {
   height: 40px;
   width: 40px;
   flex: 0 0 40px;
 }
-#loc_kingdom #kingdom_purchasePanel .kingdom_building .kingdom_buildingName {
+#loc_kingdom #kingdom_purchasePanel .kingdom_building .kingdom_building_row .kingdom_buildingName {
   padding-left: 3px;
+  flex: 1 1 0px;
+}
+#loc_kingdom #kingdom_purchasePanel .kingdom_building .kingdom_building_row .kingdom_buildingCost {
   flex: 1 1 0px;
 }
 
@@ -230,7 +237,7 @@ p, span, li {
   height: 100%;
 }
 
-.button {
+.clickable {
   cursor: pointer;
 }
 

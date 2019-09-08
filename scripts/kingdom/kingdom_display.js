@@ -55,13 +55,13 @@ function kingdom_updateResources () {
 
 function kingdom_updateinfoPanel (isBuilding, value) {
 	if (isBuilding) {
-		kingdom_updateinfoPanel_building(value);
+		kingdom_updateinfoPanel_building("", value);
 	}
 	else {
+		var terrain = kingdom_landscape[value];
+		let titleText = "<img src = './images/kingdom/" + kingdom_terrain[terrain].imageLink + "' alt='" + kingdom_terrain[terrain].name + "'>" + kingdom_terrain[terrain].name;
 		if (game.kingdom.constructions[value] == kingdom_buildingEnum.EMPTY) {
-			// Show Terrain
-			var terrain = kingdom_landscape[value];
-			kingdom_infoTitle.html("<img src = './images/kingdom/" + kingdom_terrain[terrain].imageLink + "' alt='" + kingdom_terrain[terrain].name + "'>" + kingdom_terrain[terrain].name);
+			kingdom_infoTitle.html(titleText);
 			let description = kingdom_terrain[terrain].description;
 			if (kingdom_cellInRange(value) == kingdom_rangeEnum.OUTSKIRTS) {
 				description += "<p class='kingdom_infoPanel_red'>This tile is outside of your borders. You cannot place buildings on it, but it counts for adjacency bonuses.</p>";
@@ -69,14 +69,13 @@ function kingdom_updateinfoPanel (isBuilding, value) {
 			kingdom_infoDescription.html(description);
 		}
 		else {
-			//Show Building
-			kingdom_updateinfoPanel_building(game.kingdom.constructions[value]);
+			kingdom_updateinfoPanel_building(titleText, game.kingdom.constructions[value]);
 		}
 	}
 }
 
-function kingdom_updateinfoPanel_building (building) {
-	kingdom_infoTitle.html("<img src = './images/kingdom/" + kingdom_buildings[building].imageLink + "' alt='" + kingdom_buildings[building].name + "'>" + kingdom_buildings[building].name);
+function kingdom_updateinfoPanel_building (initialTitleText, building) {
+	kingdom_infoTitle.html(initialTitleText + "<img src = './images/kingdom/" + kingdom_buildings[building].imageLink + "' alt='" + kingdom_buildings[building].name + "'>" + kingdom_buildings[building].name);
 	kingdom_infoDescription.html(kingdom_buildings[building].description);
 }
 

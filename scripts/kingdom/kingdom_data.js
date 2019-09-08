@@ -62,7 +62,7 @@ var kingdom_landscape = [
     
     kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST,
     
-    kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST,
+    kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST,
     
     kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST,
     
@@ -78,7 +78,8 @@ var kingdom_landscape = [
 const kingdom_buildingEnum = {
     EMPTY: 0,
     CASTLE: 1,
-    WOODCUTTER: 2
+	WOODCUTTER: 2,
+	SHED: 3
 }
 
 var kingdom_buildings = [
@@ -111,7 +112,6 @@ var kingdom_buildings = [
 		costLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-		requirement: kingdom_terrainEnum.FOREST,
         output: function (i) {
 			kingdom_outputs.wood += 1;
 			if (kingdom_getTerrainNorth(i) == kingdom_terrainEnum.FOREST) {
@@ -128,7 +128,7 @@ var kingdom_buildings = [
 			}
 		},
 		unlocked: true,
-		description: "<p>How much wood could a woodcutter cut if the woodcutter could cut wood?</p><p>Depends on how much wood is nearby.</p><p>Can only be placed on forest.</p><p>Wood + 1</p><p>Wood + 1 for each adjacent forest.</p>",
+		description: "<p>How much wood could a woodcutter cut if the woodcutter could cut wood?</p><p>Depends on how much wood is nearby.</p><p><strong>Can only be placed on forest.</strong></p><p>Wood + 1</p><p>Wood + 1 for each adjacent forest.</p>",
 		cost: function() {
 			return Math.floor(20 * Math.pow(2, game.kingdom.building[kingdom_buildingEnum.WOODCUTTER]));
 		},
@@ -141,13 +141,53 @@ var kingdom_buildings = [
 			}
 		},
 		purchase: function () {
-			if (game.kingdom.resource.labour >= this.cost()) {
+			if (this.canAfford()) {
 				game.kingdom.resource.labour -= this.cost();
 				game.kingdom.building[kingdom_buildingEnum.WOODCUTTER] ++;
 			}
 		},
 		costDescription: function () {
 			return "<img src = './images/kingdom/" + kingdom_resources[kingdom_resourceEnum.LABOUR].imageLink + "' alt='" + kingdom_resources[kingdom_resourceEnum.LABOUR].name + "'/>" + this.cost();
+		}
+	},
+	{
+		idNumber: kingdom_buildingEnum.SHED,
+		name: "Shed",
+		id: "kingdom_shed",
+		imageLink: "building_shed.png",
+		idLink: null,
+		valueLink: null,
+		costLink: null,
+		buildButtonLink: null,
+		placeButtonLink: null,
+        output: function (i) {
+			kingdom_outputs.research += 1;
+		},
+		unlocked: true,
+		description: "<p>All of the best ideas happen when working alone in a shed, unless they involve the use of power tools.</p><p><strong>Can only be built adjacent to the Castle.</strong></p><p>Research + 1</p>",
+		costLabour: function() {
+			return Math.floor(30 * Math.pow(2, game.kingdom.building[kingdom_buildingEnum.SHED]));
+		},
+		costWood: function() {
+			return Math.floor(50 * Math.pow(5, game.kingdom.building[kingdom_buildingEnum.SHED]));
+		},
+		canAfford: function() {
+			if (game.kingdom.resource.labour >= this.costLabour() && game.kingdom.resource.wood >= this.costWood()) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		},
+		purchase: function () {
+			if (this.canAfford()) {
+				game.kingdom.resource.labour -= this.costLabour();
+				game.kingdom.resource.wood -= this.costWood();
+				game.kingdom.building[kingdom_buildingEnum.SHED] ++;
+			}
+		},
+		costDescription: function () {
+			return "<img src = './images/kingdom/" + kingdom_resources[kingdom_resourceEnum.LABOUR].imageLink + "' alt='" + kingdom_resources[kingdom_resourceEnum.LABOUR].name + "'/>" + this.costLabour() + "<img src = './images/kingdom/" + kingdom_resources[kingdom_resourceEnum.WOOD].imageLink + "' alt='" + kingdom_resources[kingdom_resourceEnum.WOOD].name + "'/>" + this.costWood();
 		}
 	}
 ];
@@ -160,4 +200,3 @@ var kingdom_outputs = {
     labour: 0,
     wood: 0
 }
-

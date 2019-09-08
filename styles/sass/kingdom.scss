@@ -62,6 +62,11 @@
 
             .kingdom_infoPanel {
                 overflow-wrap: break-word;
+
+                .kingdom_infoPanel_red {
+                    color: red;
+                    font-weight: bold;
+                }
             }
         }
     }

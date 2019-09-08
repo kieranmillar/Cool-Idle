@@ -6,24 +6,24 @@ const kingdom_infoAdjacency = $("#kingdom_infoAdjacency");
 function kingdom_redraw () {
 	kingdom_updateResources ();
 	kingdom_populateTileImages ();
-	kingdom_updateinfoPanel ();
+	kingdom_updateinfoPanel(false, kingdom_currentCell);
 	kingdom_updateBuildings ();
 }
 
 function kingdom_populateTileImages () {
 	for (let i = 0; i < kingdom_cells.length; i++)
 	{
-		kingdom_cells[i].style.opacity = "1";
-		kingdom_cells[i].style.visibility = "visible";
-		//let kingdom_range = cellInRange (i);
-		// if (kingdom_range == 0)
-		// {
-		// 	kingdom_cells[i].style.visibility = "hidden";
-		// }
-		// else if (kingdom_range == 1)
-		// {
-		// 	kingdom_cells[i].style.opacity = "0.5";
-		// }
+		let r = kingdom_cellInRange (i);
+		if (r == kingdom_rangeEnum.OUTOFRANGE) {
+			kingdom_cells[i].style.visibility = "hidden";
+		}
+		else if (r == kingdom_rangeEnum.OUTSKIRTS) {
+			kingdom_cells[i].style.opacity = "0.5";
+		}
+		else {
+			kingdom_cells[i].style.opacity = "1";
+			kingdom_cells[i].style.visibility = "visible";
+		}
 		if (game.kingdom.constructions[i] != kingdom_buildingEnum.EMPTY)
 		{
 			let y = game.kingdom.constructions[i];
@@ -53,19 +53,31 @@ function kingdom_updateResources () {
 	}
 }
 
-function kingdom_updateinfoPanel () {
-	if (game.kingdom.constructions[kingdom_currentCell] == kingdom_buildingEnum.EMPTY) {
-		// Show Terrain
-		var terrain = kingdom_landscape[kingdom_currentCell];
-		kingdom_infoTitle.html("<img src = './images/kingdom/" + kingdom_terrain[terrain].imageLink + "' alt='" + kingdom_terrain[terrain].name + "'>" + kingdom_terrain[terrain].name);
-		kingdom_infoDescription.html(kingdom_terrain[terrain].description);
+function kingdom_updateinfoPanel (isBuilding, value) {
+	if (isBuilding) {
+		kingdom_updateinfoPanel_building(value);
 	}
 	else {
-		//Show Building
-		var building = game.kingdom.constructions[kingdom_currentCell];
-		kingdom_infoTitle.html("<img src = './images/kingdom/" + kingdom_buildings[building].imageLink + "' alt='" + kingdom_buildings[building].name + "'>" + kingdom_buildings[building].name);
-		kingdom_infoDescription.html(kingdom_buildings[building].description);
+		if (game.kingdom.constructions[value] == kingdom_buildingEnum.EMPTY) {
+			// Show Terrain
+			var terrain = kingdom_landscape[value];
+			kingdom_infoTitle.html("<img src = './images/kingdom/" + kingdom_terrain[terrain].imageLink + "' alt='" + kingdom_terrain[terrain].name + "'>" + kingdom_terrain[terrain].name);
+			let description = kingdom_terrain[terrain].description;
+			if (kingdom_cellInRange(value) == kingdom_rangeEnum.OUTSKIRTS) {
+				description += "<p class='kingdom_infoPanel_red'>This tile is outside of your borders. You cannot place buildings on it, but it counts for adjacency bonuses.</p>";
+			}
+			kingdom_infoDescription.html(description);
+		}
+		else {
+			//Show Building
+			kingdom_updateinfoPanel_building(game.kingdom.constructions[value]);
+		}
 	}
+}
+
+function kingdom_updateinfoPanel_building (building) {
+	kingdom_infoTitle.html("<img src = './images/kingdom/" + kingdom_buildings[building].imageLink + "' alt='" + kingdom_buildings[building].name + "'>" + kingdom_buildings[building].name);
+	kingdom_infoDescription.html(kingdom_buildings[building].description);
 }
 
 function kingdom_updateBuildings () {

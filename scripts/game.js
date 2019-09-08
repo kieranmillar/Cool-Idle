@@ -48,7 +48,7 @@ function load()
     if (localStorage.getItem("gameStored") != null)
 	{
 		loadedGame = JSON.parse(localStorage.getItem("gameStored"));
-        game = { ...loadedGame };
+        $.extend(true, game, loadedGame);
     }
     else {
         game.previousTick = getTick(); 

@@ -1,5 +1,6 @@
 var kingdom_cells;
 var kingdom_currentCell = 40;
+var kingdom_range = 1;
 
 function kingdom_init() {
     //Dynamically create resource list
@@ -22,8 +23,7 @@ function kingdom_init() {
             var cell = $('<div></div>');
             cell.addClass("kingdom_tileCell");
             cell.click(function () {kingdom_clickedCell()});
-            cell
-            .mouseenter({ value: count }, function (event) {kingdom_mousedOverCell(event.data.value)});
+            cell.mouseenter({ value: count }, function (event) {kingdom_mousedOverCell(event.data.value)});
             row.append(cell);
             count ++;
         }
@@ -38,7 +38,8 @@ function kingdom_init() {
         }
         var newElement = $('<div></div>');
         newElement.attr('id', building.id);
-		newElement.addClass("kingdom_building");
+        newElement.addClass("kingdom_building");
+        newElement.mouseenter({ value: building.idNumber }, function (event) {kingdom_mousedOverBuilding(event.data.value)});
 		newElement.html("<img src = './images/kingdom/" + building.imageLink + "' alt='" + building.name + "'></img><span id='" + building.value + "'></span> " + building.name + "<button type='button' class='kingdom_buildButton button' onclick='kingdom_build(" + building.idNumber + ")'>Build</button> <button type='button' class='kingdom_placeButton button' onclick='kingdom_place(" + building.idNumber + ")'>Place</button>");
         $("#kingdom_purchasePanel").append(newElement);
         building.idLink = $("#" + building.id);
@@ -146,9 +147,35 @@ function kingdom_getConstructionWest(currentTile) {
     }
 }
 
+const kingdom_rangeEnum = {
+    OUTOFRANGE: 0,
+    OUTSKIRTS: 1,
+    INRANGE: 2
+}
+
+function kingdom_cellInRange (x)
+{
+	let row = Math.floor(x/9);
+	let column = x % 9;
+	if (Math.abs(row - 4) > kingdom_range + 1 || Math.abs(column - 4) > kingdom_range + 1)
+	{
+		return kingdom_rangeEnum.OUTOFRANGE;
+	}
+	else if (Math.abs(row - 4) == kingdom_range + 1 || Math.abs(column - 4) == kingdom_range + 1)
+	{
+		return kingdom_rangeEnum.OUTSKIRTS;
+	}
+	else
+	{
+		return kingdom_rangeEnum.INRANGE;
+	}
+}
+
 function kingdom_mousedOverCell(x) {
-    kingdom_currentCell = x;
-    kingdom_updateinfoPanel ();
+    if (kingdom_cellInRange(x) != kingdom_rangeEnum.OUTOFRANGE) {
+        kingdom_currentCell = x;
+        kingdom_updateinfoPanel (false, x);
+    }
 }
 
 function kingdom_clickedCell() {
@@ -158,6 +185,10 @@ function kingdom_clickedCell() {
 	else {
 		//the cell is unbuilt terrain
 	}
+}
+
+function kingdom_mousedOverBuilding(x) {
+    kingdom_updateinfoPanel (true, x);
 }
 
 function kingdom_build(x) {

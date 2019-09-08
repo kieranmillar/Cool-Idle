@@ -57,6 +57,10 @@
 #loc_kingdom #kingdom_mainArea #kingdom_infoPanel .kingdom_infoPanel {
   overflow-wrap: break-word;
 }
+#loc_kingdom #kingdom_mainArea #kingdom_infoPanel .kingdom_infoPanel .kingdom_infoPanel_red {
+  color: red;
+  font-weight: bold;
+}
 #loc_kingdom #kingdom_purchasePanel {
   width: 400px;
   height: 100%;

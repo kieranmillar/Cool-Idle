@@ -246,3 +246,13 @@ function kingdom_place(cell) {
         }
     }
 }
+
+function kingdom_purchaseUpgrade(upgrade) {
+    if (game.kingdom.upgrades[upgrade] == 0) {
+        kingdom_upgrades[upgrade].purchase();
+        game.kingdom.upgrades[upgrade] = 1;
+        save();
+        kingdom_updateResources ();
+        kingdom_updateBuildings();
+    }
+}

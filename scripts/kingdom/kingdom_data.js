@@ -130,7 +130,7 @@ var kingdom_buildings = [
 		unlocked: true,
 		description: "<p>How much wood could a woodcutter cut if the woodcutter could cut wood?</p><p>Depends on how much wood is nearby.</p><p><strong>Can only be placed on forest.</strong></p><p>Wood + 1</p><p>Wood + 1 for each adjacent forest.</p>",
 		cost: function() {
-			return Math.floor(20 * Math.pow(2, game.kingdom.building[kingdom_buildingEnum.WOODCUTTER]));
+			return Math.floor(20 * Math.pow(3, game.kingdom.building[this.idNumber]));
 		},
 		canAfford: function() {
 			if (game.kingdom.resource.labour >= this.cost()) {
@@ -146,7 +146,7 @@ var kingdom_buildings = [
 		purchase: function () {
 			if (this.canAfford()) {
 				game.kingdom.resource.labour -= this.cost();
-				kingdom_addBuilding(kingdom_buildingEnum.WOODCUTTER);
+				kingdom_addBuilding(this.idNumber);
 			}
 		},
 		costDescription: function () {
@@ -169,10 +169,10 @@ var kingdom_buildings = [
 		unlocked: true,
 		description: "<p>All of the best ideas happen when working alone in a shed, unless they involve the use of power tools.</p><p><strong>Can only be built adjacent to the Castle.</strong></p><p>Research + 1</p>",
 		costLabour: function() {
-			return Math.floor(30 * Math.pow(2, game.kingdom.building[kingdom_buildingEnum.SHED]));
+			return Math.floor(30 * Math.pow(2, game.kingdom.building[this.idNumber]));
 		},
 		costWood: function() {
-			return Math.floor(50 * Math.pow(5, game.kingdom.building[kingdom_buildingEnum.SHED]));
+			return Math.floor(50 * Math.pow(5, game.kingdom.building[this.idNumber]));
 		},
 		canAfford: function() {
 			if (game.kingdom.resource.labour >= this.costLabour() && game.kingdom.resource.wood >= this.costWood()) {
@@ -203,7 +203,7 @@ var kingdom_buildings = [
 			if (this.canAfford()) {
 				game.kingdom.resource.labour -= this.costLabour();
 				game.kingdom.resource.wood -= this.costWood();
-				kingdom_addBuilding(kingdom_buildingEnum.SHED);
+				kingdom_addBuilding(this.idNumber);
 			}
 		},
 		costDescription: function () {
@@ -220,3 +220,63 @@ var kingdom_outputs = {
     labour: 0,
     wood: 0
 }
+
+const kingdom_upgradeEnum = {
+	QUARRY: 0,
+	SAWMILL: 1
+}
+
+var kingdom_upgrades = [
+	{
+		idNumber: kingdom_upgradeEnum.QUARRY,
+		name: "Quarry",
+		id: "kingdom_upgrade_quarry",
+		idLink: null,
+		description: "<p>Unlocks a new building that produces stone from hills.</p>",
+		cost: function() {
+			return 200;
+		},
+		canAfford: function() {
+			if (game.kingdom.resource.research >= this.cost()) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		},
+		purchase: function () {
+			if (this.canAfford()) {
+				game.kingdom.resource.research -= this.cost();
+			}
+		},
+		costDescription: function () {
+			return "<img src = './images/kingdom/" + kingdom_resources[kingdom_resourceEnum.RESEARCH].imageLink + "' alt='" + kingdom_resources[kingdom_resourceEnum.RESEARCH].name + "'/>" + displayNum(this.cost());
+		}
+	},
+	{
+		idNumber: kingdom_upgradeEnum.SAWMILL,
+		name: "Sawmill",
+		id: "kingdom_upgrade_sawmill",
+		idLink: null,
+		description: "<p>Unlocks a new building that produces planks from wood.</p>",
+		cost: function() {
+			return 200;
+		},
+		canAfford: function() {
+			if (game.kingdom.resource.research >= this.cost()) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		},
+		purchase: function () {
+			if (this.canAfford()) {
+				game.kingdom.resource.research -= this.cost();
+			}
+		},
+		costDescription: function () {
+			return "<img src = './images/kingdom/" + kingdom_resources[kingdom_resourceEnum.RESEARCH].imageLink + "' alt='" + kingdom_resources[kingdom_resourceEnum.RESEARCH].name + "'/>" + displayNum(this.cost());
+		}
+	}
+]

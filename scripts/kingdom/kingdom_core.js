@@ -46,7 +46,7 @@ function kingdom_init() {
         htmlText += "<div class='kingdom_building_row'><span id='" + building.id + "Cost' class='kingdom_buildingCost'>" + building.costDescription() + "</span><button type='button' id='" + building.id + "BuildButton' class='kingdom_buildButton button' onclick='kingdom_build(" + building.idNumber + ")' disabled>Build</button></div>";
 		newElement.html(htmlText);
         
-        $("#kingdom_purchasePanel").append(newElement);
+        $("#kingdom_buildingList").append(newElement);
         building.idLink = $("#" + building.id);
         building.valueLink = $("#" + building.id + "Stock");
         building.costLink = $("#" + building.id + "Cost");

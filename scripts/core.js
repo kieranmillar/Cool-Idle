@@ -1,3 +1,4 @@
+const suffixes = ["K", "M", "B", "T", "Qa", "Qt", "Sx", "Sp", "Oc", "Nn", "Dc", "UDc", "DDc", "TDc", "QaDc", "QtDc", "SxDc", "SpDc", "ODc", "NDc", "Vi", "UVi", "DVi", "TVi", "QaVi", "QtVi", "SxVi", "SpVi", "OcVi", "NnVi", "Tg"];
 var ticks = 0; // browsers sometimes slow down execution of javascript when not in focus, so there may exist times where we need to execute multiple ticks
 const maxTicks = 60;
 var ticksSinceSave = 0;
@@ -37,15 +38,15 @@ function gameLoop ()
         ticksSinceSave ++;
     }
     id_level.html(game.level);
-    id_exp.html(game.exp);
-    id_maxExp.html(getMaxExp());
+    id_exp.html(displayNum(game.exp));
+    id_maxExp.html(displayNum(getMaxExp()));
     id_expProgress.attr({
 		"value": game.exp,
 		"max": getMaxExp ()
     });
-    id_yellowCoins.html(game.yellowCoins);
-    id_greenCoins.html(game.greenCoins);
-    id_blueCoins.html(game.blueCoins);
+    id_yellowCoins.html(displayNum(game.yellowCoins));
+    id_greenCoins.html(displayNum(game.greenCoins));
+    id_blueCoins.html(displayNum(game.blueCoins));
     game.previousTick = currentTick;
     if (ticksSinceSave >= ticksToSave) {
         save();
@@ -115,6 +116,19 @@ function gainGreenCoins (amount) {
 
 function gainBlueCoins (amount) {
     game.blueCoins += amount;
+}
+
+function displayNum(num) {
+    if (num < 1000) {
+        return num;
+    }
+	//if(player.sciNotation) return Math.abs(num) < 100000 ? (ifMoney ? parseFloat(num).toFixed(2) : num) : parseFloat(num).toPrecision(5);
+	for(var i = suffixes.length - 1; i >= 0; i--) {
+		if(Math.abs(num) >= Math.pow(10, 3*i + 3) * 0.99999) {
+			return i < 4 ? parseFloat(num/Math.pow(10, 3*i + 3)).toFixed(2) + suffixes[i] : parseFloat(num/Math.pow(10, 3*i + 3)).toFixed(2) + " " + suffixes[i]; //spaces out first four suffixes
+		}
+    }
+    return parseFloat(num).toFixed(2);
 }
 
 $(document).ready(function(){

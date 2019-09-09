@@ -1,6 +1,8 @@
 var kingdom_cells;
 var kingdom_currentCell = 40;
 var kingdom_range = 1;
+var kingdom_buildingStock = [];
+var kingdom_placing = 0;
 
 function kingdom_init() {
     //Dynamically create resource list
@@ -22,7 +24,7 @@ function kingdom_init() {
         for (let j = 0; j < 9; j++) {
             var cell = $('<div></div>');
             cell.addClass("kingdom_tileCell");
-            cell.click(function () {kingdom_clickedCell()});
+            cell.click({ value: count }, function (event) {kingdom_clickedCell(event.data.value)});
             cell.mouseenter({ value: count }, function (event) {kingdom_mousedOverCell(event.data.value)});
             row.append(cell);
             count ++;
@@ -40,7 +42,7 @@ function kingdom_init() {
         newElement.attr('id', building.id);
         newElement.addClass("kingdom_building");
         newElement.mouseenter({ value: building.idNumber }, function (event) {kingdom_mousedOverBuilding(event.data.value)});
-        let htmlText = "<div class='kingdom_building_row'><span id='" + building.id + "Stock' class='kingdom_buildingStock'></span><img src = './images/kingdom/" + building.imageLink + "' alt='" + building.name + "' class='kingdom_buildingImage'/><span class='kingdom_buildingName'>" + building.name + "</span><button type='button' id='" + building.id + "PlaceButton' class='kingdom_placeButton button' onclick='kingdom_place(" + building.idNumber + ")' disabled>Place</button></div>";
+        let htmlText = "<div class='kingdom_building_row'><span id='" + building.id + "Stock' class='kingdom_buildingStock'></span><img src = './images/kingdom/" + building.imageLink + "' alt='" + building.name + "' class='kingdom_buildingImage'/><span class='kingdom_buildingName'>" + building.name + "</span><button type='button' id='" + building.id + "PlaceButton' class='kingdom_placeButton button' onclick='kingdom_pickupBuilding(" + building.idNumber + ")' disabled>Place</button></div>";
         htmlText += "<div class='kingdom_building_row'><span id='" + building.id + "Cost' class='kingdom_buildingCost'>" + building.costDescription() + "</span><button type='button' id='" + building.id + "BuildButton' class='kingdom_buildButton button' onclick='kingdom_build(" + building.idNumber + ")' disabled>Build</button></div>";
 		newElement.html(htmlText);
         
@@ -51,6 +53,14 @@ function kingdom_init() {
         building.buildButtonLink = $("#" + building.id + "BuildButton");
         building.placeButtonLink = $("#" + building.id + "PlaceButton");
     });
+
+    //Calculate building stock
+    kingdom_buildingStock = [ ...game.kingdom.building ];
+    for (let i = 0; i < kingdom_cells.length; i++) {
+        if (game.kingdom.constructions[i] != kingdom_buildingEnum.EMPTY && game.kingdom.constructions[i] != kingdom_buildingEnum.CASTLE) {
+            kingdom_buildingStock [game.kingdom.constructions[i]] --;
+        }
+    }
 
     kingdom_calculateOutput();
 }
@@ -64,9 +74,7 @@ function kingdom_tick () {
 }
 
 function kingdom_calculateOutput () {
-    for (property in kingdom_outputs) {
-        property = 0;
-    }
+    Object.keys(kingdom_outputs).forEach(v => kingdom_outputs[v] = 0);
     for (let i = 0; i < kingdom_cells.length; i++) {
         const currentConstruction = game.kingdom.constructions[i];
         if (currentConstruction != kingdom_buildingEnum.EMPTY) {
@@ -117,7 +125,7 @@ function kingdom_getConstructionEast(currentTile) {
 
 function kingdom_getTerrainSouth(currentTile) {
     let southTile = currentTile + 9;
-    if (southTile < 81) {
+    if (southTile < kingdom_cells.length) {
         return kingdom_landscape[southTile];
     }
     else {
@@ -127,7 +135,7 @@ function kingdom_getTerrainSouth(currentTile) {
 
 function kingdom_getConstructionSouth(currentTile) {
     let southTile = currentTile + 9;
-    if (southTile < 81) {
+    if (southTile < kingdom_cells.length) {
         return game.kingdom.constructions[southTile];
     }
     else {
@@ -177,33 +185,64 @@ function kingdom_cellInRange (x)
 	}
 }
 
-function kingdom_mousedOverCell(x) {
-    if (kingdom_cellInRange(x) != kingdom_rangeEnum.OUTOFRANGE) {
-        kingdom_currentCell = x;
-        kingdom_updateinfoPanel (false, x);
+function kingdom_mousedOverCell(cell) {
+    if (kingdom_cellInRange(cell) != kingdom_rangeEnum.OUTOFRANGE) {
+        kingdom_currentCell = cell;
+        kingdom_updateinfoPanel (false, cell);
     }
 }
 
-function kingdom_clickedCell() {
-	if (game.kingdom.constructions[kingdom_currentCell] != kingdom_buildingEnum.EMPTY) {
-		//there is a construction on the cell
+function kingdom_clickedCell(cell) {
+	if (game.kingdom.constructions[cell] != kingdom_buildingEnum.EMPTY) {
+        //there is a construction on the cell
 	}
 	else {
-		//the cell is unbuilt terrain
+        //the cell is unbuilt terrain
+        if (kingdom_placing != 0) {
+            kingdom_place (cell);
+        }
 	}
 }
 
-function kingdom_mousedOverBuilding(x) {
-    kingdom_updateinfoPanel (true, x);
+function kingdom_mousedOverBuilding(building) {
+    kingdom_updateinfoPanel (true, building);
 }
 
-function kingdom_build(x) {
-    kingdom_buildings[x].purchase();
+function kingdom_build(building) {
+    kingdom_buildings[building].purchase();
     save();
     kingdom_updateResources ();
     kingdom_updateBuildings();
 }
 
-function kingdom_place(x) {
+function kingdom_addBuilding(building) {
+    game.kingdom.building[building] ++;
+	kingdom_buildingStock[building] ++;
+}
 
+function kingdom_pickupBuilding(building) {
+    if (kingdom_placing == building) {
+        kingdom_placing = 0;
+    }
+    else {
+        kingdom_placing = building;
+    }
+    kingdom_updateBuildings();
+}
+
+function kingdom_place(cell) {
+    if (kingdom_placing != 0
+    && game.kingdom.constructions[cell] == kingdom_buildingEnum.EMPTY
+    && kingdom_cellInRange(cell) == kingdom_rangeEnum.INRANGE) {
+        if (kingdom_buildings[kingdom_placing].canPlace(cell)) {
+            game.kingdom.constructions[cell] = kingdom_placing;
+            kingdom_buildingStock[kingdom_placing] --;
+            kingdom_placing = 0;
+            kingdom_calculateOutput();
+            kingdom_updateResources();
+            kingdom_populateTileImages();
+            kingdom_updateBuildings();
+            save();
+        }
+    }
 }

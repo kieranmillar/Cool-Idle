@@ -83,7 +83,7 @@ function kingdom_updateBuildings () {
 	$(".kingdom_building").hide();
 	for (i = 0; i < kingdom_buildings.length; i++) {
 		if (kingdom_buildings[i].unlocked) {
-			kingdom_buildings[i].valueLink.html(game.kingdom.building[i]);
+			kingdom_buildings[i].valueLink.html(kingdom_buildingStock[i]);
 			kingdom_buildings[i].costLink.html(kingdom_buildings[i].costDescription());
 			kingdom_buildings[i].idLink.show();
 			if (kingdom_buildings[i].canAfford()) {
@@ -94,13 +94,19 @@ function kingdom_updateBuildings () {
 				$(kingdom_buildings[i].buildButtonLink).prop('disabled', true);
 				$(kingdom_buildings[i].buildButtonLink).removeClass('clickable');
 			}
-			if (game.kingdom.building[i] > 0) {
+			if (kingdom_buildingStock[i] > 0) {
 				$(kingdom_buildings[i].placeButtonLink).prop('disabled', false);
 				$(kingdom_buildings[i].placeButtonLink).addClass('clickable');
 			}
 			else {
 				$(kingdom_buildings[i].placeButtonLink).prop('disabled', true);
 				$(kingdom_buildings[i].placeButtonLink).removeClass('clickable');
+			}
+			if (kingdom_placing == i) {
+				$(kingdom_buildings[i].placeButtonLink).html('Cancel');
+			}
+			else {
+				$(kingdom_buildings[i].placeButtonLink).html('Place');
 			}
 		}
 	}

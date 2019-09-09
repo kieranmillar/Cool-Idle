@@ -140,10 +140,13 @@ var kingdom_buildings = [
 				return false;
 			}
 		},
+		canPlace: function (i) {
+			return kingdom_landscape[i] == kingdom_terrainEnum.FOREST;
+		},
 		purchase: function () {
 			if (this.canAfford()) {
 				game.kingdom.resource.labour -= this.cost();
-				game.kingdom.building[kingdom_buildingEnum.WOODCUTTER] ++;
+				kingdom_addBuilding(kingdom_buildingEnum.WOODCUTTER);
 			}
 		},
 		costDescription: function () {
@@ -179,11 +182,28 @@ var kingdom_buildings = [
 				return false;
 			}
 		},
+		canPlace: function (i) {
+			if (kingdom_getConstructionNorth(i) == kingdom_buildingEnum.CASTLE) {
+				return true;
+			}
+			else if (kingdom_getConstructionEast(i) == kingdom_buildingEnum.CASTLE) {
+				return true;
+			}
+			else if (kingdom_getConstructionSouth(i) == kingdom_buildingEnum.CASTLE) {
+				return true;
+			}
+			else if (kingdom_getConstructionWest(i) == kingdom_buildingEnum.CASTLE) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		},
 		purchase: function () {
 			if (this.canAfford()) {
 				game.kingdom.resource.labour -= this.costLabour();
 				game.kingdom.resource.wood -= this.costWood();
-				game.kingdom.building[kingdom_buildingEnum.SHED] ++;
+				kingdom_addBuilding(kingdom_buildingEnum.SHED);
 			}
 		},
 		costDescription: function () {

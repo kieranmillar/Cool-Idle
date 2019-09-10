@@ -112,9 +112,7 @@ var kingdom_buildings = [
 	{
 		idNumber: kingdom_buildingEnum.EMPTY,
 		name: "",
-		imageLink: "",
 		unlocked: false,
-		description: ""
 	},
 	{
 		idNumber: kingdom_buildingEnum.CASTLE,
@@ -126,7 +124,9 @@ var kingdom_buildings = [
             kingdom_outputs.exp += 1;
 		},
 		unlocked: false,
-		description: "<p>You rule your kingdom from your trusty castle. This building cannot be removed or relocated.</p><p>Labour Force + 1</p><p>Yellow Coins + 1</p><p>Exp + 1</p>"
+		description: function() {
+			return "<p>You rule your kingdom from your trusty castle. This building cannot be removed or relocated.</p><p>Labour Force + 1</p><p>Yellow Coins + 1</p><p>Exp + 1</p>";
+		}
 	},
 	{
 		idNumber: kingdom_buildingEnum.WOODCUTTER,
@@ -140,21 +140,29 @@ var kingdom_buildings = [
 		placeButtonLink: null,
         output: function (i) {
 			kingdom_outputs.wood += 1;
-			if (kingdom_getTerrainNorth(i) == kingdom_terrainEnum.FOREST) {
-				kingdom_outputs.wood += 1;
-			}
-			if (kingdom_getTerrainEast(i) == kingdom_terrainEnum.FOREST) {
-				kingdom_outputs.wood += 1;
-			}
-			if (kingdom_getTerrainSouth(i) == kingdom_terrainEnum.FOREST) {
-				kingdom_outputs.wood += 1;
-			}
-			if (kingdom_getTerrainWest(i) == kingdom_terrainEnum.FOREST) {
-				kingdom_outputs.wood += 1;
+			if (game.kingdom.upgrades[kingdom_upgradeEnum.WOODCUTTERADJACENCY]) {
+				if (kingdom_getTerrainNorth(i) == kingdom_terrainEnum.FOREST) {
+					kingdom_outputs.wood += 1;
+				}
+				if (kingdom_getTerrainEast(i) == kingdom_terrainEnum.FOREST) {
+					kingdom_outputs.wood += 1;
+				}
+				if (kingdom_getTerrainSouth(i) == kingdom_terrainEnum.FOREST) {
+					kingdom_outputs.wood += 1;
+				}
+				if (kingdom_getTerrainWest(i) == kingdom_terrainEnum.FOREST) {
+					kingdom_outputs.wood += 1;
+				}
 			}
 		},
 		unlocked: true,
-		description: "<p>How much wood could a woodcutter cut if the woodcutter could cut wood?</p><p>Depends on how much wood is nearby.</p><p><strong>Can only be placed on forest.</strong></p><p>Wood + 1</p><p>Wood + 1 for each adjacent forest.</p>",
+		description: function() {
+			let text = "<p>How much wood could a woodcutter cut if the woodcutter could cut wood?</p><p>Depends on how much wood is nearby.</p><p><strong>Can only be placed on forest.</strong></p><p>Wood + 1</p>";
+			if (game.kingdom.upgrades[kingdom_upgradeEnum.WOODCUTTERADJACENCY]) {
+				text += "<p>Wood + 1 for each adjacent forest.</p>";
+			}
+			return text;
+		},
 		cost: function() {
 			return Math.floor(20 * Math.pow(3, game.kingdom.building[this.idNumber]));
 		},
@@ -193,12 +201,14 @@ var kingdom_buildings = [
 			kingdom_outputs.research += 1;
 		},
 		unlocked: true,
-		description: "<p>All of the best ideas happen when working alone in a shed, unless they involve the use of power tools.</p><p><strong>Can only be placed adjacent to the Castle.</strong></p><p>Research + 1</p>",
+		description: function() {
+			return "<p>All of the best ideas happen when working alone in a shed, unless they involve the use of power tools.</p><p><strong>Can only be placed adjacent to the Castle.</strong></p><p>Research + 1</p>";
+		},
 		costLabour: function() {
 			return Math.floor(20 * Math.pow(2, game.kingdom.building[this.idNumber]));
 		},
 		costWood: function() {
-			return Math.floor(50 * Math.pow(5, game.kingdom.building[this.idNumber]));
+			return Math.floor(10 * Math.pow(5, game.kingdom.building[this.idNumber]));
 		},
 		canAfford: function() {
 			if (game.kingdom.resource.labour >= this.costLabour() && game.kingdom.resource.wood >= this.costWood()) {
@@ -250,7 +260,9 @@ var kingdom_buildings = [
 			kingdom_outputs.stone += 1;
 		},
 		unlocked: false,
-		description: "<p>It's like hunting for buried treasure, if you consider all rocks to be treasure.</p><p><strong>Can only be placed on hills.</strong></p><p>Stone + 1</p>",
+		description: function() {
+			return "<p>It's like hunting for buried treasure, if you consider all rocks to be treasure.</p><p><strong>Can only be placed on hills.</strong></p><p>Stone + 1</p>";
+		},
 		cost: function() {
 			return Math.floor(80 * Math.pow(3, game.kingdom.building[this.idNumber]));
 		},
@@ -287,17 +299,25 @@ var kingdom_buildings = [
 		placeButtonLink: null,
         output: function (i) {
 			let x = 1;
-			if (kingdom_getConstructionNorth(i) == kingdom_buildingEnum.WOODCUTTER
-			|| kingdom_getConstructionEast(i) == kingdom_buildingEnum.WOODCUTTER
-			|| kingdom_getConstructionSouth(i) == kingdom_buildingEnum.WOODCUTTER
-			|| kingdom_getConstructionWest(i) == kingdom_buildingEnum.WOODCUTTER) {
-				x = 2;
+			if (game.kingdom.upgrades[kingdom_upgradeEnum.SAWMILLEFFICIENCY]) {
+				if (kingdom_getConstructionNorth(i) == kingdom_buildingEnum.WOODCUTTER
+				|| kingdom_getConstructionEast(i) == kingdom_buildingEnum.WOODCUTTER
+				|| kingdom_getConstructionSouth(i) == kingdom_buildingEnum.WOODCUTTER
+				|| kingdom_getConstructionWest(i) == kingdom_buildingEnum.WOODCUTTER) {
+					x = 2;
+				}
 			}
 			kingdom_outputs.wood -= x;
 			kingdom_outputs.plank += x;
 		},
 		unlocked: false,
-		description: "<p>This building is a cut above the rest.</p><p>Wood - 1</p><p>Plank + 1</p><p>If adjacent to at least one Woodcutter's Hut: Wood - 1 and Plank + 1</p>",
+		description: function() {
+			let text = "<p>This building is a cut above the rest.</p><p>Wood - 1</p><p>Plank + 1</p>";
+			if (game.kingdom.upgrades[kingdom_upgradeEnum.SAWMILLEFFICIENCY]) {
+				text += "<p>Doubled effect if adjacent to at least one Woodcutter's Hut.</p>";
+			}
+			return text;
+		},
 		costLabour: function() {
 			return Math.floor(50 * Math.pow(4, game.kingdom.building[this.idNumber]));
 		},
@@ -341,7 +361,9 @@ var kingdom_outputs = {
 
 const kingdom_upgradeEnum = {
 	QUARRY: 0,
-	SAWMILL: 1
+	SAWMILL: 1,
+	WOODCUTTERADJACENCY: 2,
+	SAWMILLEFFICIENCY: 3
 }
 
 var kingdom_upgrades = [
@@ -381,7 +403,7 @@ var kingdom_upgrades = [
 		idLink: null,
 		buttonLink: null,
 		unlocked: true,
-		description: "<p>Unlocks a new building that produces planks from wood.</p>",
+		description: "<p>Unlocks a new building that converts wood to planks.</p>",
 		cost: function() {
 			return 100;
 		},
@@ -397,6 +419,63 @@ var kingdom_upgrades = [
 			if (this.canAfford()) {
 				game.kingdom.resource.research -= this.cost();
 				kingdom_buildings[kingdom_buildingEnum.SAWMILL].unlocked = true;
+				kingdom_upgrades[kingdom_upgradeEnum.SAWMILLEFFICIENCY].unlocked = true;
+			}
+		},
+		costDescription: function () {
+			return "<img src = './images/kingdom/" + kingdom_resources[kingdom_resourceEnum.RESEARCH].imageLink + "' alt='" + kingdom_resources[kingdom_resourceEnum.RESEARCH].name + "'/>" + displayNum(this.cost());
+		}
+	},
+	{
+		idNumber: kingdom_upgradeEnum.WOODCUTTERADJACENCY,
+		name: "Woodcutter's Hut Range",
+		id: "kingdom_upgrade_woodcutterAdjacency",
+		idLink: null,
+		buttonLink: null,
+		unlocked: true,
+		description: "<p>Woodcutter's Huts will produce additional wood for each forest tile adjacent to them.</p>",
+		cost: function() {
+			return 300;
+		},
+		canAfford: function() {
+			if (game.kingdom.resource.research >= this.cost()) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		},
+		purchase: function () {
+			if (this.canAfford()) {
+				game.kingdom.resource.research -= this.cost();
+			}
+		},
+		costDescription: function () {
+			return "<img src = './images/kingdom/" + kingdom_resources[kingdom_resourceEnum.RESEARCH].imageLink + "' alt='" + kingdom_resources[kingdom_resourceEnum.RESEARCH].name + "'/>" + displayNum(this.cost());
+		}
+	},
+	{
+		idNumber: kingdom_upgradeEnum.SAWMILLEFFICIENCY,
+		name: "Sawmill Efficiency",
+		id: "kingdom_upgrade_sawmillEfficiency",
+		idLink: null,
+		buttonLink: null,
+		unlocked: false,
+		description: "<p>Sawmills will convert wood to planks twice as fast if placed next to a Wooductter's Hut.</p>",
+		cost: function() {
+			return 500;
+		},
+		canAfford: function() {
+			if (game.kingdom.resource.research >= this.cost()) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		},
+		purchase: function () {
+			if (this.canAfford()) {
+				game.kingdom.resource.research -= this.cost();
 			}
 		},
 		costDescription: function () {

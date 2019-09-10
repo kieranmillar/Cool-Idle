@@ -83,6 +83,7 @@ function kingdom_init() {
     }
     if (game.kingdom.upgrades[kingdom_upgradeEnum.SAWMILL]) {
         kingdom_buildings[kingdom_buildingEnum.SAWMILL].unlocked = true;
+        kingdom_upgrades[kingdom_upgradeEnum.SAWMILLEFFICIENCY].unlocked = true;
     }
 
     kingdom_calculateOutput();
@@ -287,9 +288,10 @@ function kingdom_purchaseUpgrade(upgrade) {
     if (game.kingdom.upgrades[upgrade] == 0) {
         kingdom_upgrades[upgrade].purchase();
         game.kingdom.upgrades[upgrade] = 1;
-        save();
+        kingdom_calculateOutput();
         kingdom_updateResources();
         kingdom_updateBuildings();
         kingdom_updateUpgrades();
+        save();
     }
 }

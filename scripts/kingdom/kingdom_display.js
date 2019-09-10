@@ -1,7 +1,5 @@
 const kingdom_infoTitle = $("#kingdom_infoTitle");
 const kingdom_infoDescription = $("#kingdom_infoDescription");
-const kingdom_infoOutput = $("#kingdom_infoOutput");
-const kingdom_infoAdjacency = $("#kingdom_infoAdjacency");
 
 function kingdom_redraw () {
 	kingdom_updateResources ();
@@ -41,25 +39,38 @@ function kingdom_populateTileImages () {
 function kingdom_updateResources () {
 	$(".kingdom_resource").hide();
 	if (game.kingdom.resource.research > 0 || kingdom_outputs.research != 0) {
-		kingdom_resources[kingdom_resourceEnum.RESEARCH].valueLink.html(displayNum(game.kingdom.resource.research) + " (+" + displayNum(kingdom_outputs.research) + ")");
+		kingdom_resources[kingdom_resourceEnum.RESEARCH].valueLink.html(kingdom_resourceHtml(game.kingdom.resource.research, kingdom_outputs.research));
 		kingdom_resources[kingdom_resourceEnum.RESEARCH].idLink.show();
 	}
 	if (game.kingdom.resource.labour > 0 || kingdom_outputs.labour != 0) {
-		kingdom_resources[kingdom_resourceEnum.LABOUR].valueLink.html(displayNum(game.kingdom.resource.labour) + " (+" + displayNum(kingdom_outputs.labour) + ")");
+		kingdom_resources[kingdom_resourceEnum.LABOUR].valueLink.html(kingdom_resourceHtml(game.kingdom.resource.labour, kingdom_outputs.labour));
 		kingdom_resources[kingdom_resourceEnum.LABOUR].idLink.show();
 	}
 	if (game.kingdom.resource.wood > 0 || kingdom_outputs.wood != 0) {
-		kingdom_resources[kingdom_resourceEnum.WOOD].valueLink.html(displayNum(game.kingdom.resource.wood) + " (+" + displayNum(kingdom_outputs.wood) + ")");
+		kingdom_resources[kingdom_resourceEnum.WOOD].valueLink.html(kingdom_resourceHtml(game.kingdom.resource.wood, kingdom_outputs.wood));
 		kingdom_resources[kingdom_resourceEnum.WOOD].idLink.show();
 	}
 	if (game.kingdom.resource.plank > 0 || kingdom_outputs.plank != 0) {
-		kingdom_resources[kingdom_resourceEnum.PLANK].valueLink.html(displayNum(game.kingdom.resource.plank) + " (+" + displayNum(kingdom_outputs.plank) + ")");
+		kingdom_resources[kingdom_resourceEnum.PLANK].valueLink.html(kingdom_resourceHtml(game.kingdom.resource.plank, kingdom_outputs.plank));
 		kingdom_resources[kingdom_resourceEnum.PLANK].idLink.show();
 	}
 	if (game.kingdom.resource.stone > 0 || kingdom_outputs.stone != 0) {
-		kingdom_resources[kingdom_resourceEnum.STONE].valueLink.html(displayNum(game.kingdom.resource.stone) + " (+" + displayNum(kingdom_outputs.stone) + ")");
+		kingdom_resources[kingdom_resourceEnum.STONE].valueLink.html(kingdom_resourceHtml(game.kingdom.resource.stone, kingdom_outputs.stone));
 		kingdom_resources[kingdom_resourceEnum.STONE].idLink.show();
 	}
+}
+
+function kingdom_resourceHtml (total, income) {
+	let text = displayNum(total);
+	if (income != 0)
+	{
+		text += " (";
+		if (income > 0) {
+			text += "+";
+		}
+		text += displayNum(income) + ")";
+	}
+	return text;
 }
 
 function kingdom_updateinfoPanel (infoPanelType, value) {
@@ -89,7 +100,7 @@ function kingdom_updateinfoPanel (infoPanelType, value) {
 
 function kingdom_updateinfoPanel_building (initialTitleText, building) {
 	kingdom_infoTitle.html(initialTitleText + "<img src = './images/kingdom/" + kingdom_buildings[building].imageLink + "' alt='" + kingdom_buildings[building].name + "'>" + kingdom_buildings[building].name);
-	kingdom_infoDescription.html(kingdom_buildings[building].description);
+	kingdom_infoDescription.html(kingdom_buildings[building].description());
 }
 
 function kingdom_updateBuildings () {

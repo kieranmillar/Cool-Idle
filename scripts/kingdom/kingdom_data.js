@@ -389,7 +389,6 @@ var kingdom_upgrades = [
 		purchase: function () {
 			if (this.canAfford()) {
 				game.kingdom.resource.research -= this.cost();
-				kingdom_buildings[kingdom_buildingEnum.QUARRY].unlocked = true;
 			}
 		},
 		costDescription: function () {
@@ -418,8 +417,6 @@ var kingdom_upgrades = [
 		purchase: function () {
 			if (this.canAfford()) {
 				game.kingdom.resource.research -= this.cost();
-				kingdom_buildings[kingdom_buildingEnum.SAWMILL].unlocked = true;
-				kingdom_upgrades[kingdom_upgradeEnum.SAWMILLEFFICIENCY].unlocked = true;
 			}
 		},
 		costDescription: function () {

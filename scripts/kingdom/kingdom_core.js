@@ -77,15 +77,7 @@ function kingdom_init() {
         upgrade.buttonLink = $("#" + upgrade.id + "UpgradeButton");
     });
 
-    //Unlock stuff
-    if (game.kingdom.upgrades[kingdom_upgradeEnum.QUARRY]) {
-        kingdom_buildings[kingdom_buildingEnum.QUARRY].unlocked = true;
-    }
-    if (game.kingdom.upgrades[kingdom_upgradeEnum.SAWMILL]) {
-        kingdom_buildings[kingdom_buildingEnum.SAWMILL].unlocked = true;
-        kingdom_upgrades[kingdom_upgradeEnum.SAWMILLEFFICIENCY].unlocked = true;
-    }
-
+    kingdom_unlocks();
     kingdom_calculateOutput();
 }
 
@@ -97,6 +89,16 @@ function kingdom_tick () {
     game.kingdom.resource.stone += kingdom_outputs.stone * game.level;
     gainYellowCoins(kingdom_outputs.yellowCoins * game.level);
     gainExp(kingdom_outputs.exp * game.level);
+}
+
+function kingdom_unlocks() {
+    if (game.kingdom.upgrades[kingdom_upgradeEnum.QUARRY]) {
+        kingdom_buildings[kingdom_buildingEnum.QUARRY].unlocked = true;
+    }
+    if (game.kingdom.upgrades[kingdom_upgradeEnum.SAWMILL]) {
+        kingdom_buildings[kingdom_buildingEnum.SAWMILL].unlocked = true;
+        kingdom_upgrades[kingdom_upgradeEnum.SAWMILLEFFICIENCY].unlocked = true;
+    }
 }
 
 function kingdom_calculateOutput () {
@@ -288,6 +290,7 @@ function kingdom_purchaseUpgrade(upgrade) {
     if (game.kingdom.upgrades[upgrade] == 0) {
         kingdom_upgrades[upgrade].purchase();
         game.kingdom.upgrades[upgrade] = 1;
+        kingdom_unlocks();
         kingdom_calculateOutput();
         kingdom_updateResources();
         kingdom_updateBuildings();

@@ -8,6 +8,7 @@ function kingdom_redraw () {
 	kingdom_populateTileImages ();
 	kingdom_updateinfoPanel(false, kingdom_currentCell);
 	kingdom_updateBuildings ();
+	kingdom_updateUpgrades ();
 }
 
 function kingdom_populateTileImages () {
@@ -51,10 +52,22 @@ function kingdom_updateResources () {
 		kingdom_resources[kingdom_resourceEnum.WOOD].valueLink.html(displayNum(game.kingdom.resource.wood) + " (+" + displayNum(kingdom_outputs.wood) + ")");
 		kingdom_resources[kingdom_resourceEnum.WOOD].idLink.show();
 	}
+	if (game.kingdom.resource.plank > 0 || kingdom_outputs.plank != 0) {
+		kingdom_resources[kingdom_resourceEnum.PLANK].valueLink.html(displayNum(game.kingdom.resource.plank) + " (+" + displayNum(kingdom_outputs.plank) + ")");
+		kingdom_resources[kingdom_resourceEnum.PLANK].idLink.show();
+	}
+	if (game.kingdom.resource.stone > 0 || kingdom_outputs.stone != 0) {
+		kingdom_resources[kingdom_resourceEnum.STONE].valueLink.html(displayNum(game.kingdom.resource.stone) + " (+" + displayNum(kingdom_outputs.stone) + ")");
+		kingdom_resources[kingdom_resourceEnum.STONE].idLink.show();
+	}
 }
 
-function kingdom_updateinfoPanel (isBuilding, value) {
-	if (isBuilding) {
+function kingdom_updateinfoPanel (infoPanelType, value) {
+	if (infoPanelType == kingdom_infoPanelEnum.UPGRADE) {
+		kingdom_infoTitle.html(kingdom_upgrades[value].name);
+		kingdom_infoDescription.html(kingdom_upgrades[value].description);
+	}
+	else if (infoPanelType == kingdom_infoPanelEnum.BUILDING) {
 		kingdom_updateinfoPanel_building("", value);
 	}
 	else {
@@ -110,5 +123,21 @@ function kingdom_updateBuildings () {
 			}
 		}
 	}
-	
+}
+
+function kingdom_updateUpgrades () {
+	$(".kingdom_upgrade").hide();
+	for (i = 0; i < kingdom_upgrades.length; i++) {
+		if (kingdom_upgrades[i].unlocked && game.kingdom.upgrades[i] == 0) {
+			kingdom_upgrades[i].idLink.show();
+			if (kingdom_upgrades[i].canAfford()) {
+				$(kingdom_upgrades[i].buttonLink).prop('disabled', false);
+				$(kingdom_upgrades[i].buttonLink).addClass('clickable');
+			}
+			else {
+				$(kingdom_upgrades[i].buttonLink).prop('disabled', true);
+				$(kingdom_upgrades[i].buttonLink).removeClass('clickable');
+			}
+		}
+	}
 }

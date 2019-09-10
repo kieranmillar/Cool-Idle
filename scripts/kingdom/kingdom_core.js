@@ -62,6 +62,29 @@ function kingdom_init() {
         }
     }
 
+    //Dynamically create upgrade list
+    kingdom_upgrades.forEach(upgrade => {
+        var newElement = $('<div></div>');
+        newElement.attr('id', upgrade.id);
+        newElement.addClass("kingdom_upgrade");
+        newElement.mouseenter({ value: upgrade.idNumber }, function (event) {kingdom_mousedOverUpgrade(event.data.value)});
+        let htmlText = "<div class='kingdom_upgrade_row'><span class='kingdom_upgradeName'>" + upgrade.name + "</span><button type='button' id='" + upgrade.id + "UpgradeButton' class='kingdom_upgradeButton button' onclick='kingdom_purchaseUpgrade(" + upgrade.idNumber + ")' disabled>Purchase</button></div>";
+        htmlText += "<div class='kingdom_upgrade_row'><span id='" + upgrade.id + "Cost' class='kingdom_upgradeCost'>" + upgrade.costDescription() + "</span></div>";
+		newElement.html(htmlText);
+        
+        $("#kingdom_upgradeList").append(newElement);
+        upgrade.idLink = $("#" + upgrade.id);
+        upgrade.buttonLink = $("#" + upgrade.id + "UpgradeButton");
+    });
+
+    //Unlock stuff
+    if (game.kingdom.upgrades[kingdom_upgradeEnum.QUARRY]) {
+        kingdom_buildings[kingdom_buildingEnum.QUARRY].unlocked = true;
+    }
+    if (game.kingdom.upgrades[kingdom_upgradeEnum.SAWMILL]) {
+        kingdom_buildings[kingdom_buildingEnum.SAWMILL].unlocked = true;
+    }
+
     kingdom_calculateOutput();
 }
 
@@ -69,6 +92,8 @@ function kingdom_tick () {
     game.kingdom.resource.research += kingdom_outputs.research * game.level;
     game.kingdom.resource.labour += kingdom_outputs.labour * game.level;
     game.kingdom.resource.wood += kingdom_outputs.wood * game.level;
+    game.kingdom.resource.plank += kingdom_outputs.plank * game.level;
+    game.kingdom.resource.stone += kingdom_outputs.stone * game.level;
     gainYellowCoins(kingdom_outputs.yellowCoins * game.level);
     gainExp(kingdom_outputs.exp * game.level);
 }
@@ -185,10 +210,16 @@ function kingdom_cellInRange (x)
 	}
 }
 
+const kingdom_infoPanelEnum = {
+    CELL: 0,
+    BUILDING: 1,
+    UPGRADE: 2
+}
+
 function kingdom_mousedOverCell(cell) {
     if (kingdom_cellInRange(cell) != kingdom_rangeEnum.OUTOFRANGE) {
         kingdom_currentCell = cell;
-        kingdom_updateinfoPanel (false, cell);
+        kingdom_updateinfoPanel (kingdom_infoPanelEnum.CELL, cell);
     }
 }
 
@@ -205,14 +236,19 @@ function kingdom_clickedCell(cell) {
 }
 
 function kingdom_mousedOverBuilding(building) {
-    kingdom_updateinfoPanel (true, building);
+    kingdom_updateinfoPanel (kingdom_infoPanelEnum.BUILDING, building);
+}
+
+function kingdom_mousedOverUpgrade(upgrade) {
+    kingdom_updateinfoPanel (kingdom_infoPanelEnum.UPGRADE, upgrade);
 }
 
 function kingdom_build(building) {
     kingdom_buildings[building].purchase();
     save();
-    kingdom_updateResources ();
+    kingdom_updateResources();
     kingdom_updateBuildings();
+    kingdom_updateUpgrades();
 }
 
 function kingdom_addBuilding(building) {
@@ -252,7 +288,8 @@ function kingdom_purchaseUpgrade(upgrade) {
         kingdom_upgrades[upgrade].purchase();
         game.kingdom.upgrades[upgrade] = 1;
         save();
-        kingdom_updateResources ();
+        kingdom_updateResources();
         kingdom_updateBuildings();
+        kingdom_updateUpgrades();
     }
 }

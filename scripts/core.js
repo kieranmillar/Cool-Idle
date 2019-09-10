@@ -30,8 +30,9 @@ function gameLoop ()
         if (game.kingdom.unlocked) {
             kingdom_tick();
             if (activeTab = "kingdom") {
-                kingdom_updateResources ();
-                kingdom_updateBuildings ();
+                kingdom_updateResources();
+                kingdom_updateBuildings();
+                kingdom_updateUpgrades();
             }
         }
         ticks --;

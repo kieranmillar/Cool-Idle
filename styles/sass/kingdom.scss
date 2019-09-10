@@ -134,7 +134,24 @@
                     
                 // }
             }
+        }
 
+        .kingdom_upgrade {
+            max-width: 388px;
+            flex-direction: row;
+            align-items: center;
+            border: 1px solid black;
+            padding: 2px;
+            margin: 2px;
+
+            .kingdom_upgrade_row {
+                display: flex;
+                flex-direction: row;
+
+                .kingdom_upgradeName {
+                    flex: 1 1 0px;
+                }
+            }
         }
     }
 }

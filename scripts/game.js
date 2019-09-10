@@ -14,7 +14,9 @@ var game = {
         resource: {
             research: 0,
             labour: 0,
-            wood: 0
+            wood: 0,
+            plank: 0,
+            stone: 0
         },
         building: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         constructions: [

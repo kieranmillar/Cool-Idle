@@ -33,6 +33,8 @@ function kingdom_init() {
     }
     kingdom_cells = $(".kingdom_tileCell");
 
+    $("#kingdom_removeBuildingPanel").mouseenter(function () {kingdom_updateinfoPanel(kingdom_infoPanelEnum.REMOVE, 0)});
+
     //Dynamically create building list
     kingdom_buildings.forEach(building => {
         if (building.name == "Castle" || building.name == "") {
@@ -227,7 +229,8 @@ function kingdom_cellInRange (x)
 const kingdom_infoPanelEnum = {
     CELL: 0,
     BUILDING: 1,
-    UPGRADE: 2
+    UPGRADE: 2,
+    REMOVE: 3
 }
 
 function kingdom_mousedOverCell(cell) {
@@ -240,13 +243,41 @@ function kingdom_mousedOverCell(cell) {
 function kingdom_clickedCell(cell) {
 	if (game.kingdom.constructions[cell] != kingdom_buildingEnum.EMPTY) {
         //there is a construction on the cell
+        if (kingdom_placing == -1) {
+            kingdom_removeBuilding(cell);
+        }
 	}
 	else {
         //the cell is unbuilt terrain
-        if (kingdom_placing != 0) {
+        if (kingdom_placing > 0) {
             kingdom_place (cell);
         }
 	}
+}
+
+function kingdom_removeBuilding(cell) {
+    let building = game.kingdom.constructions[cell];
+    if (building == kingdom_buildingEnum.CASTLE || building == kingdom_buildingEnum.EMPTY) {
+        return;
+    }
+    game.kingdom.constructions[cell] = kingdom_buildingEnum.EMPTY;
+    kingdom_buildingStock[building] ++;
+    kingdom_placing = 0;
+    kingdom_calculateOutput();
+    kingdom_updateResources();
+    kingdom_populateTileImages();
+    kingdom_updateBuildings();
+    save();
+}
+
+function kingdom_pickupRemoveBuilding() {
+    if (kingdom_placing == -1) {
+        kingdom_placing = 0;
+    }
+    else {
+        kingdom_placing = -1;
+    }
+    kingdom_updateBuildings();
 }
 
 function kingdom_mousedOverBuilding(building) {
@@ -279,7 +310,7 @@ function kingdom_build(building) {
         return;
     }
     for (let i = 0; i < kingdom_buildings[building].cost.length; i ++) {
-        game.kingdom.resource[kingdom_buildings[building].cost[i].type] - kingdom_getBuildingResourceCost(building, i);
+        game.kingdom.resource[kingdom_buildings[building].cost[i].type] -= kingdom_getBuildingResourceCost(building, i);
     }
     game.kingdom.building[building] ++;
     kingdom_buildingStock[building] ++;

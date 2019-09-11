@@ -111,14 +111,17 @@
 					</div>
 				</div>
 				<div id="kingdom_purchasePanel" class="kingdom_column">
-					<div>
-						<h3>Buildings</h3>
-						<div id="kingdom_buildingList" class="kingdom_purchasePanelGridItem"></div>
+					<div id="kingdom_removeBuildingPanel" class="kingdom_building">
+						<div class="kingdom_building_row">
+							<img src="./images/kingdom/bulldozer.png" alt= "Remove Building" class='kingdom_buildingImage'/>
+							<span class="kingdom_buildingName">Remove Building</span>
+							<button type="button" id="kingdom_removeButton" class="button" onclick="kingdom_pickupRemoveBuilding()">Remove</button>
+						</div>
 					</div>
-					<div>
-						<h3>Upgrades</h3>
-						<div id="kingdom_upgradeList" class="kingdom_purchasePanelGridItem"></div>
-					</div>
+					<h3>Buildings</h3>
+					<div id="kingdom_buildingList"></div>
+					<h3>Upgrades</h3>
+					<div id="kingdom_upgradeList"></div>
 				</div>
 			</div>
 		</div>

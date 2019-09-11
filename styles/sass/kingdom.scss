@@ -82,16 +82,10 @@
         flex-grow: 0;
         flex-shrink: 0;
         border-left: 2px solid black;
-        display: grid;
-        grid-template-rows: 1fr 1fr;
         overflow-y: auto;
 
         h3 {
             padding-left: 2px;
-        }
-
-        .kingdom_purchasePanelGridItem {
-            overflow-y: auto;
         }
 
         .kingdom_building {
@@ -101,40 +95,40 @@
             border: 1px solid black;
             padding: 2px;
             margin: 2px;
-
-            .kingdom_building_row {
-                display: flex;
-                flex-direction: row;
-
-                .kingdom_buildingStock {
-                    flex: 0 0 50px;
-                    font-size: 24px;
-                }
-
-                .kingdom_buildingImage {
-                    height: 40px;
-                    width: 40px;
-                    flex: 0 0 40px;
-                }
-    
-                .kingdom_buildingName {
-                    padding-left: 3px;
-                    flex: 1 1 0px;
-                }
-    
-                // .kingdom_buildButton {
-                    
-                // }
-
-                .kingdom_buildingCost {
-                    flex: 1 1 0px;
-                }
-
-                // .kingdom_placeButton {
-                    
-                // }
-            }
         }
+
+        .kingdom_building_row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .kingdom_buildingStock {
+            flex: 0 0 50px;
+            font-size: 24px;
+        }
+
+        .kingdom_buildingImage {
+            height: 40px;
+            width: 40px;
+            flex: 0 0 40px;
+        }
+
+        .kingdom_buildingName {
+            padding-left: 3px;
+            flex: 1 1 0px;
+        }
+
+        // .kingdom_buildButton {
+            
+        // }
+
+        .kingdom_buildingCost {
+            flex: 1 1 0px;
+        }
+
+        // .kingdom_placeButton {
+            
+        // }
 
         .kingdom_upgrade {
             max-width: 388px;

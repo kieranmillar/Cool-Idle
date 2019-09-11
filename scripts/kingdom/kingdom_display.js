@@ -1,5 +1,7 @@
 const kingdom_infoTitle = $("#kingdom_infoTitle");
 const kingdom_infoDescription = $("#kingdom_infoDescription");
+const kingdom_removeBuildingPanelLink = $("#kingdom_removeBuildingPanel");
+const kingdom_removeButtonLink = $("#kingdom_removeButton");
 
 function kingdom_redraw () {
 	kingdom_updateResources ();
@@ -74,7 +76,11 @@ function kingdom_resourceHtml (total, income) {
 }
 
 function kingdom_updateinfoPanel (infoPanelType, value) {
-	if (infoPanelType == kingdom_infoPanelEnum.UPGRADE) {
+	if (infoPanelType == kingdom_infoPanelEnum.REMOVE) {
+		kingdom_infoTitle.html("<img src = './images/kingdom/bulldozer.png' alt='Remove Building'/>Remove Building");
+		kingdom_infoDescription.html("<p>Remove a building, returning it to your stock. You cannot remove the Castle.</p><p>(You can then place it again later without paying for it again).</p>");
+	}
+	else if (infoPanelType == kingdom_infoPanelEnum.UPGRADE) {
 		kingdom_infoTitle.html(kingdom_upgrades[value].name);
 		kingdom_infoDescription.html(kingdom_upgrades[value].description);
 	}
@@ -83,7 +89,7 @@ function kingdom_updateinfoPanel (infoPanelType, value) {
 	}
 	else {
 		var terrain = kingdom_landscape[value];
-		let titleText = "<img src = './images/kingdom/" + kingdom_terrain[terrain].imageLink + "' alt='" + kingdom_terrain[terrain].name + "'>" + kingdom_terrain[terrain].name;
+		let titleText = "<img src = './images/kingdom/" + kingdom_terrain[terrain].imageLink + "' alt='" + kingdom_terrain[terrain].name + "'/>" + kingdom_terrain[terrain].name;
 		if (game.kingdom.constructions[value] == kingdom_buildingEnum.EMPTY) {
 			kingdom_infoTitle.html(titleText);
 			let description = kingdom_terrain[terrain].description;
@@ -105,6 +111,15 @@ function kingdom_updateinfoPanel_building (initialTitleText, building) {
 
 function kingdom_updateBuildings () {
 	$(".kingdom_building").hide();
+	if (true) { //TODO: Implement unlocking this
+		kingdom_removeBuildingPanelLink.show();
+	}
+	if (kingdom_placing == -1) {
+		kingdom_removeButtonLink.html('Cancel');
+	}
+	else {
+		kingdom_removeButtonLink.html('Remove');
+	}
 	for (let i = 2; i < kingdom_buildings.length; i++) {
 		if (kingdom_buildings[i].unlocked) {
 			kingdom_buildings[i].valueLink.html(kingdom_buildingStock[i]);

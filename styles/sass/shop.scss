@@ -1,10 +1,12 @@
 #loc_shop {
-    display: flex;
-    flex-flow: row;
+    .shop_section {
+        display: flex;
+        flex-flow: row;
+    }
 
     .shop_item {
         background-color: white;
-        width: 200px;
+        width: 240px;
         border: 1px solid black;
         border-radius: 4px;
         padding: 2px;

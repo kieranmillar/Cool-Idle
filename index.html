@@ -54,6 +54,7 @@
 		</div>
 		<div id="locations">
 			<div id="loc_help" class="location">
+				<p><strong>This game is currently in early development, and you should frequently delete your save file in the settings screen as major breaking changes frequently occur.</strong></p>
 				<p>Welcome to Cool Idle!</p>
 				<p>Click on the tabs above to swap locations.</p>
 				<p>This page tells you all you need to know to play the game. Come back as you unlock more gameplay features to learn how they work!</p>
@@ -94,10 +95,26 @@
 			</div>
 
 			<div id="loc_shop" class="location">
-				<div id="shop_kingdom" class="shop_item" onclick="shop_buy('kingdom')">
-					<h2>Kingdom</h2>
-					<p>Build and expand an empire, producing goods every second!</p>
-					<p class="cost">Cost: Free!</p>
+				<div id="shop_section_features">
+					<h1>Features</h1>
+					<div class="shop_section">
+						<div id="shop_kingdom" class="shop_item" onclick="shop_buy('kingdom')">
+							<h2>Kingdom</h2>
+							<p>Build and expand an empire, producing goods every second!</p>
+							<p class="cost">Cost: Free!</p>
+						</div>
+					</div>
+				</div>
+				<div id="shop_section_kingdom">
+					<hr>
+					<h1>Kingdom</h1>
+					<div class="shop_section">
+						<div id="shop_kingdom_remove" class="shop_item" onclick="shop_buy('kingdom_remove')">
+							<h2>Remove Buildings</h2>
+							<p>Unlock the ability to remove buildings you previously placed.</p>
+							<p class="cost">Cost: 500 Yellow Coins</p>
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -126,10 +143,12 @@
 			</div>
 		</div>
 
-		<script src="./scripts/shop.js"></script>
 		<script src="./scripts/kingdom/kingdom_data.js"></script>
 		<script src="./scripts/kingdom/kingdom_core.js"></script>
 		<script src="./scripts/kingdom/kingdom_display.js"></script>
+		<script src="./scripts/shop/shop_data.js"></script>
+		<script src="./scripts/shop/shop_core.js"></script>
+		<script src="./scripts/shop/shop_display.js"></script>
 		<script src="./scripts/game.js"></script>
 		<script src="./scripts/core.js"></script>
 	</body>

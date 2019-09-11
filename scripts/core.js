@@ -27,7 +27,7 @@ function gameLoop ()
 	while (ticks > 0)
 	{
         // Per second stuff goes here
-        if (game.kingdom.unlocked) {
+        if (game.shop[shop_itemEnum.FEATUREKINGDOM] == 1) {
             kingdom_tick();
             if (activeTab = "kingdom") {
                 kingdom_updateResources();
@@ -88,7 +88,7 @@ function displayFeatures() {
     $("#tab_settings").show();
     $("#tab_shop").show();
     $(".help").hide();
-    if (game.kingdom.unlocked) {
+    if (game.shop[shop_itemEnum.FEATUREKINGDOM] == 1) {
         $("#tab_kingdom").show();
         $("#help_kingdom").show();
     }

@@ -9,8 +9,8 @@ var game = {
 	yellowCoins: 0,
     greenCoins: 0,
     blueCoins: 0,
+    shop: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     kingdom: {
-        unlocked: false,
         resource: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         building: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         constructions: [

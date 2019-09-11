@@ -111,7 +111,7 @@ function kingdom_updateinfoPanel_building (initialTitleText, building) {
 
 function kingdom_updateBuildings () {
 	$(".kingdom_building").hide();
-	if (true) { //TODO: Implement unlocking this
+	if (game.shop[shop_itemEnum.KINGDOMREMOVE]) {
 		kingdom_removeBuildingPanelLink.show();
 	}
 	if (kingdom_placing == -1) {

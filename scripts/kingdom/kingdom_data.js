@@ -110,7 +110,8 @@ const kingdom_buildingEnum = {
 	WOODCUTTER: 2,
 	SHED: 3,
 	QUARRY: 4,
-	SAWMILL: 5
+	SAWMILL: 5,
+	LOGCABIN: 6
 }
 
 var kingdom_buildings = [
@@ -126,11 +127,21 @@ var kingdom_buildings = [
         output: function (i) {
             kingdom_outputs.labour += 1;
             kingdom_outputs.yellowCoins += 1;
-            kingdom_outputs.exp += 1;
+			let exp = 1;
+			if (game.shop[shop_itemEnum.KINGDOMSTOCKEXP] == 1) {
+				for (let i = 0; i < kingdom_buildingStock.length; i++) {
+					exp += kingdom_buildingStock[i];
+				}
+			}
+			kingdom_outputs.exp += exp;
 		},
 		unlocked: false,
 		description: function() {
-			return "<p>You rule your kingdom from your trusty castle. This building cannot be removed or relocated.</p><p>Labour + 1</p><p>Yellow Coins + 1</p><p>Exp + 1</p>";
+			let text = "<p>You rule your kingdom from your trusty castle. This building cannot be removed or relocated.</p><p>Labour + 1</p><p>Yellow Coins + 1</p><p>Exp + 1</p>";
+			if (game.shop[shop_itemEnum.KINGDOMSTOCKEXP] == 1) {
+				text += "<p>Exp + 1 for each unplaced building in stock.</p>";
+			}
+			return text;
 		}
 	},
 	{
@@ -225,9 +236,6 @@ var kingdom_buildings = [
 			else {
 				return false;
 			}
-		},
-		costDescription: function () {
-			return "<img src = './images/kingdom/" + kingdom_resources[kingdom_resourceEnum.LABOUR].imageLink + "' alt='" + kingdom_resources[kingdom_resourceEnum.LABOUR].name + "'/>" + displayNum(this.costLabour()) + "<img src = './images/kingdom/" + kingdom_resources[kingdom_resourceEnum.WOOD].imageLink + "' alt='" + kingdom_resources[kingdom_resourceEnum.WOOD].name + "'/>" + displayNum(this.costWood());
 		}
 	},
 	{
@@ -256,9 +264,6 @@ var kingdom_buildings = [
 		],
 		canPlace: function (i) {
 			return kingdom_landscape[i] == kingdom_terrainEnum.HILLS;
-		},
-		costDescription: function () {
-			return "<img src = './images/kingdom/" + kingdom_resources[kingdom_resourceEnum.LABOUR].imageLink + "' alt='" + kingdom_resources[kingdom_resourceEnum.LABOUR].name + "'/>" + displayNum(this.cost());
 		}
 	},
 	{
@@ -307,9 +312,52 @@ var kingdom_buildings = [
 		],
 		canPlace: function (i) {
 			return true;
+		}
+	},
+	{
+		idNumber: kingdom_buildingEnum.LOGCABIN,
+		name: "Log Cabin",
+		id: "kingdom_logCabin",
+		imageLink: "building_logcabin.png",
+		idLink: null,
+		valueLink: null,
+		buildButtonLink: null,
+		placeButtonLink: null,
+        output: function (i) {
+			kingdom_outputs.labour += 1;
 		},
-		costDescription: function () {
-			return "<img src = './images/kingdom/" + kingdom_resources[kingdom_resourceEnum.LABOUR].imageLink + "' alt='" + kingdom_resources[kingdom_resourceEnum.LABOUR].name + "'/>" + displayNum(this.costLabour()) + "<img src = './images/kingdom/" + kingdom_resources[kingdom_resourceEnum.WOOD].imageLink + "' alt='" + kingdom_resources[kingdom_resourceEnum.WOOD].name + "'/>" + displayNum(this.costWood());
+		unlocked: false,
+		description: function() {
+			return "<p>A place for your worker drones to live. I mean citizens.</p><p>Labour + 1</p>";
+		},
+		cost: [
+			{
+				type: kingdom_resourceEnum.LABOUR,
+				base: 100,
+				factor: 3,
+				link: null
+			},
+			{
+				type: kingdom_resourceEnum.WOOD,
+				base: 500,
+				factor: 3,
+				link: null
+			},
+			{
+				type: kingdom_resourceEnum.PLANK,
+				base: 200,
+				factor: 3,
+				link: null
+			},
+			{
+				type: kingdom_resourceEnum.STONE,
+				base: 100,
+				factor: 3,
+				link: null
+			}
+		],
+		canPlace: function (i) {
+			return true;
 		}
 	}
 ];
@@ -329,7 +377,9 @@ const kingdom_upgradeEnum = {
 	QUARRY: 0,
 	SAWMILL: 1,
 	WOODCUTTERADJACENCY: 2,
-	SAWMILLEFFICIENCY: 3
+	LOGCABIN: 3,
+	SAWMILLEFFICIENCY: 4,
+	EXPANDBORDERS1: 5
 }
 
 var kingdom_upgrades = [
@@ -379,6 +429,21 @@ var kingdom_upgrades = [
 		]
 	},
 	{
+		idNumber: kingdom_upgradeEnum.LOGCABIN,
+		name: "Log Cabin",
+		id: "kingdom_upgrade_logcabin",
+		idLink: null,
+		buttonLink: null,
+		unlocked: false,
+		description: "<p>Unlocks a new building that produces Labour.</p>",
+		cost: [
+			{
+				type: kingdom_resourceEnum.RESEARCH,
+				value: 500
+			}
+		]
+	},
+	{
 		idNumber: kingdom_upgradeEnum.SAWMILLEFFICIENCY,
 		name: "Sawmill Efficiency",
 		id: "kingdom_upgrade_sawmillEfficiency",
@@ -390,6 +455,25 @@ var kingdom_upgrades = [
 			{
 				type: kingdom_resourceEnum.RESEARCH,
 				value: 500
+			}
+		]
+	},
+	{
+		idNumber: kingdom_upgradeEnum.EXPANDBORDERS1,
+		name: "Expand Borders 1",
+		id: "kingdom_upgrade_expandBorders1",
+		idLink: null,
+		buttonLink: null,
+		unlocked: true,
+		description: "<p>Expand your borders, gaining more land to place buildings on.</p>",
+		cost: [
+			{
+				type: kingdom_resourceEnum.RESEARCH,
+				value: 5000
+			},
+			{
+				type: kingdom_resourceEnum.LABOUR,
+				value: 5000
 			}
 		]
 	}

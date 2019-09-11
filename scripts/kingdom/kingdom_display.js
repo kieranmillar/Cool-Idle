@@ -20,6 +20,7 @@ function kingdom_populateTileImages () {
 		}
 		else if (r == kingdom_rangeEnum.OUTSKIRTS) {
 			kingdom_cells[i].style.opacity = "0.5";
+			kingdom_cells[i].style.visibility = "visible";
 		}
 		else {
 			kingdom_cells[i].style.opacity = "1";
@@ -78,7 +79,7 @@ function kingdom_resourceHtml (total, income) {
 function kingdom_updateinfoPanel (infoPanelType, value) {
 	if (infoPanelType == kingdom_infoPanelEnum.REMOVE) {
 		kingdom_infoTitle.html("<img src = './images/kingdom/bulldozer.png' alt='Remove Building'/>Remove Building");
-		kingdom_infoDescription.html("<p>Remove a building, returning it to your stock. You cannot remove the Castle.</p><p>(You can then place it again later without paying for it again).</p>");
+		kingdom_infoDescription.html("<p>Remove a building, returning it to your stock. (You can then place it again later without paying for it again.)</p><p>You cannot remove the Castle.</p>");
 	}
 	else if (infoPanelType == kingdom_infoPanelEnum.UPGRADE) {
 		kingdom_infoTitle.html(kingdom_upgrades[value].name);

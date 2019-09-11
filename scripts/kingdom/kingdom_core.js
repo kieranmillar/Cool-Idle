@@ -105,12 +105,22 @@ function kingdom_tick () {
 }
 
 function kingdom_unlocks() {
+    kingdom_range = 1;
     if (game.kingdom.upgrades[kingdom_upgradeEnum.QUARRY]) {
         kingdom_buildings[kingdom_buildingEnum.QUARRY].unlocked = true;
     }
     if (game.kingdom.upgrades[kingdom_upgradeEnum.SAWMILL]) {
         kingdom_buildings[kingdom_buildingEnum.SAWMILL].unlocked = true;
         kingdom_upgrades[kingdom_upgradeEnum.SAWMILLEFFICIENCY].unlocked = true;
+    }
+    if (game.kingdom.upgrades[kingdom_upgradeEnum.QUARRY] && game.kingdom.upgrades[kingdom_upgradeEnum.SAWMILL]) {
+        kingdom_upgrades[kingdom_upgradeEnum.LOGCABIN].unlocked = true;
+    }
+    if (game.kingdom.upgrades[kingdom_upgradeEnum.LOGCABIN]) {
+        kingdom_buildings[kingdom_buildingEnum.LOGCABIN].unlocked = true;
+    }
+    if (game.kingdom.upgrades[kingdom_upgradeEnum.EXPANDBORDERS1]) {
+        kingdom_range += 1;
     }
 }
 
@@ -314,6 +324,7 @@ function kingdom_build(building) {
     }
     game.kingdom.building[building] ++;
     kingdom_buildingStock[building] ++;
+    kingdom_calculateOutput();
     kingdom_updateResources();
     kingdom_updateBuildings();
     kingdom_updateUpgrades();
@@ -370,9 +381,7 @@ function kingdom_purchaseUpgrade(upgrade) {
         game.kingdom.upgrades[upgrade] = 1;
         kingdom_unlocks();
         kingdom_calculateOutput();
-        kingdom_updateResources();
-        kingdom_updateBuildings();
-        kingdom_updateUpgrades();
+        kingdom_redraw();
         save();
     }
 }

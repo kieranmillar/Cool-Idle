@@ -127,19 +127,21 @@ var kingdom_buildings = [
         output: function (i) {
             kingdom_outputs.labour += 1;
             kingdom_outputs.yellowCoins += 1;
-			let exp = 1;
+			let exp = 0;
 			if (game.shop[shop_itemEnum.KINGDOMSTOCKEXP] == 1) {
 				for (let i = 0; i < kingdom_buildingStock.length; i++) {
 					exp += kingdom_buildingStock[i];
 				}
+				Math.floor(exp / 2);
 			}
+			exp += 1;
 			kingdom_outputs.exp += exp;
 		},
 		unlocked: false,
 		description: function() {
 			let text = "<p>You rule your kingdom from your trusty castle. This building cannot be removed or relocated.</p><p>Labour + 1</p><p>Yellow Coins + 1</p><p>Exp + 1</p>";
 			if (game.shop[shop_itemEnum.KINGDOMSTOCKEXP] == 1) {
-				text += "<p>Exp + 1 for each unplaced building in stock.</p>";
+				text += "<p>Exp + 1 for every 2 unplaced buildings in stock.</p>";
 			}
 			return text;
 		}

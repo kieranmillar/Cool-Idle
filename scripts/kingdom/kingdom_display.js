@@ -38,24 +38,24 @@ function kingdom_populateTileImages () {
 
 function kingdom_updateResources () {
 	$(".kingdom_resource").hide();
-	if (game.kingdom.resource.research > 0 || kingdom_outputs.research != 0) {
-		kingdom_resources[kingdom_resourceEnum.RESEARCH].valueLink.html(kingdom_resourceHtml(game.kingdom.resource.research, kingdom_outputs.research));
+	if (game.kingdom.resource[kingdom_resourceEnum.RESEARCH] > 0 || kingdom_outputs.research != 0) {
+		kingdom_resources[kingdom_resourceEnum.RESEARCH].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[kingdom_resourceEnum.RESEARCH], kingdom_outputs.research));
 		kingdom_resources[kingdom_resourceEnum.RESEARCH].idLink.show();
 	}
-	if (game.kingdom.resource.labour > 0 || kingdom_outputs.labour != 0) {
-		kingdom_resources[kingdom_resourceEnum.LABOUR].valueLink.html(kingdom_resourceHtml(game.kingdom.resource.labour, kingdom_outputs.labour));
+	if (game.kingdom.resource[kingdom_resourceEnum.LABOUR] > 0 || kingdom_outputs.labour != 0) {
+		kingdom_resources[kingdom_resourceEnum.LABOUR].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[kingdom_resourceEnum.LABOUR], kingdom_outputs.labour));
 		kingdom_resources[kingdom_resourceEnum.LABOUR].idLink.show();
 	}
-	if (game.kingdom.resource.wood > 0 || kingdom_outputs.wood != 0) {
-		kingdom_resources[kingdom_resourceEnum.WOOD].valueLink.html(kingdom_resourceHtml(game.kingdom.resource.wood, kingdom_outputs.wood));
+	if (game.kingdom.resource[kingdom_resourceEnum.WOOD] > 0 || kingdom_outputs.wood != 0) {
+		kingdom_resources[kingdom_resourceEnum.WOOD].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[kingdom_resourceEnum.WOOD], kingdom_outputs.wood));
 		kingdom_resources[kingdom_resourceEnum.WOOD].idLink.show();
 	}
-	if (game.kingdom.resource.plank > 0 || kingdom_outputs.plank != 0) {
-		kingdom_resources[kingdom_resourceEnum.PLANK].valueLink.html(kingdom_resourceHtml(game.kingdom.resource.plank, kingdom_outputs.plank));
+	if (game.kingdom.resource[kingdom_resourceEnum.PLANK] > 0 || kingdom_outputs.plank != 0) {
+		kingdom_resources[kingdom_resourceEnum.PLANK].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[kingdom_resourceEnum.PLANK], kingdom_outputs.plank));
 		kingdom_resources[kingdom_resourceEnum.PLANK].idLink.show();
 	}
-	if (game.kingdom.resource.stone > 0 || kingdom_outputs.stone != 0) {
-		kingdom_resources[kingdom_resourceEnum.STONE].valueLink.html(kingdom_resourceHtml(game.kingdom.resource.stone, kingdom_outputs.stone));
+	if (game.kingdom.resource[kingdom_resourceEnum.STONE] > 0 || kingdom_outputs.stone != 0) {
+		kingdom_resources[kingdom_resourceEnum.STONE].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[kingdom_resourceEnum.STONE], kingdom_outputs.stone));
 		kingdom_resources[kingdom_resourceEnum.STONE].idLink.show();
 	}
 }
@@ -105,12 +105,13 @@ function kingdom_updateinfoPanel_building (initialTitleText, building) {
 
 function kingdom_updateBuildings () {
 	$(".kingdom_building").hide();
-	for (i = 0; i < kingdom_buildings.length; i++) {
+	for (let i = 2; i < kingdom_buildings.length; i++) {
 		if (kingdom_buildings[i].unlocked) {
 			kingdom_buildings[i].valueLink.html(kingdom_buildingStock[i]);
-			kingdom_buildings[i].costLink.html(kingdom_buildings[i].costDescription());
-			kingdom_buildings[i].idLink.show();
-			if (kingdom_buildings[i].canAfford()) {
+			for (let j = 0; j < kingdom_buildings[i].cost.length; j ++) {
+				kingdom_buildings[i].cost[j].link.html(displayNum(kingdom_getBuildingResourceCost(i, j)));
+			}
+			if (kingdom_getBuildingAffordable (i)) {
 				$(kingdom_buildings[i].buildButtonLink).prop('disabled', false);
 				$(kingdom_buildings[i].buildButtonLink).addClass('clickable');
 			}
@@ -132,16 +133,17 @@ function kingdom_updateBuildings () {
 			else {
 				$(kingdom_buildings[i].placeButtonLink).html('Place');
 			}
+			kingdom_buildings[i].idLink.show();
 		}
 	}
 }
 
 function kingdom_updateUpgrades () {
 	$(".kingdom_upgrade").hide();
-	for (i = 0; i < kingdom_upgrades.length; i++) {
+	for (let i = 0; i < kingdom_upgrades.length; i++) {
 		if (kingdom_upgrades[i].unlocked && game.kingdom.upgrades[i] == 0) {
 			kingdom_upgrades[i].idLink.show();
-			if (kingdom_upgrades[i].canAfford()) {
+			if (kingdom_getUpgradeAffordable (i)) {
 				$(kingdom_upgrades[i].buttonLink).prop('disabled', false);
 				$(kingdom_upgrades[i].buttonLink).addClass('clickable');
 			}

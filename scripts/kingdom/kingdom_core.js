@@ -43,15 +43,22 @@ function kingdom_init() {
         newElement.addClass("kingdom_building");
         newElement.mouseenter({ value: building.idNumber }, function (event) {kingdom_mousedOverBuilding(event.data.value)});
         let htmlText = "<div class='kingdom_building_row'><span id='" + building.id + "Stock' class='kingdom_buildingStock'></span><img src = './images/kingdom/" + building.imageLink + "' alt='" + building.name + "' class='kingdom_buildingImage'/><span class='kingdom_buildingName'>" + building.name + "</span><button type='button' id='" + building.id + "PlaceButton' class='kingdom_placeButton button' onclick='kingdom_pickupBuilding(" + building.idNumber + ")' disabled>Place</button></div>";
-        htmlText += "<div class='kingdom_building_row'><span id='" + building.id + "Cost' class='kingdom_buildingCost'>" + building.costDescription() + "</span><button type='button' id='" + building.id + "BuildButton' class='kingdom_buildButton button' onclick='kingdom_build(" + building.idNumber + ")' disabled>Build</button></div>";
-		newElement.html(htmlText);
+        htmlText += "<div class='kingdom_building_row'><span class='kingdom_buildingCost'>";
+        for (let i = 0; i < building.cost.length; i ++) {
+            htmlText += "<img src = './images/kingdom/" + kingdom_resources[building.cost[i].type].imageLink + "' alt='" + kingdom_resources[building.cost[i].type].name + "'/><span id='" + building.id + kingdom_resources[building.cost[i].type].name + "Cost'></span>";
+            building.cost[i].link = $("#" + building.id + kingdom_resources[building.cost[i].type].name + "Cost");
+        }
+        htmlText += "</span><button type='button' id='" + building.id + "BuildButton' class='kingdom_buildButton button' onclick='kingdom_build(" + building.idNumber + ")' disabled>Build</button></div>";
+        newElement.html(htmlText);
         
         $("#kingdom_buildingList").append(newElement);
         building.idLink = $("#" + building.id);
         building.valueLink = $("#" + building.id + "Stock");
-        building.costLink = $("#" + building.id + "Cost");
         building.buildButtonLink = $("#" + building.id + "BuildButton");
         building.placeButtonLink = $("#" + building.id + "PlaceButton");
+        for (let i = 0; i < building.cost.length; i ++) {
+            building.cost[i].link = $("#" + building.id + kingdom_resources[building.cost[i].type].name + "Cost");
+        }
     });
 
     //Calculate building stock
@@ -69,7 +76,11 @@ function kingdom_init() {
         newElement.addClass("kingdom_upgrade");
         newElement.mouseenter({ value: upgrade.idNumber }, function (event) {kingdom_mousedOverUpgrade(event.data.value)});
         let htmlText = "<div class='kingdom_upgrade_row'><span class='kingdom_upgradeName'>" + upgrade.name + "</span><button type='button' id='" + upgrade.id + "UpgradeButton' class='kingdom_upgradeButton button' onclick='kingdom_purchaseUpgrade(" + upgrade.idNumber + ")' disabled>Purchase</button></div>";
-        htmlText += "<div class='kingdom_upgrade_row'><span id='" + upgrade.id + "Cost' class='kingdom_upgradeCost'>" + upgrade.costDescription() + "</span></div>";
+        htmlText += "<div class='kingdom_upgrade_row'><span>";
+        for (let i = 0; i < upgrade.cost.length; i ++) {
+            htmlText += "<img src = './images/kingdom/" + kingdom_resources[upgrade.cost[i].type].imageLink + "' alt='" + kingdom_resources[upgrade.cost[i].type].name + "'/>" + displayNum(upgrade.cost[i].value);
+        }
+        htmlText += "</span></div>";
 		newElement.html(htmlText);
         
         $("#kingdom_upgradeList").append(newElement);
@@ -82,11 +93,11 @@ function kingdom_init() {
 }
 
 function kingdom_tick () {
-    game.kingdom.resource.research += kingdom_outputs.research * game.level;
-    game.kingdom.resource.labour += kingdom_outputs.labour * game.level;
-    game.kingdom.resource.wood += kingdom_outputs.wood * game.level;
-    game.kingdom.resource.plank += kingdom_outputs.plank * game.level;
-    game.kingdom.resource.stone += kingdom_outputs.stone * game.level;
+    game.kingdom.resource[kingdom_resourceEnum.RESEARCH] += kingdom_outputs.research * game.level;
+    game.kingdom.resource[kingdom_resourceEnum.LABOUR] += kingdom_outputs.labour * game.level;
+    game.kingdom.resource[kingdom_resourceEnum.WOOD] += kingdom_outputs.wood * game.level;
+    game.kingdom.resource[kingdom_resourceEnum.PLANK] += kingdom_outputs.plank * game.level;
+    game.kingdom.resource[kingdom_resourceEnum.STONE] += kingdom_outputs.stone * game.level;
     gainYellowCoins(kingdom_outputs.yellowCoins * game.level);
     gainExp(kingdom_outputs.exp * game.level);
 }
@@ -246,17 +257,36 @@ function kingdom_mousedOverUpgrade(upgrade) {
     kingdom_updateinfoPanel (kingdom_infoPanelEnum.UPGRADE, upgrade);
 }
 
+// Get the scaled cost of a certain resource, based on number of that building already built
+function kingdom_getBuildingResourceCost (building, resource) {
+    return Math.floor(kingdom_buildings[building].cost[resource].base * Math.pow(kingdom_buildings[building].cost[resource].factor, game.kingdom.building[building]));
+}
+
+// Returns if you can afford to build a building
+function kingdom_getBuildingAffordable (building) {
+    for (let i = 0; i < kingdom_buildings[building].cost.length; i ++) {
+        let playerResource = game.kingdom.resource[kingdom_buildings[building].cost[i].type];
+        if (playerResource < kingdom_getBuildingResourceCost(building, i)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Build a building, paying its resource cost.
 function kingdom_build(building) {
-    kingdom_buildings[building].purchase();
-    save();
+    if (!kingdom_getBuildingAffordable (building)) {
+        return;
+    }
+    for (let i = 0; i < kingdom_buildings[building].cost.length; i ++) {
+        game.kingdom.resource[kingdom_buildings[building].cost[i].type] - kingdom_getBuildingResourceCost(building, i);
+    }
+    game.kingdom.building[building] ++;
+    kingdom_buildingStock[building] ++;
     kingdom_updateResources();
     kingdom_updateBuildings();
     kingdom_updateUpgrades();
-}
-
-function kingdom_addBuilding(building) {
-    game.kingdom.building[building] ++;
-	kingdom_buildingStock[building] ++;
+    save();
 }
 
 function kingdom_pickupBuilding(building) {
@@ -286,9 +316,26 @@ function kingdom_place(cell) {
     }
 }
 
+// Returns if you can afford to purchase an upgrade
+function kingdom_getUpgradeAffordable (upgrade) {
+    for (let i = 0; i < kingdom_upgrades[upgrade].cost.length; i ++) {
+        let playerResource = game.kingdom.resource[kingdom_upgrades[upgrade].cost[i].type];
+        if (playerResource < kingdom_upgrades[upgrade].cost[i].value) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Purchase an upgrade, paying its resource cost
 function kingdom_purchaseUpgrade(upgrade) {
     if (game.kingdom.upgrades[upgrade] == 0) {
-        kingdom_upgrades[upgrade].purchase();
+        if (!kingdom_getUpgradeAffordable (upgrade)) {
+            return;
+        }
+        for (let i = 0; i < kingdom_upgrades[upgrade].cost.length; i ++) {
+            game.kingdom.resource[kingdom_upgrades[upgrade].cost[i].type] -= kingdom_upgrades[upgrade].cost[i].value;
+        }
         game.kingdom.upgrades[upgrade] = 1;
         kingdom_unlocks();
         kingdom_calculateOutput();

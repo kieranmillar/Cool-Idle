@@ -11,13 +11,7 @@ var game = {
     blueCoins: 0,
     kingdom: {
         unlocked: false,
-        resource: {
-            research: 0,
-            labour: 0,
-            wood: 0,
-            plank: 0,
-            stone: 0
-        },
+        resource: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         building: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         constructions: [
             kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY,

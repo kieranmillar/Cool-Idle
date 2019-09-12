@@ -2,6 +2,8 @@ const kingdom_infoTitle = $("#kingdom_infoTitle");
 const kingdom_infoDescription = $("#kingdom_infoDescription");
 const kingdom_removeBuildingPanelLink = $("#kingdom_removeBuildingPanel");
 const kingdom_removeButtonLink = $("#kingdom_removeButton");
+const kingdom_claimTilePanelLink = $("#kingdom_claimTilePanel");
+const kingdom_claimTileButtonLink = $("#kingdom_claimTileButton");
 
 function kingdom_redraw () {
 	kingdom_updateResources ();
@@ -14,8 +16,8 @@ function kingdom_redraw () {
 function kingdom_populateTileImages () {
 	for (let i = 0; i < kingdom_cells.length; i++)
 	{
-		let r = kingdom_cellInRange (i);
-		if (r == kingdom_rangeEnum.OUTOFRANGE) {
+		let r = game.kingdom.borders[i];
+		if (r == kingdom_rangeEnum.OUTOFBORDERS) {
 			kingdom_cells[i].style.visibility = "hidden";
 		}
 		else if (r == kingdom_rangeEnum.OUTSKIRTS) {
@@ -81,6 +83,10 @@ function kingdom_updateinfoPanel (infoPanelType, value) {
 		kingdom_infoTitle.html("<img src = './images/kingdom/bulldozer.png' alt='Remove Building'/>Remove Building");
 		kingdom_infoDescription.html("<p>Remove a building, returning it to your stock. (You can then place it again later without paying for it again.)</p><p>You cannot remove the Castle.</p>");
 	}
+	else if (infoPanelType == kingdom_infoPanelEnum.CLAIMTILE) {
+		kingdom_infoTitle.html("<img src = './images/kingdom/swords.png' alt='Claim Tile'/>Claim Tile");
+		kingdom_infoDescription.html("<p>Fight for more territory! Claim a tile on your borders as your own!</p>");
+	}
 	else if (infoPanelType == kingdom_infoPanelEnum.UPGRADE) {
 		kingdom_infoTitle.html(kingdom_upgrades[value].name);
 		kingdom_infoDescription.html(kingdom_upgrades[value].description);
@@ -94,7 +100,7 @@ function kingdom_updateinfoPanel (infoPanelType, value) {
 		if (game.kingdom.constructions[value] == kingdom_buildingEnum.EMPTY) {
 			kingdom_infoTitle.html(titleText);
 			let description = kingdom_terrain[terrain].description;
-			if (kingdom_cellInRange(value) == kingdom_rangeEnum.OUTSKIRTS) {
+			if (game.kingdom.borders[value] == kingdom_rangeEnum.OUTSKIRTS) {
 				description += "<p class='kingdom_infoPanel_red'>This tile is outside of your borders. You cannot place buildings on it, but it counts for adjacency bonuses.</p>";
 			}
 			kingdom_infoDescription.html(description);
@@ -120,6 +126,15 @@ function kingdom_updateBuildings () {
 	}
 	else {
 		kingdom_removeButtonLink.html('Remove');
+	}
+	if (game.shop[shop_itemEnum.KINGDOMCLAIMTILE]) {
+		kingdom_claimTilePanelLink.show();
+	}
+	if (kingdom_placing == -2) {
+		kingdom_claimTileButtonLink.html('Cancel');
+	}
+	else {
+		kingdom_claimTileButtonLink.html('Claim TIle');
 	}
 	for (let i = 2; i < kingdom_buildings.length; i++) {
 		if (kingdom_buildings[i].unlocked) {

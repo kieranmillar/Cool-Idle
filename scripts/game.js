@@ -13,6 +13,17 @@ var game = {
     kingdom: {
         resource: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         building: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        borders: [
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 1, 1, 1, 0, 0, 0,
+            0, 0, 1, 2, 2, 2, 1, 0, 0,
+            0, 0, 1, 2, 2, 2, 1, 0, 0,
+            0, 0, 1, 2, 2, 2, 1, 0, 0,
+            0, 0, 0, 1, 1, 1, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
         constructions: [
             kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY, kingdom_buildingEnum.EMPTY,
 

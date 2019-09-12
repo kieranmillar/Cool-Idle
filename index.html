@@ -114,10 +114,10 @@
 							<p>Unlock the ability to remove buildings you previously placed.</p>
 							<p class="cost">Cost: 500 Yellow Coins</p>
 						</div>
-						<div id="shop_kingdom_stockExp" class="shop_item" onclick="shop_buy('kingdom_stockExp')">
-							<h2>Building Experience</h2>
-							<p>The Castle produces 1 additional Exp for every 2 unplaced buildings in stock.</p>
-							<p class="cost">Cost: 2.50K Yellow Coins</p>
+						<div id="shop_kingdom_claimTile" class="shop_item" onclick="shop_buy('kingdom_claimTile')">
+							<h2>Claim Tile</h2>
+							<p>Unlock the ability to expand your borders by spending military.</p>
+							<p class="cost">Cost: 500 Yellow Coins</p>
 						</div>
 					</div>
 				</div>
@@ -138,6 +138,21 @@
 							<img src="./images/kingdom/bulldozer.png" alt= "Remove Building" class='kingdom_buildingImage'/>
 							<span class="kingdom_buildingName">Remove Building</span>
 							<button type="button" id="kingdom_removeButton" class="button" onclick="kingdom_pickupRemoveBuilding()">Remove</button>
+						</div>
+					</div>
+					<div id="kingdom_claimTilePanel" class="kingdom_building">
+						<div class="kingdom_building_row">
+							<img src="./images/kingdom/swords.png" alt= "Claim Tile" class='kingdom_buildingImage'/>
+							<span class="kingdom_buildingName">Claim Tile</span>
+							<button type="button" id="kingdom_claimTileButton" class="button" onclick="kingdom_pickupClaimTile()">Claim Tile</button>
+						</div>
+						<div class="kingdom_building_row">
+							<span class="kingdom_buildingCost">
+								<img src="./images/kingdom/resource_labour.png" alt="Labour"/>
+								<span id="kingdom_claimTileLabourCost"></span>
+								<img src="./images/kingdom/resource_military.png" alt="Military"/>
+								<span id="kingdom_claimTileMilitaryCost"></span>
+							</span>
 						</div>
 					</div>
 					<h3>Buildings</h3>

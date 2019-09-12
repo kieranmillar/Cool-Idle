@@ -11,8 +11,8 @@ function shop_redraw () {
         $('#shop_kingdom_remove').addClass('purchased');
         $('#shop_kingdom_remove > .cost').html("Purchased!");
     }
-    if (game.shop[shop_itemEnum.KINGDOMSTOCKEXP] == 1) {
-        $('#shop_kingdom_stockExp').addClass('purchased');
-        $('#shop_kingdom_stockExp > .cost').html("Purchased!");
+    if (game.shop[shop_itemEnum.KINGDOMCLAIMTILE] == 1) {
+        $('#shop_kingdom_claimTile').addClass('purchased');
+        $('#shop_kingdom_claimTile > .cost').html("Purchased!");
     }
 }

@@ -15,11 +15,11 @@ function shop_buy (item) {
                 }
             }
             break;
-        case "kingdom_stockExp":
-            if (game.yellowCoins >= 2500) {
-                if (!game.shop[shop_itemEnum.KINGDOMSTOCKEXP]) {
-                    game.shop[shop_itemEnum.KINGDOMSTOCKEXP] = 1;
-                    game.yellowCoins -= 2500;
+        case "kingdom_claimTile":
+            if (game.yellowCoins >= 500) {
+                if (!game.shop[shop_itemEnum.KINGDOMCLAIMTILE]) {
+                    game.shop[shop_itemEnum.KINGDOMCLAIMTILE] = 1;
+                    game.yellowCoins -= 500;
                     displayFeatures();
                 }
             }

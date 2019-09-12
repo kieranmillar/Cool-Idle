@@ -1,6 +1,5 @@
 var kingdom_cells;
 var kingdom_currentCell = 40;
-var kingdom_range = 1;
 var kingdom_buildingStock = [];
 var kingdom_placing = 0;
 
@@ -34,6 +33,7 @@ function kingdom_init() {
     kingdom_cells = $(".kingdom_tileCell");
 
     $("#kingdom_removeBuildingPanel").mouseenter(function () {kingdom_updateinfoPanel(kingdom_infoPanelEnum.REMOVE, 0)});
+    $("#kingdom_claimTilePanel").mouseenter(function () {kingdom_updateinfoPanel(kingdom_infoPanelEnum.CLAIMTILE, 0)});
 
     //Dynamically create building list
     kingdom_buildings.forEach(building => {
@@ -213,45 +213,32 @@ function kingdom_getConstructionWest(currentTile) {
 }
 
 const kingdom_rangeEnum = {
-    OUTOFRANGE: 0,
+    OUTOFBORDERS: 0,
     OUTSKIRTS: 1,
-    INRANGE: 2
-}
-
-function kingdom_cellInRange (x)
-{
-	let row = Math.floor(x/9);
-	let column = x % 9;
-	if (Math.abs(row - 4) > kingdom_range + 1 || Math.abs(column - 4) > kingdom_range + 1)
-	{
-		return kingdom_rangeEnum.OUTOFRANGE;
-	}
-	else if (Math.abs(row - 4) == kingdom_range + 1 || Math.abs(column - 4) == kingdom_range + 1)
-	{
-		return kingdom_rangeEnum.OUTSKIRTS;
-	}
-	else
-	{
-		return kingdom_rangeEnum.INRANGE;
-	}
+    INBORDERS: 2
 }
 
 const kingdom_infoPanelEnum = {
     CELL: 0,
     BUILDING: 1,
     UPGRADE: 2,
-    REMOVE: 3
+    REMOVE: 3,
+    CLAIMTILE: 4
 }
 
 function kingdom_mousedOverCell(cell) {
-    if (kingdom_cellInRange(cell) != kingdom_rangeEnum.OUTOFRANGE) {
+    if (game.kingdom.borders[cell] != kingdom_rangeEnum.OUTOFBORDERS) {
         kingdom_currentCell = cell;
         kingdom_updateinfoPanel (kingdom_infoPanelEnum.CELL, cell);
     }
 }
 
 function kingdom_clickedCell(cell) {
-	if (game.kingdom.constructions[cell] != kingdom_buildingEnum.EMPTY) {
+    if (kingdom_placing == -2) {
+        //We are trying to claim a tile
+        kingdom_claimTile(cell);
+    }
+    else if (game.kingdom.constructions[cell] != kingdom_buildingEnum.EMPTY) {
         //there is a construction on the cell
         if (kingdom_placing == -1) {
             kingdom_removeBuilding(cell);
@@ -263,6 +250,42 @@ function kingdom_clickedCell(cell) {
             kingdom_place (cell);
         }
 	}
+}
+
+function kingdom_claimTile(cell) {
+    if (game.kingdom.borders[cell] != kingdom_rangeEnum.OUTSKIRTS) {
+        return;
+    }
+    game.kingdom.borders[cell] = kingdom_rangeEnum.INBORDERS;
+    if (cell > 8) {
+        let northTile = cell - 9;
+        if (game.kingdom.borders[northTile] == kingdom_rangeEnum.OUTOFBORDERS) {
+            game.kingdom.borders[northTile] = kingdom_rangeEnum.OUTSKIRTS;
+        }
+    }
+    if (cell % 9 < 8) {
+        let eastTile = cell + 1;
+        if (game.kingdom.borders[eastTile] == kingdom_rangeEnum.OUTOFBORDERS) {
+            game.kingdom.borders[eastTile] = kingdom_rangeEnum.OUTSKIRTS;
+        }
+    }
+    if (cell < 72) {
+        let southTile = cell + 9;
+        if (game.kingdom.borders[southTile] == kingdom_rangeEnum.OUTOFBORDERS) {
+            game.kingdom.borders[southTile] = kingdom_rangeEnum.OUTSKIRTS;
+        }
+    }
+    if (cell % 9 > 0) {
+        let westTile = cell - 1;
+        if (game.kingdom.borders[westTile] == kingdom_rangeEnum.OUTOFBORDERS) {
+            game.kingdom.borders[westTile] = kingdom_rangeEnum.OUTSKIRTS;
+        }
+    }
+    kingdom_placing = 0;
+    kingdom_updateResources();
+    kingdom_populateTileImages();
+    kingdom_updateBuildings();
+    save();
 }
 
 function kingdom_removeBuilding(cell) {
@@ -286,6 +309,16 @@ function kingdom_pickupRemoveBuilding() {
     }
     else {
         kingdom_placing = -1;
+    }
+    kingdom_updateBuildings();
+}
+
+function kingdom_pickupClaimTile() {
+    if (kingdom_placing == -2) {
+        kingdom_placing = 0;
+    }
+    else {
+        kingdom_placing = -2;
     }
     kingdom_updateBuildings();
 }
@@ -344,7 +377,7 @@ function kingdom_pickupBuilding(building) {
 function kingdom_place(cell) {
     if (kingdom_placing != 0
     && game.kingdom.constructions[cell] == kingdom_buildingEnum.EMPTY
-    && kingdom_cellInRange(cell) == kingdom_rangeEnum.INRANGE) {
+    && game.kingdom.borders[cell] == kingdom_rangeEnum.INBORDERS) {
         if (kingdom_buildings[kingdom_placing].canPlace(cell)) {
             game.kingdom.constructions[cell] = kingdom_placing;
             kingdom_buildingStock[kingdom_placing] --;

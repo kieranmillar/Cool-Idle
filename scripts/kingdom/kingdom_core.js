@@ -2,6 +2,7 @@ var kingdom_cells;
 var kingdom_currentCell = 40;
 var kingdom_buildingStock = [];
 var kingdom_placing = 0;
+var kingdom_claimedTiles = 0;
 
 function kingdom_init() {
     //Dynamically create resource list
@@ -100,8 +101,8 @@ function kingdom_tick () {
     game.kingdom.resource[kingdom_resourceEnum.WOOD] += kingdom_outputs.wood * game.level;
     game.kingdom.resource[kingdom_resourceEnum.PLANK] += kingdom_outputs.plank * game.level;
     game.kingdom.resource[kingdom_resourceEnum.STONE] += kingdom_outputs.stone * game.level;
-    gainYellowCoins(kingdom_outputs.yellowCoins * game.level);
-    gainExp(kingdom_outputs.exp * game.level);
+    gainYellowCoins(kingdom_outputs.yellowCoins);
+    gainExp(kingdom_outputs.exp);
 }
 
 function kingdom_unlocks() {
@@ -125,6 +126,12 @@ function kingdom_unlocks() {
 }
 
 function kingdom_calculateOutput () {
+    kingdom_claimedTiles = -9;
+    for (let i = 0; i < game.kingdom.borders.length; i++) {
+        if (game.kingdom.borders[i] == 2) {
+            kingdom_claimedTiles ++;
+        }
+    }
     Object.keys(kingdom_outputs).forEach(v => kingdom_outputs[v] = 0);
     for (let i = 0; i < kingdom_cells.length; i++) {
         const currentConstruction = game.kingdom.constructions[i];
@@ -282,6 +289,7 @@ function kingdom_claimTile(cell) {
         }
     }
     kingdom_placing = 0;
+    kingdom_claimedTiles ++;
     kingdom_updateResources();
     kingdom_populateTileImages();
     kingdom_updateBuildings();
@@ -314,13 +322,16 @@ function kingdom_pickupRemoveBuilding() {
 }
 
 function kingdom_pickupClaimTile() {
-    if (kingdom_placing == -2) {
-        kingdom_placing = 0;
+    let cost = Math.floor(50 * Math.pow(2, kingdom_claimedTiles));
+    if (game.kingdom.resource[kingdom_resourceEnum.LABOUR] >= cost && game.kingdom.resource[kingdom_resourceEnum.MILITARY] >= cost) {
+        if (kingdom_placing == -2) {
+            kingdom_placing = 0;
+        }
+        else {
+            kingdom_placing = -2;
+        }
+        kingdom_updateBuildings();
     }
-    else {
-        kingdom_placing = -2;
-    }
-    kingdom_updateBuildings();
 }
 
 function kingdom_mousedOverBuilding(building) {

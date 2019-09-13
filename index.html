@@ -14,7 +14,7 @@
 		content="Kieran Millar" />
 		
 		<meta name="revised"
-		content="Kieran Millar, 05/09/2019" />
+		content="Kieran Millar, 12/09/2019" />
 		
 		<link rel="stylesheet" type="text/css" href="styles/css/main.css">
 		
@@ -36,14 +36,17 @@
 				</h2>
 			</div>
 			<div id="expBar">
-				<p>Level: <span id="level"></span></p>
-				<p>Exp: <span id="exp"></span> / <span id="maxExp"></span></p>
+				<div id="topbar_levelRow">
+					<span id="topbar_level">Level: <span id="level"></span></span>
+					<span class="topbar_coin"><img src="./images/coin_yellow.png" alt= "Yellow Coins"/><span id="yellowCoins"></span></span>
+					<span class="topbar_coin"><img src="./images/coin_blue.png" alt= "Blue Coins"/><span id="blueCoins"></span></span>
+					<span class="topbar_coin"><img src="./images/coin_green.png" alt= "Green Coins"/><span id="greenCoins"></span></span>
+				</div>
+				<div>
+					<img src="./images/exp.png" alt= "Exp"/>
+					<span id="exp"></span> / <span id="maxExp"></span>
+				</div>
 				<progress id="expProgress" value="0" max="1"></progress>
-			</div>
-			<div id="coinList">
-				<p>Yellow Coins: <span id="yellowCoins"></span></p>
-				<p>Green Coins: <span id="greenCoins"></span></p>
-				<p>Blue Coins: <span id="blueCoins"></span></p>
 			</div>
 		</div>
 		<div id="tabs">
@@ -71,15 +74,15 @@
 				<p>At the top of your screen you will find 3 types of coins:</p>
 				<ul>
 					<li>Yellow coins: A common currency you can earn in each feature.</li>
-					<li>Green coins: A rarer currency that you only earn in features by performing more difficult tasks.</li>
-					<li>Blue coins: These coins can only be earned by levelling up. When you level up you earn a number of blue coins equal to the level you just completed, e.g. when levelling up from level 4 to level 5, you earn 4 blue coins.</li>
+					<li>Blue coins: A rarer currency that you only earn in features by performing more difficult tasks.</li>
+					<li>Green coins: These coins can only be earned by levelling up. When you level up you earn a number of green coins equal to the level you just completed, e.g. when levelling up from level 4 to level 5, you earn 4 green coins.</li>
 				</ul>
 				<p>Coins are spent in Cool-Mart to unlock and upgrade game features!</p>
 
 				<div id="help_kingdom" class="help">
 					<hr>
 					<h2>Kingdom</h2>
-					<p><strong>Level bonus:</strong> All building effects are multiplied by your level.</p>
+					<p><strong>Level bonus:</strong> All building effects except exp and coin gain are multiplied by your level.</p>
 					<p>Build and place buildings which produce resources every second. Use these resources to build more buildings, or unlock upgrades. The output of buildings can often be improved by building them on, or next to, various terrain features or other buildings. The resources produced by buildings can also include experience and coins.</p>
 				</div>
 
@@ -112,12 +115,12 @@
 						<div id="shop_kingdom_remove" class="shop_item" onclick="shop_buy('kingdom_remove')">
 							<h2>Remove Buildings</h2>
 							<p>Unlock the ability to remove buildings you previously placed.</p>
-							<p class="cost">Cost: 500 Yellow Coins</p>
+							<p class="cost">Cost: <img src="./images/coin_yellow.png" alt= "Yellow Coins"/>250</p>
 						</div>
 						<div id="shop_kingdom_claimTile" class="shop_item" onclick="shop_buy('kingdom_claimTile')">
 							<h2>Claim Tile</h2>
 							<p>Unlock the ability to expand your borders by spending military.</p>
-							<p class="cost">Cost: 500 Yellow Coins</p>
+							<p class="cost">Cost: <img src="./images/coin_yellow.png" alt= "Yellow Coins"/>250</p>
 						</div>
 					</div>
 				</div>
@@ -137,7 +140,7 @@
 						<div class="kingdom_building_row">
 							<img src="./images/kingdom/bulldozer.png" alt= "Remove Building" class='kingdom_buildingImage'/>
 							<span class="kingdom_buildingName">Remove Building</span>
-							<button type="button" id="kingdom_removeButton" class="button" onclick="kingdom_pickupRemoveBuilding()">Remove</button>
+							<button type="button" id="kingdom_removeButton" class="button clickable" onclick="kingdom_pickupRemoveBuilding()">Remove</button>
 						</div>
 					</div>
 					<div id="kingdom_claimTilePanel" class="kingdom_building">

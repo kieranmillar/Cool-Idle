@@ -97,7 +97,7 @@ function displayFeatures() {
 function gainExp (amount) {
     game.exp += amount;
     while (game.exp >= getMaxExp()) {
-        gainBlueCoins (game.level);
+        gainGreenCoins (game.level);
         game.exp -= getMaxExp();
         game.level ++;
     }
@@ -111,12 +111,12 @@ function gainYellowCoins (amount) {
     game.yellowCoins += amount;
 }
 
-function gainGreenCoins (amount) {
-    game.greenCoins += amount;
-}
-
 function gainBlueCoins (amount) {
     game.blueCoins += amount;
+}
+
+function gainGreenCoins (amount) {
+    game.greenCoins += amount;
 }
 
 function displayNum(num) {

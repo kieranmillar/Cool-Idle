@@ -4,6 +4,8 @@ const kingdom_removeBuildingPanelLink = $("#kingdom_removeBuildingPanel");
 const kingdom_removeButtonLink = $("#kingdom_removeButton");
 const kingdom_claimTilePanelLink = $("#kingdom_claimTilePanel");
 const kingdom_claimTileButtonLink = $("#kingdom_claimTileButton");
+const kingdom_claimTileLabourCost = $("#kingdom_claimTileLabourCost");
+const kingdom_claimTileMilitaryCost = $("#kingdom_claimTileMilitaryCost");
 
 function kingdom_redraw () {
 	kingdom_updateResources ();
@@ -85,7 +87,7 @@ function kingdom_updateinfoPanel (infoPanelType, value) {
 	}
 	else if (infoPanelType == kingdom_infoPanelEnum.CLAIMTILE) {
 		kingdom_infoTitle.html("<img src = './images/kingdom/swords.png' alt='Claim Tile'/>Claim Tile");
-		kingdom_infoDescription.html("<p>Fight for more territory! Claim a tile on your borders as your own!</p>");
+		kingdom_infoDescription.html("<p>Fight for more territory! Claim a tile just outside your borders as your own!</p>");
 	}
 	else if (infoPanelType == kingdom_infoPanelEnum.UPGRADE) {
 		kingdom_infoTitle.html(kingdom_upgrades[value].name);
@@ -129,6 +131,17 @@ function kingdom_updateBuildings () {
 	}
 	if (game.shop[shop_itemEnum.KINGDOMCLAIMTILE]) {
 		kingdom_claimTilePanelLink.show();
+		let cost = Math.floor(50 * Math.pow(2, kingdom_claimedTiles));
+		if (game.kingdom.resource[kingdom_resourceEnum.LABOUR] >= cost && game.kingdom.resource[kingdom_resourceEnum.MILITARY] >= cost) {
+			$(kingdom_claimTileButtonLink).prop('disabled', false);
+			$(kingdom_claimTileButtonLink).addClass('clickable');
+		}
+		else {
+			$(kingdom_claimTileButtonLink).prop('disabled', true);
+			$(kingdom_claimTileButtonLink).removeClass('clickable');
+		}
+		kingdom_claimTileLabourCost.html(displayNum(cost));
+		kingdom_claimTileMilitaryCost.html(displayNum(cost));
 	}
 	if (kingdom_placing == -2) {
 		kingdom_claimTileButtonLink.html('Cancel');

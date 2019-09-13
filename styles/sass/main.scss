@@ -44,6 +44,10 @@ p, span, li {
     line-height: 140%;
 }
 
+img {
+	vertical-align: middle;
+}
+
 #topbar {
 	display: flex;
 	flex-direction: row;
@@ -78,6 +82,22 @@ p, span, li {
 	}
 }
 
+#topbar_levelRow {
+	display: flex;
+	flex-flow: row;
+}
+
+#topbar_level {
+	flex-grow: 1;
+	flex-shrink: 0;
+}
+
+.topbar_coin {
+	flex-grow: 0;
+	flex-shrink: 0;
+	width: 130px;
+}
+
 #expBar {
 	flex-grow: 1;
 	flex-shrink: 0;
@@ -98,12 +118,6 @@ p, span, li {
 			background-color: green;
 		}
 	}
-}
-
-#coinList {
-	width: 200px;
-	flex-grow: 0;
-	flex-shrink: 0;
 }
 
 #tabs {

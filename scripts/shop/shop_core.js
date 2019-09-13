@@ -7,19 +7,19 @@ function shop_buy (item) {
             }
             break;
         case "kingdom_remove":
-            if (game.yellowCoins >= 500) {
+            if (game.yellowCoins >= 250) {
                 if (!game.shop[shop_itemEnum.KINGDOMREMOVE]) {
                     game.shop[shop_itemEnum.KINGDOMREMOVE] = 1;
-                    game.yellowCoins -= 500;
+                    game.yellowCoins -= 250;
                     displayFeatures();
                 }
             }
             break;
         case "kingdom_claimTile":
-            if (game.yellowCoins >= 500) {
+            if (game.yellowCoins >= 250) {
                 if (!game.shop[shop_itemEnum.KINGDOMCLAIMTILE]) {
                     game.shop[shop_itemEnum.KINGDOMCLAIMTILE] = 1;
-                    game.yellowCoins -= 500;
+                    game.yellowCoins -= 250;
                     displayFeatures();
                 }
             }

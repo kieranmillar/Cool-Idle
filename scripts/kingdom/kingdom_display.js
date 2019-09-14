@@ -53,6 +53,10 @@ function kingdom_updateResources () {
 		kingdom_resources[kingdom_resourceEnum.LABOUR].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[kingdom_resourceEnum.LABOUR], kingdom_outputs.labour));
 		kingdom_resources[kingdom_resourceEnum.LABOUR].idLink.show();
 	}
+	if (game.kingdom.resource[kingdom_resourceEnum.MILITARY] > 0 || kingdom_outputs.military != 0) {
+		kingdom_resources[kingdom_resourceEnum.MILITARY].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[kingdom_resourceEnum.MILITARY], kingdom_outputs.military));
+		kingdom_resources[kingdom_resourceEnum.MILITARY].idLink.show();
+	}
 	if (game.kingdom.resource[kingdom_resourceEnum.WOOD] > 0 || kingdom_outputs.wood != 0) {
 		kingdom_resources[kingdom_resourceEnum.WOOD].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[kingdom_resourceEnum.WOOD], kingdom_outputs.wood));
 		kingdom_resources[kingdom_resourceEnum.WOOD].idLink.show();
@@ -131,7 +135,7 @@ function kingdom_updateBuildings () {
 	}
 	if (game.shop[shop_itemEnum.KINGDOMCLAIMTILE]) {
 		kingdom_claimTilePanelLink.show();
-		let cost = Math.floor(50 * Math.pow(2, kingdom_claimedTiles));
+		let cost = Math.floor(kingdom_claimTileCostBase * Math.pow(kingdom_claimTileCostFactor, kingdom_claimedTiles));
 		if (game.kingdom.resource[kingdom_resourceEnum.LABOUR] >= cost && game.kingdom.resource[kingdom_resourceEnum.MILITARY] >= cost) {
 			$(kingdom_claimTileButtonLink).prop('disabled', false);
 			$(kingdom_claimTileButtonLink).addClass('clickable');

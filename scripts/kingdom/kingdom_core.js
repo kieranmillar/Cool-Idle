@@ -98,6 +98,7 @@ function kingdom_init() {
 function kingdom_tick () {
     game.kingdom.resource[kingdom_resourceEnum.RESEARCH] += kingdom_outputs.research * game.level;
     game.kingdom.resource[kingdom_resourceEnum.LABOUR] += kingdom_outputs.labour * game.level;
+    game.kingdom.resource[kingdom_resourceEnum.MILITARY] += kingdom_outputs.military * game.level;
     game.kingdom.resource[kingdom_resourceEnum.WOOD] += kingdom_outputs.wood * game.level;
     game.kingdom.resource[kingdom_resourceEnum.PLANK] += kingdom_outputs.plank * game.level;
     game.kingdom.resource[kingdom_resourceEnum.STONE] += kingdom_outputs.stone * game.level;
@@ -116,12 +117,13 @@ function kingdom_unlocks() {
     }
     if (game.kingdom.upgrades[kingdom_upgradeEnum.QUARRY] && game.kingdom.upgrades[kingdom_upgradeEnum.SAWMILL]) {
         kingdom_upgrades[kingdom_upgradeEnum.LOGCABIN].unlocked = true;
+        kingdom_upgrades[kingdom_upgradeEnum.BARRACKS].unlocked = true;
     }
     if (game.kingdom.upgrades[kingdom_upgradeEnum.LOGCABIN]) {
         kingdom_buildings[kingdom_buildingEnum.LOGCABIN].unlocked = true;
     }
-    if (game.kingdom.upgrades[kingdom_upgradeEnum.EXPANDBORDERS1]) {
-        kingdom_range += 1;
+    if (game.kingdom.upgrades[kingdom_upgradeEnum.BARRACKS]) {
+        kingdom_buildings[kingdom_buildingEnum.BARRACKS].unlocked = true;
     }
 }
 
@@ -263,6 +265,9 @@ function kingdom_claimTile(cell) {
     if (game.kingdom.borders[cell] != kingdom_rangeEnum.OUTSKIRTS) {
         return;
     }
+    let cost = Math.floor(kingdom_claimTileCostBase * Math.pow(kingdom_claimTileCostFactor, kingdom_claimedTiles));
+    game.kingdom.resource[kingdom_resourceEnum.LABOUR] -= cost;
+    game.kingdom.resource[kingdom_resourceEnum.MILITARY] -= cost;
     game.kingdom.borders[cell] = kingdom_rangeEnum.INBORDERS;
     if (cell > 8) {
         let northTile = cell - 9;
@@ -322,7 +327,7 @@ function kingdom_pickupRemoveBuilding() {
 }
 
 function kingdom_pickupClaimTile() {
-    let cost = Math.floor(50 * Math.pow(2, kingdom_claimedTiles));
+    let cost = Math.floor(kingdom_claimTileCostBase * Math.pow(kingdom_claimTileCostFactor, kingdom_claimedTiles));
     if (game.kingdom.resource[kingdom_resourceEnum.LABOUR] >= cost && game.kingdom.resource[kingdom_resourceEnum.MILITARY] >= cost) {
         if (kingdom_placing == -2) {
             kingdom_placing = 0;
@@ -389,15 +394,18 @@ function kingdom_place(cell) {
     if (kingdom_placing != 0
     && game.kingdom.constructions[cell] == kingdom_buildingEnum.EMPTY
     && game.kingdom.borders[cell] == kingdom_rangeEnum.INBORDERS) {
-        if (kingdom_buildings[kingdom_placing].canPlace(cell)) {
-            game.kingdom.constructions[cell] = kingdom_placing;
-            kingdom_buildingStock[kingdom_placing] --;
-            kingdom_placing = 0;
-            kingdom_calculateOutput();
-            kingdom_updateResources();
-            kingdom_populateTileImages();
-            kingdom_updateBuildings();
-            save();
+        if ((kingdom_buildings[kingdom_placing].aquatic == true && kingdom_terrain[cell] == kingdom_terrainEnum.WATER)
+        || (kingdom_buildings[kingdom_placing].aquatic == false && kingdom_terrain[cell] != kingdom_terrainEnum.WATER)) {
+            if (kingdom_buildings[kingdom_placing].canPlace(cell)) {
+                game.kingdom.constructions[cell] = kingdom_placing;
+                kingdom_buildingStock[kingdom_placing] --;
+                kingdom_placing = 0;
+                kingdom_calculateOutput();
+                kingdom_updateResources();
+                kingdom_populateTileImages();
+                kingdom_updateBuildings();
+                save();
+            }
         }
     }
 }

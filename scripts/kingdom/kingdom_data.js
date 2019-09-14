@@ -1,9 +1,13 @@
+const kingdom_claimTileCostBase = 500;
+const kingdom_claimTileCostFactor = 2;
+
 const kingdom_resourceEnum = {
 	RESEARCH: 0,
 	LABOUR: 1,
-	WOOD: 2,
-	PLANK: 3,
-	STONE: 4
+	MILITARY: 2,
+	WOOD: 3,
+	PLANK: 4,
+	STONE: 5
 }
 
 var kingdom_resources = [
@@ -22,6 +26,15 @@ var kingdom_resources = [
 		id: "kingdom_labour",
 		imageLink: "resource_labour.png",
 		value: "kingdom_labour_amount",
+		idLink: null,
+		valueLink: null
+	},
+	{
+		idNumber: kingdom_resourceEnum.MILITARY,
+		name: "Military",
+		id: "kingdom_military",
+		imageLink: "resource_military.png",
+		value: "kingdom_military_amount",
 		idLink: null,
 		valueLink: null
 	},
@@ -58,7 +71,8 @@ const kingdom_terrainEnum = {
 	INVALID: 0,
     PLAINS: 1,
 	FOREST: 2,
-	HILLS: 3
+	HILLS: 3,
+	WATER: 4
 }
 
 const kingdom_terrain = [
@@ -81,6 +95,11 @@ const kingdom_terrain = [
 		name: "Hills",
 		imageLink: "tile_hills.png",
 		description: "<p>For when you want to take the high ground.</p>"
+	},
+	{
+		name: "Water",
+		imageLink: "tile_water.png",
+		description: "<p>It's like rain, except on the ground.</p><p>Most buildings cannot be placed on this tile.</p>"
 	}
 ];
 
@@ -111,7 +130,8 @@ const kingdom_buildingEnum = {
 	SHED: 3,
 	QUARRY: 4,
 	SAWMILL: 5,
-	LOGCABIN: 6
+	LOGCABIN: 6,
+	BARRACKS: 7
 }
 
 var kingdom_buildings = [
@@ -179,7 +199,8 @@ var kingdom_buildings = [
 		],
 		canPlace: function (i) {
 			return kingdom_landscape[i] == kingdom_terrainEnum.FOREST;
-		}
+		},
+		aquatic: false
 	},
 	{
 		idNumber: kingdom_buildingEnum.SHED,
@@ -227,7 +248,8 @@ var kingdom_buildings = [
 			else {
 				return false;
 			}
-		}
+		},
+		aquatic: false
 	},
 	{
 		idNumber: kingdom_buildingEnum.QUARRY,
@@ -255,7 +277,8 @@ var kingdom_buildings = [
 		],
 		canPlace: function (i) {
 			return kingdom_landscape[i] == kingdom_terrainEnum.HILLS;
-		}
+		},
+		aquatic: false
 	},
 	{
 		idNumber: kingdom_buildingEnum.SAWMILL,
@@ -303,7 +326,8 @@ var kingdom_buildings = [
 		],
 		canPlace: function (i) {
 			return true;
-		}
+		},
+		aquatic: false
 	},
 	{
 		idNumber: kingdom_buildingEnum.LOGCABIN,
@@ -349,7 +373,56 @@ var kingdom_buildings = [
 		],
 		canPlace: function (i) {
 			return true;
-		}
+		},
+		aquatic: false
+	},
+	{
+		idNumber: kingdom_buildingEnum.BARRACKS,
+		name: "Barracks",
+		id: "kingdom_logCabinbarracks",
+		imageLink: "building_barracks.png",
+		idLink: null,
+		valueLink: null,
+		buildButtonLink: null,
+		placeButtonLink: null,
+        output: function (i) {
+			let x = 1;
+			if (kingdom_getConstructionNorth(i) == kingdom_buildingEnum.CASTLE
+			|| kingdom_getConstructionEast(i) == kingdom_buildingEnum.CASTLE
+			|| kingdom_getConstructionSouth(i) == kingdom_buildingEnum.CASTLE
+			|| kingdom_getConstructionWest(i) == kingdom_buildingEnum.CASTLE) {
+				x = 2;
+			}
+			kingdom_outputs.military += x;
+		},
+		unlocked: false,
+		description: function() {
+			return "<p>This building trains missionaries to spread the word of how great your leadership is, which encourages nearby lands to willingly join your side. Any claims otherwise are biased propoganda from our enemies.</p><p>Military + 1</p><p>Doubled effect if adjacent to the Castle.</p>";
+		},
+		cost: [
+			{
+				type: kingdom_resourceEnum.LABOUR,
+				base: 200,
+				factor: 3,
+				link: null
+			},
+			{
+				type: kingdom_resourceEnum.PLANK,
+				base: 100,
+				factor: 2,
+				link: null
+			},
+			{
+				type: kingdom_resourceEnum.STONE,
+				base: 300,
+				factor: 4,
+				link: null
+			}
+		],
+		canPlace: function (i) {
+			return true;
+		},
+		aquatic: false
 	}
 ];
 
@@ -361,7 +434,8 @@ var kingdom_outputs = {
     labour: 0,
 	wood: 0,
 	plank: 0,
-	stone: 0
+	stone: 0,
+	military: 0
 }
 
 const kingdom_upgradeEnum = {
@@ -369,7 +443,8 @@ const kingdom_upgradeEnum = {
 	SAWMILL: 1,
 	WOODCUTTERADJACENCY: 2,
 	LOGCABIN: 3,
-	SAWMILLEFFICIENCY: 4
+	SAWMILLEFFICIENCY: 4,
+	BARRACKS: 5
 }
 
 var kingdom_upgrades = [
@@ -445,6 +520,21 @@ var kingdom_upgrades = [
 			{
 				type: kingdom_resourceEnum.RESEARCH,
 				value: 500
+			}
+		]
+	},
+	{
+		idNumber: kingdom_upgradeEnum.BARRACKS,
+		name: "Barracks",
+		id: "kingdom_upgrade_barracks",
+		idLink: null,
+		buttonLink: null,
+		unlocked: false,
+		description: "<p>Unlocks a new building that produces Military.</p>",
+		cost: [
+			{
+				type: kingdom_resourceEnum.RESEARCH,
+				value: 800
 			}
 		]
 	}

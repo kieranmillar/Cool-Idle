@@ -167,16 +167,20 @@ var kingdom_buildings = [
         output: function (i) {
 			kingdom_outputs.wood += 1;
 			if (game.kingdom.upgrades[kingdom_upgradeEnum.WOODCUTTERADJACENCY]) {
-				if (kingdom_getTerrainNorth(i) == kingdom_terrainEnum.FOREST) {
+				if (kingdom_getTerrainNorth(i) == kingdom_terrainEnum.FOREST
+				&& kingdom_getConstructionNorth(i) == kingdom_buildingEnum.EMPTY) {
 					kingdom_outputs.wood += 1;
 				}
-				if (kingdom_getTerrainEast(i) == kingdom_terrainEnum.FOREST) {
+				if (kingdom_getTerrainEast(i) == kingdom_terrainEnum.FOREST
+				&& kingdom_getConstructionEast(i) == kingdom_buildingEnum.EMPTY) {
 					kingdom_outputs.wood += 1;
 				}
-				if (kingdom_getTerrainSouth(i) == kingdom_terrainEnum.FOREST) {
+				if (kingdom_getTerrainSouth(i) == kingdom_terrainEnum.FOREST
+				&& kingdom_getConstructionSouth(i) == kingdom_buildingEnum.EMPTY) {
 					kingdom_outputs.wood += 1;
 				}
-				if (kingdom_getTerrainWest(i) == kingdom_terrainEnum.FOREST) {
+				if (kingdom_getTerrainWest(i) == kingdom_terrainEnum.FOREST
+				&& kingdom_getConstructionWest(i) == kingdom_buildingEnum.EMPTY) {
 					kingdom_outputs.wood += 1;
 				}
 			}
@@ -185,7 +189,7 @@ var kingdom_buildings = [
 		description: function() {
 			let text = "<p>How much wood could a woodcutter cut if the woodcutter could cut wood?</p><p>Depends on how much wood is nearby.</p><p><strong>Can only be placed on forest.</strong></p><p>Wood + 1</p>";
 			if (game.kingdom.upgrades[kingdom_upgradeEnum.WOODCUTTERADJACENCY]) {
-				text += "<p>Wood + 1 for each adjacent forest.</p>";
+				text += "<p>Wood + 1 for each adjacent unoccupied forest.</p>";
 			}
 			return text;
 		},
@@ -485,7 +489,7 @@ var kingdom_upgrades = [
 		idLink: null,
 		buttonLink: null,
 		unlocked: true,
-		description: "<p>Woodcutter's Huts will produce additional wood for each forest tile adjacent to them.</p>",
+		description: "<p>Woodcutter's Huts will produce additional wood for each unoccupied forest tile adjacent to them.</p>",
 		cost: [
 			{
 				type: kingdom_resourceEnum.RESEARCH,
@@ -500,7 +504,7 @@ var kingdom_upgrades = [
 		idLink: null,
 		buttonLink: null,
 		unlocked: false,
-		description: "<p>Unlocks a new building that produces Labour.</p>",
+		description: "<p>Unlocks a new building that produces labour.</p>",
 		cost: [
 			{
 				type: kingdom_resourceEnum.RESEARCH,
@@ -515,7 +519,7 @@ var kingdom_upgrades = [
 		idLink: null,
 		buttonLink: null,
 		unlocked: false,
-		description: "<p>Sawmills will convert wood to planks twice as fast if placed adjacent to a Woodcutter's Hut.</p>",
+		description: "<p>Sawmills will convert wood to planks twice as fast if placed adjacent to at least one Woodcutter's Hut.</p>",
 		cost: [
 			{
 				type: kingdom_resourceEnum.RESEARCH,
@@ -530,7 +534,7 @@ var kingdom_upgrades = [
 		idLink: null,
 		buttonLink: null,
 		unlocked: false,
-		description: "<p>Unlocks a new building that produces Military.</p>",
+		description: "<p>Unlocks a new building that produces military.</p>",
 		cost: [
 			{
 				type: kingdom_resourceEnum.RESEARCH,

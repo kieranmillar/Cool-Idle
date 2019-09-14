@@ -145,7 +145,7 @@ var kingdom_buildings = [
 		name: "Castle",
 		imageLink: "building_castle.png",
         output: function (i) {
-            kingdom_outputs.labour += 1;
+            kingdom_outputs.resource[kingdom_resourceEnum.LABOUR] += 1;
             kingdom_outputs.yellowCoins += 1;
 			kingdom_outputs.exp += 1;
 		},
@@ -165,23 +165,23 @@ var kingdom_buildings = [
 		buildButtonLink: null,
 		placeButtonLink: null,
         output: function (i) {
-			kingdom_outputs.wood += 1;
+			kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 			if (game.kingdom.upgrades[kingdom_upgradeEnum.WOODCUTTERADJACENCY]) {
 				if (kingdom_getTerrainNorth(i) == kingdom_terrainEnum.FOREST
 				&& kingdom_getConstructionNorth(i) == kingdom_buildingEnum.EMPTY) {
-					kingdom_outputs.wood += 1;
+					kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 				}
 				if (kingdom_getTerrainEast(i) == kingdom_terrainEnum.FOREST
 				&& kingdom_getConstructionEast(i) == kingdom_buildingEnum.EMPTY) {
-					kingdom_outputs.wood += 1;
+					kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 				}
 				if (kingdom_getTerrainSouth(i) == kingdom_terrainEnum.FOREST
 				&& kingdom_getConstructionSouth(i) == kingdom_buildingEnum.EMPTY) {
-					kingdom_outputs.wood += 1;
+					kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 				}
 				if (kingdom_getTerrainWest(i) == kingdom_terrainEnum.FOREST
 				&& kingdom_getConstructionWest(i) == kingdom_buildingEnum.EMPTY) {
-					kingdom_outputs.wood += 1;
+					kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 				}
 			}
 		},
@@ -216,7 +216,7 @@ var kingdom_buildings = [
 		buildButtonLink: null,
 		placeButtonLink: null,
         output: function (i) {
-			kingdom_outputs.research += 1;
+			kingdom_outputs.resource[kingdom_resourceEnum.RESEARCH] += 1;
 		},
 		unlocked: true,
 		description: function() {
@@ -265,7 +265,7 @@ var kingdom_buildings = [
 		buildButtonLink: null,
 		placeButtonLink: null,
         output: function (i) {
-			kingdom_outputs.stone += 1;
+			kingdom_outputs.resource[kingdom_resourceEnum.STONE] += 1;
 		},
 		unlocked: false,
 		description: function() {
@@ -303,12 +303,11 @@ var kingdom_buildings = [
 					x = 2;
 				}
 			}
-			kingdom_outputs.wood -= x;
-			kingdom_outputs.plank += x;
+			kingdom_outputs.conversion.sawmill += x;
 		},
 		unlocked: false,
 		description: function() {
-			let text = "<p>This building is a cut above the rest.</p><p>Wood - 1</p><p>Plank + 1</p>";
+			let text = "<p>This building is a cut above the rest.</p><p>Converts 1 Wood into 1 Plank</p>";
 			if (game.kingdom.upgrades[kingdom_upgradeEnum.SAWMILLEFFICIENCY]) {
 				text += "<p>Doubled effect if adjacent to at least one Woodcutter's Hut.</p>";
 			}
@@ -343,7 +342,7 @@ var kingdom_buildings = [
 		buildButtonLink: null,
 		placeButtonLink: null,
         output: function (i) {
-			kingdom_outputs.labour += 1;
+			kingdom_outputs.resource[kingdom_resourceEnum.LABOUR] += 1;
 		},
 		unlocked: false,
 		description: function() {
@@ -397,7 +396,7 @@ var kingdom_buildings = [
 			|| kingdom_getConstructionWest(i) == kingdom_buildingEnum.CASTLE) {
 				x = 2;
 			}
-			kingdom_outputs.military += x;
+			kingdom_outputs.resource[kingdom_resourceEnum.MILITARY] += x;
 		},
 		unlocked: false,
 		description: function() {
@@ -432,14 +431,12 @@ var kingdom_buildings = [
 
 var kingdom_outputs = {
     yellowCoins: 0,
-    greenCoins: 0,
-    exp: 0,
-    research: 0,
-    labour: 0,
-	wood: 0,
-	plank: 0,
-	stone: 0,
-	military: 0
+	exp: 0,
+	resource: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    conversion: {
+		sawmill: 0
+	},
+	resourceDisplay: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
 
 const kingdom_upgradeEnum = {

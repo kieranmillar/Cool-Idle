@@ -96,12 +96,18 @@ function kingdom_init() {
 }
 
 function kingdom_tick () {
-    game.kingdom.resource[kingdom_resourceEnum.RESEARCH] += kingdom_outputs.research * game.level;
-    game.kingdom.resource[kingdom_resourceEnum.LABOUR] += kingdom_outputs.labour * game.level;
-    game.kingdom.resource[kingdom_resourceEnum.MILITARY] += kingdom_outputs.military * game.level;
-    game.kingdom.resource[kingdom_resourceEnum.WOOD] += kingdom_outputs.wood * game.level;
-    game.kingdom.resource[kingdom_resourceEnum.PLANK] += kingdom_outputs.plank * game.level;
-    game.kingdom.resource[kingdom_resourceEnum.STONE] += kingdom_outputs.stone * game.level;
+    for (let i = 0; i < game.kingdom.resource.length; i++) {
+        game.kingdom.resource[i] += kingdom_outputs.resource[i] * game.level;
+        kingdom_outputs.resourceDisplay[i] = kingdom_outputs.resource[i];
+    }
+    let expectedWood = (kingdom_outputs.resource[kingdom_resourceEnum.WOOD] - kingdom_outputs.conversion.sawmill) * game.level;
+    if (expectedWood > 0 || Math.abs(expectedWood) < game.kingdom.resource[kingdom_resourceEnum.WOOD]) {
+        // Turn on wood consumption
+        game.kingdom.resource[kingdom_resourceEnum.WOOD] -= kingdom_outputs.conversion.sawmill * game.level;
+        kingdom_outputs.resourceDisplay[kingdom_resourceEnum.WOOD] -= kingdom_outputs.conversion.sawmill;
+        game.kingdom.resource[kingdom_resourceEnum.PLANK] += kingdom_outputs.conversion.sawmill * game.level;
+        kingdom_outputs.resourceDisplay[kingdom_resourceEnum.PLANK] += kingdom_outputs.conversion.sawmill;
+    }
     gainYellowCoins(kingdom_outputs.yellowCoins);
     gainExp(kingdom_outputs.exp);
 }
@@ -134,7 +140,13 @@ function kingdom_calculateOutput () {
             kingdom_claimedTiles ++;
         }
     }
-    Object.keys(kingdom_outputs).forEach(v => kingdom_outputs[v] = 0);
+
+    for (let i = 0; i < kingdom_outputs.resource.length; i++) {
+        kingdom_outputs.resource[i] = 0;
+    }
+    kingdom_outputs.exp = 0;
+    kingdom_outputs.yellowCoins = 0;
+    Object.keys(kingdom_outputs.conversion).forEach(v => kingdom_outputs.conversion[v] = 0);
     for (let i = 0; i < kingdom_cells.length; i++) {
         const currentConstruction = game.kingdom.constructions[i];
         if (currentConstruction != kingdom_buildingEnum.EMPTY) {

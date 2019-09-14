@@ -45,29 +45,11 @@ function kingdom_populateTileImages () {
 
 function kingdom_updateResources () {
 	$(".kingdom_resource").hide();
-	if (game.kingdom.resource[kingdom_resourceEnum.RESEARCH] > 0 || kingdom_outputs.research != 0) {
-		kingdom_resources[kingdom_resourceEnum.RESEARCH].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[kingdom_resourceEnum.RESEARCH], kingdom_outputs.research));
-		kingdom_resources[kingdom_resourceEnum.RESEARCH].idLink.show();
-	}
-	if (game.kingdom.resource[kingdom_resourceEnum.LABOUR] > 0 || kingdom_outputs.labour != 0) {
-		kingdom_resources[kingdom_resourceEnum.LABOUR].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[kingdom_resourceEnum.LABOUR], kingdom_outputs.labour));
-		kingdom_resources[kingdom_resourceEnum.LABOUR].idLink.show();
-	}
-	if (game.kingdom.resource[kingdom_resourceEnum.MILITARY] > 0 || kingdom_outputs.military != 0) {
-		kingdom_resources[kingdom_resourceEnum.MILITARY].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[kingdom_resourceEnum.MILITARY], kingdom_outputs.military));
-		kingdom_resources[kingdom_resourceEnum.MILITARY].idLink.show();
-	}
-	if (game.kingdom.resource[kingdom_resourceEnum.WOOD] > 0 || kingdom_outputs.wood != 0) {
-		kingdom_resources[kingdom_resourceEnum.WOOD].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[kingdom_resourceEnum.WOOD], kingdom_outputs.wood));
-		kingdom_resources[kingdom_resourceEnum.WOOD].idLink.show();
-	}
-	if (game.kingdom.resource[kingdom_resourceEnum.PLANK] > 0 || kingdom_outputs.plank != 0) {
-		kingdom_resources[kingdom_resourceEnum.PLANK].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[kingdom_resourceEnum.PLANK], kingdom_outputs.plank));
-		kingdom_resources[kingdom_resourceEnum.PLANK].idLink.show();
-	}
-	if (game.kingdom.resource[kingdom_resourceEnum.STONE] > 0 || kingdom_outputs.stone != 0) {
-		kingdom_resources[kingdom_resourceEnum.STONE].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[kingdom_resourceEnum.STONE], kingdom_outputs.stone));
-		kingdom_resources[kingdom_resourceEnum.STONE].idLink.show();
+	for (let i = 0; i < kingdom_resources.length; i++) {
+		if (game.kingdom.resource[i] > 0 || kingdom_outputs.resource[i] != 0) {
+			kingdom_resources[i].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[i], kingdom_outputs.resourceDisplay[i]));
+			kingdom_resources[i].idLink.show();
+		}
 	}
 }
 

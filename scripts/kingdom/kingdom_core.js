@@ -278,6 +278,9 @@ function kingdom_claimTile(cell) {
     if (game.kingdom.borders[cell] != kingdom_rangeEnum.OUTSKIRTS) {
         return;
     }
+    if (kingdom_landscape[cell] == kingdom_terrainEnum.WATER && true) { //TODO: Upgrade that lets you claim water tiles
+        return;
+    }
     let cost = Math.floor(kingdom_claimTileCostBase * Math.pow(kingdom_claimTileCostFactor, kingdom_claimedTiles));
     game.kingdom.resource[kingdom_resourceEnum.LABOUR] -= cost;
     game.kingdom.resource[kingdom_resourceEnum.MILITARY] -= cost;
@@ -430,9 +433,7 @@ function kingdom_place(cell) {
                 kingdom_buildingStock[kingdom_placing] --;
                 kingdom_placing = 0;
                 kingdom_calculateOutput();
-                kingdom_updateResources();
-                kingdom_populateTileImages();
-                kingdom_updateBuildings();
+                kingdom_redraw();
                 save();
             }
         }

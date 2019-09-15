@@ -143,7 +143,9 @@ var kingdom_buildings = [
 	{
 		idNumber: kingdom_buildingEnum.CASTLE,
 		name: "Castle",
-		imageLink: "building_castle.png",
+		imageLink: function (terrain) {
+			return "building_castle.png";
+		},
         output: function (i) {
             kingdom_outputs.resource[kingdom_resourceEnum.LABOUR] += 1;
             kingdom_outputs.yellowCoins += 1;
@@ -159,7 +161,9 @@ var kingdom_buildings = [
 		idNumber: kingdom_buildingEnum.WOODCUTTER,
 		name: "Woodcutter's Hut",
 		id: "kingdom_woodcutter",
-		imageLink: "building_woodcutter.png",
+		imageLink: function (terrain) {
+			return "building_woodcutter.png";
+		},
 		idLink: null,
 		valueLink: null,
 		buildButtonLink: null,
@@ -210,7 +214,20 @@ var kingdom_buildings = [
 		idNumber: kingdom_buildingEnum.SHED,
 		name: "Shed",
 		id: "kingdom_shed",
-		imageLink: "building_shed.png",
+		imageLink: function (terrain) {
+			switch (terrain) {
+				case kingdom_terrainEnum.HILLS:
+					return "building_shed_hills.png";
+					break;
+				case kingdom_terrainEnum.FOREST:
+					return "building_shed_forest.png";
+					break;
+				case kingdom_terrainEnum.PLAINS:
+				default:
+					return "building_shed_plains.png";
+					break;
+			}
+		},
 		idLink: null,
 		valueLink: null,
 		buildButtonLink: null,
@@ -259,7 +276,9 @@ var kingdom_buildings = [
 		idNumber: kingdom_buildingEnum.QUARRY,
 		name: "Quarry",
 		id: "kingdom_quarry",
-		imageLink: "building_quarry.png",
+		imageLink: function (terrain) {
+			return "building_quarry.png";
+		},
 		idLink: null,
 		valueLink: null,
 		buildButtonLink: null,
@@ -288,7 +307,20 @@ var kingdom_buildings = [
 		idNumber: kingdom_buildingEnum.SAWMILL,
 		name: "Sawmill",
 		id: "kingdom_sawmill",
-		imageLink: "building_sawmill.png",
+		imageLink: function (terrain) {
+			switch (terrain) {
+				case kingdom_terrainEnum.HILLS:
+					return "building_sawmill_hills.png";
+					break;
+				case kingdom_terrainEnum.FOREST:
+					return "building_sawmill_forest.png";
+					break;
+				case kingdom_terrainEnum.PLAINS:
+				default:
+					return "building_sawmill_plains.png";
+					break;
+			}
+		},
 		idLink: null,
 		valueLink: null,
 		buildButtonLink: null,
@@ -336,7 +368,20 @@ var kingdom_buildings = [
 		idNumber: kingdom_buildingEnum.LOGCABIN,
 		name: "Log Cabin",
 		id: "kingdom_logCabin",
-		imageLink: "building_logcabin.png",
+		imageLink: function (terrain) {
+			switch (terrain) {
+				case kingdom_terrainEnum.HILLS:
+					return "building_logcabin_hills.png";
+					break;
+				case kingdom_terrainEnum.FOREST:
+					return "building_logcabin_forest.png";
+					break;
+				case kingdom_terrainEnum.PLAINS:
+				default:
+					return "building_logcabin_plains.png";
+					break;
+			}
+		},
 		idLink: null,
 		valueLink: null,
 		buildButtonLink: null,
@@ -383,7 +428,20 @@ var kingdom_buildings = [
 		idNumber: kingdom_buildingEnum.BARRACKS,
 		name: "Barracks",
 		id: "kingdom_logCabinbarracks",
-		imageLink: "building_barracks.png",
+		imageLink: function (terrain) {
+			switch (terrain) {
+				case kingdom_terrainEnum.HILLS:
+					return "building_barracks_hills.png";
+					break;
+				case kingdom_terrainEnum.FOREST:
+					return "building_barracks_forest.png";
+					break;
+				case kingdom_terrainEnum.PLAINS:
+				default:
+					return "building_barracks_plains.png";
+					break;
+			}
+		},
 		idLink: null,
 		valueLink: null,
 		buildButtonLink: null,

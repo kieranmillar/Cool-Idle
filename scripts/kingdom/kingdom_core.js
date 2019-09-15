@@ -45,7 +45,7 @@ function kingdom_init() {
         newElement.attr('id', building.id);
         newElement.addClass("kingdom_building");
         newElement.mouseenter({ value: building.idNumber }, function (event) {kingdom_mousedOverBuilding(event.data.value)});
-        let htmlText = "<div class='kingdom_building_row'><span id='" + building.id + "Stock' class='kingdom_buildingStock'></span><img src = './images/kingdom/" + building.imageLink + "' alt='" + building.name + "' class='kingdom_buildingImage'/><span class='kingdom_buildingName'>" + building.name + "</span><button type='button' id='" + building.id + "PlaceButton' class='kingdom_placeButton button' onclick='kingdom_pickupBuilding(" + building.idNumber + ")' disabled>Place</button></div>";
+        let htmlText = "<div class='kingdom_building_row'><span id='" + building.id + "Stock' class='kingdom_buildingStock'></span><img src = './images/kingdom/" + building.imageLink(kingdom_terrainEnum.PLAINS) + "' alt='" + building.name + "' class='kingdom_buildingImage'/><span class='kingdom_buildingName'>" + building.name + "</span><button type='button' id='" + building.id + "PlaceButton' class='kingdom_placeButton button' onclick='kingdom_pickupBuilding(" + building.idNumber + ")' disabled>Place</button></div>";
         htmlText += "<div class='kingdom_building_row'><span class='kingdom_buildingCost'>";
         for (let i = 0; i < building.cost.length; i ++) {
             htmlText += "<img src = './images/kingdom/" + kingdom_resources[building.cost[i].type].imageLink + "' alt='" + kingdom_resources[building.cost[i].type].name + "'/><span id='" + building.id + kingdom_resources[building.cost[i].type].name + "Cost'></span>";

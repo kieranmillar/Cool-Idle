@@ -132,9 +132,16 @@ function kingdom_unlocks() {
     if (game.kingdom.upgrades[kingdom_upgradeEnum.BARRACKS]) {
         kingdom_buildings[kingdom_buildingEnum.BARRACKS].unlocked = true;
     }
+    if (game.shop[shop_itemEnum.KINGDOMCLAIMTILE]) {
+        kingdom_upgrades[kingdom_upgradeEnum.ROAD].unlocked = true;
+    }
+    if (game.kingdom.upgrades[kingdom_upgradeEnum.ROAD]) {
+        kingdom_buildings[kingdom_buildingEnum.ROAD].unlocked = true;
+    }
 }
 
 function kingdom_calculateOutput () {
+    kingdom_calculateRoadMap ();
     kingdom_claimedTiles = -9;
     for (let i = 0; i < game.kingdom.borders.length; i++) {
         if (game.kingdom.borders[i] == 2) {
@@ -153,6 +160,67 @@ function kingdom_calculateOutput () {
         if (currentConstruction != kingdom_buildingEnum.EMPTY) {
             if (kingdom_buildings[currentConstruction].hasOwnProperty('output')) {
                 kingdom_buildings[currentConstruction].output(i);
+            }
+        }
+    }
+}
+
+var kingdom_roadMap = [
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 1, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+];
+
+var kingdom_roadList = [];
+
+function kingdom_calculateRoadMap() {
+    for (let i = 0; i < kingdom_roadMap.length; i++) {
+        kingdom_roadMap[i] = 0;
+    }
+    kingdom_roadMap[40] = 1;
+    kingdom_roadList.push(40);
+    while (kingdom_roadList.length > 0) {
+        let currentCell = kingdom_roadList.pop();
+        let northCell = currentCell - 9;
+        if (northCell > 0) {
+            if (kingdom_roadMap[northCell] == 0) {
+                kingdom_roadMap[northCell] = 1;
+                if (kingdom_getConstructionNorth(currentCell) == kingdom_buildingEnum.ROAD) {
+                    kingdom_roadList.push(northCell);
+                }
+            }
+        }
+        let eastCell = currentCell + 1;
+        if (currentCell % 9 < 8) {
+            if (kingdom_roadMap[eastCell] == 0) {
+                kingdom_roadMap[eastCell] = 1;
+                if (kingdom_getConstructionEast(currentCell) == kingdom_buildingEnum.ROAD) {
+                    kingdom_roadList.push(eastCell);
+                }
+            }
+        }
+        let southCell = currentCell + 9;
+        if (southCell < 81) {
+            if (kingdom_roadMap[southCell] == 0) {
+                kingdom_roadMap[southCell] = 1;
+                if (kingdom_getConstructionSouth(currentCell) == kingdom_buildingEnum.ROAD) {
+                    kingdom_roadList.push(southCell);
+                }
+            }
+        }
+        let westCell = currentCell - 1;
+        if (currentCell % 9 > 0) {
+            if (kingdom_roadMap[westCell] == 0) {
+                kingdom_roadMap[westCell] = 1;
+                if (kingdom_getConstructionWest(currentCell) == kingdom_buildingEnum.ROAD) {
+                    kingdom_roadList.push(westCell);
+                }
             }
         }
     }
@@ -311,9 +379,7 @@ function kingdom_claimTile(cell) {
     }
     kingdom_placing = 0;
     kingdom_claimedTiles ++;
-    kingdom_updateResources();
-    kingdom_populateTileImages();
-    kingdom_updateBuildings();
+    kingdom_redraw();
     save();
 }
 
@@ -326,9 +392,7 @@ function kingdom_removeBuilding(cell) {
     kingdom_buildingStock[building] ++;
     kingdom_placing = 0;
     kingdom_calculateOutput();
-    kingdom_updateResources();
-    kingdom_populateTileImages();
-    kingdom_updateBuildings();
+    kingdom_redraw();
     save();
 }
 
@@ -342,9 +406,7 @@ function kingdom_removeAllBuildings() {
         kingdom_buildingStock[building] ++;
     }
     kingdom_calculateOutput();
-    kingdom_updateResources();
-    kingdom_populateTileImages();
-    kingdom_updateBuildings();
+    kingdom_redraw();
     save();
 }
 
@@ -406,9 +468,7 @@ function kingdom_build(building) {
     game.kingdom.building[building] ++;
     kingdom_buildingStock[building] ++;
     kingdom_calculateOutput();
-    kingdom_updateResources();
-    kingdom_updateBuildings();
-    kingdom_updateUpgrades();
+    kingdom_redraw();
     save();
 }
 

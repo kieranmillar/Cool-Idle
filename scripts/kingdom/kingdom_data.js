@@ -137,7 +137,8 @@ const kingdom_buildingEnum = {
 	QUARRY: 4,
 	SAWMILL: 5,
 	LOGCABIN: 6,
-	BARRACKS: 7
+	BARRACKS: 7,
+	ROAD: 8
 }
 
 var kingdom_buildings = [
@@ -239,11 +240,13 @@ var kingdom_buildings = [
 		buildButtonLink: null,
 		placeButtonLink: null,
         output: function (i) {
-			kingdom_outputs.resource[kingdom_resourceEnum.RESEARCH] += 1;
+			if (kingdom_roadMap[i] == 1) {
+				kingdom_outputs.resource[kingdom_resourceEnum.RESEARCH] += 1;
+			}
 		},
 		unlocked: true,
 		description: function() {
-			return "<p>All of the best ideas happen when working alone in a shed, unless they involve the use of power tools.</p><p><strong>Can only be placed adjacent to the Castle.</strong></p><p>Research + 1</p>";
+			return "<p>All of the best ideas happen when working alone in a shed, unless they involve the use of power tools.</p>" + kingdom_getCastleAdjacentRequirementText() + "<p>Research + 1</p>";
 		},
 		cost: [
 			{
@@ -260,21 +263,7 @@ var kingdom_buildings = [
 			}
 		],
 		canPlace: function (i) {
-			if (kingdom_getConstructionNorth(i) == kingdom_buildingEnum.CASTLE) {
-				return true;
-			}
-			else if (kingdom_getConstructionEast(i) == kingdom_buildingEnum.CASTLE) {
-				return true;
-			}
-			else if (kingdom_getConstructionSouth(i) == kingdom_buildingEnum.CASTLE) {
-				return true;
-			}
-			else if (kingdom_getConstructionWest(i) == kingdom_buildingEnum.CASTLE) {
-				return true;
-			}
-			else {
-				return false;
-			}
+			return kingdom_roadMap[i] == 1;
 		},
 		aquatic: false
 	},
@@ -433,7 +422,7 @@ var kingdom_buildings = [
 	{
 		idNumber: kingdom_buildingEnum.BARRACKS,
 		name: "Barracks",
-		id: "kingdom_logCabinbarracks",
+		id: "kingdom_barracks",
 		imageLink: function (terrain) {
 			switch (terrain) {
 				case kingdom_terrainEnum.HILLS:
@@ -454,17 +443,14 @@ var kingdom_buildings = [
 		placeButtonLink: null,
         output: function (i) {
 			let x = 1;
-			if (kingdom_getConstructionNorth(i) == kingdom_buildingEnum.CASTLE
-			|| kingdom_getConstructionEast(i) == kingdom_buildingEnum.CASTLE
-			|| kingdom_getConstructionSouth(i) == kingdom_buildingEnum.CASTLE
-			|| kingdom_getConstructionWest(i) == kingdom_buildingEnum.CASTLE) {
+			if (kingdom_roadMap[i] == 1) {
 				x = 2;
 			}
 			kingdom_outputs.resource[kingdom_resourceEnum.MILITARY] += x;
 		},
 		unlocked: false,
 		description: function() {
-			return "<p>This building trains missionaries to spread the word of how great your leadership is, which encourages nearby lands to willingly join your side. Any claims otherwise are biased propoganda from our enemies.</p><p>Military + 1</p><p>Doubled effect if adjacent to the Castle.</p>";
+			return "<p>This building trains missionaries to spread the word of how great your leadership is, which encourages nearby lands to willingly join your side. Any claims otherwise are biased propoganda from our enemies.</p><p>Military + 1</p><p>Doubled effect " + kingdom_getCastleAdjacentBonusText() + "</p>";
 		},
 		cost: [
 			{
@@ -490,8 +476,72 @@ var kingdom_buildings = [
 			return true;
 		},
 		aquatic: false
+	},
+	{
+		idNumber: kingdom_buildingEnum.ROAD,
+		name: "Road",
+		id: "kingdom_road",
+		imageLink: function (terrain) {
+			switch (terrain) {
+				case kingdom_terrainEnum.HILLS:
+					return "building_road_hills.png";
+					break;
+				case kingdom_terrainEnum.FOREST:
+					return "building_road_forest.png";
+					break;
+				case kingdom_terrainEnum.PLAINS:
+				default:
+					return "building_road_plains.png";
+					break;
+			}
+		},
+		idLink: null,
+		valueLink: null,
+		buildButtonLink: null,
+		placeButtonLink: null,
+        output: function (i) {},
+		unlocked: false,
+		description: function() {
+			return "<p>Follow the grey stone road.</p><p>Any building adjacent to a road counts as being adjacent to the Castle, provided the road ultimately links back to the Castle.</p><p>Any road that does not link back to the Castle has no effect.</p>" + kingdom_getCastleAdjacentRequirementText();
+		},
+		cost: [
+			{
+				type: kingdom_resourceEnum.LABOUR,
+				base: 100,
+				factor: 2,
+				link: null
+			},
+			{
+				type: kingdom_resourceEnum.STONE,
+				base: 200,
+				factor: 3,
+				link: null
+			}
+		],
+		canPlace: function (i) {
+			return kingdom_roadMap[i] == 1;
+		},
+		aquatic: false
 	}
 ];
+
+function kingdom_getCastleAdjacentRequirementText() {
+	let text = "<p><strong>Can only be placed adjacent to the Castle";
+	if (game.kingdom.upgrades[kingdom_upgradeEnum.ROAD]) {
+		text += " or a road network connected to the Castle";
+	}
+	text += ".</strong></p>";
+	return text;
+}
+
+function kingdom_getCastleAdjacentBonusText() {
+	let text = "if adjacent to the Castle";
+	if (game.kingdom.upgrades[kingdom_upgradeEnum.ROAD]) {
+		text += " or a road network connected to the Castle";
+	}
+	text += ".";
+	return text;
+}
 
 var kingdom_outputs = {
     yellowCoins: 0,
@@ -509,7 +559,8 @@ const kingdom_upgradeEnum = {
 	WOODCUTTERADJACENCY: 2,
 	LOGCABIN: 3,
 	SAWMILLEFFICIENCY: 4,
-	BARRACKS: 5
+	BARRACKS: 5,
+	ROAD: 6
 }
 
 var kingdom_upgrades = [
@@ -600,6 +651,21 @@ var kingdom_upgrades = [
 			{
 				type: kingdom_resourceEnum.RESEARCH,
 				value: 800
+			}
+		]
+	},
+	{
+		idNumber: kingdom_upgradeEnum.ROAD,
+		name: "Roads",
+		id: "kingdom_upgrade_road",
+		idLink: null,
+		buttonLink: null,
+		unlocked: false,
+		description: "<p>Unlocks a new building that creates a road network from the Castle. Buildings adjacent to a road that leads back to the Castle can be considered adjacent to the Castle.</p>",
+		cost: [
+			{
+				type: kingdom_resourceEnum.RESEARCH,
+				value: 1500
 			}
 		]
 	}

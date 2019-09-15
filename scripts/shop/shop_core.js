@@ -20,6 +20,7 @@ function shop_buy (item) {
                 if (!game.shop[shop_itemEnum.KINGDOMCLAIMTILE]) {
                     game.shop[shop_itemEnum.KINGDOMCLAIMTILE] = 1;
                     game.yellowCoins -= 250;
+                    kingdom_unlocks();
                     displayFeatures();
                 }
             }

@@ -10,6 +10,16 @@ const kingdom_resourceEnum = {
 	STONE: 5
 }
 
+/*Array of data structures for resources
+-----
+idNumber: The idNumber according to its position in the array. kingdom_resourceEnum should match this
+name: String containing displayed resource name. This only shows up in the image alt text
+id: String containing the html id for the container div in the resource panel
+imageLink: The name of the image stored in ../images/kingdom/
+value: String containing the html id for the span that stores the amount of the resource you have
+idLink: should be included but set to null. kingdom_init() will set this to the html container div element so we don't have to search the DOM for it again
+valueLink: should be included but set to null. kingdom_init() will set this to the html span element so we don't have to search the DOM for it again
+-----*/
 var kingdom_resources = [
 	{
 		idNumber: kingdom_resourceEnum.RESEARCH,
@@ -76,6 +86,13 @@ const kingdom_terrainEnum = {
 	VOLCANO: 5
 }
 
+//TODO: Eventually the description might want to be a lambda function so we can update later e.g. when we unlock the ability to claim water tiles
+/*Array of data structures for terrain
+-----
+name: String containing displayed resource name.
+imageLink: The name of the image stored in ../images/kingdom/
+description: The html of the description we want to show in the infopanel when you mouse over an unoccupied tile on the map
+-----*/
 const kingdom_terrain = [
 	{
 		name: "",
@@ -109,7 +126,8 @@ const kingdom_terrain = [
 	}
 ];
 
-var kingdom_landscape = [
+//Stores the map layout. The player cannot change this so no need to store it in the game object.
+const kingdom_landscape = [
     kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST,
     
     kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.WATER, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST,
@@ -141,6 +159,27 @@ const kingdom_buildingEnum = {
 	ROAD: 8
 }
 
+/*Array of data structures for buildings
+-----
+idNumber: The idNumber according to its position in the array. kingdom_buildingEnum should match this
+name: String containing displayed building name.
+id: String containing the html id for the container div in the building panel
+imageLink: A lambda function that returns the name of the image stored in ../images/kingdom/ . Takes the terrain type as an argument
+idLink: should be included but set to null. kingdom_init() will set this to the html container div element so we don't have to search the DOM for it again
+valueLink: should be included but set to null. kingdom_init() will set this to the html span element so we don't have to search the DOM for it again
+buildButtonLink: should be included but set to null. kingdom_init() will set this to the html build button element so we don't have to search the DOM for it again
+placeButtonLink: should be included but set to null. kingdom_init() will set this to the html place button element so we don't have to search the DOM for it again
+output: A lambda function that is called by kingdom_calculateOutput(). Takes the cell number as an argument. Should set the appropriate values in kindom_outputs, and also update kingdom_failMap if the building is non-functional
+unlocked: Boolean if the building has been unlocked. This should show the unlock state at the start of a new game, kingdom_unlocks() may change it later
+description: A lambda function returning the html of the description we want to show in the infopanel when you mouse over it on the building panel or map
+cost: An array of data objects detailing each resource cost for this building:
+--type: The resource type
+--base: The amount of this resource needed for the first time you build this building
+--factor: A multiplier for how much the cost of this resource increases each time you build this building
+--link: should be included but set to null. kingdom_init() will set this to the html resource value element so we don't have to search the DOM for it again
+canPlace: A lambda function returning true or false if the building can be placed on a tile. Takes the tile as an argument. Determining if it can be placed on water is done elsewhere. If can be placed on any terrain (except water or the volcano), just immediately return true.
+aquatic: Boolean if this building is placed on water or not.
+-----*/
 var kingdom_buildings = [
 	{
 		idNumber: kingdom_buildingEnum.EMPTY,
@@ -153,7 +192,7 @@ var kingdom_buildings = [
 		imageLink: function (terrain) {
 			return "building_castle.png";
 		},
-        output: function (i) {
+        output: function (cell) {
             kingdom_outputs.resource[kingdom_resourceEnum.LABOUR] += 1;
             kingdom_outputs.yellowCoins += 1;
 			kingdom_outputs.exp += 1;
@@ -175,23 +214,23 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (i) {
+        output: function (cell) {
 			kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 			if (game.kingdom.upgrades[kingdom_upgradeEnum.WOODCUTTERADJACENCY]) {
-				if (kingdom_getTerrainNorth(i) == kingdom_terrainEnum.FOREST
-				&& kingdom_getConstructionNorth(i) == kingdom_buildingEnum.EMPTY) {
+				if (kingdom_getTerrainNorth(cell) == kingdom_terrainEnum.FOREST
+				&& kingdom_getConstructionNorth(cell) == kingdom_buildingEnum.EMPTY) {
 					kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 				}
-				if (kingdom_getTerrainEast(i) == kingdom_terrainEnum.FOREST
-				&& kingdom_getConstructionEast(i) == kingdom_buildingEnum.EMPTY) {
+				if (kingdom_getTerrainEast(cell) == kingdom_terrainEnum.FOREST
+				&& kingdom_getConstructionEast(cell) == kingdom_buildingEnum.EMPTY) {
 					kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 				}
-				if (kingdom_getTerrainSouth(i) == kingdom_terrainEnum.FOREST
-				&& kingdom_getConstructionSouth(i) == kingdom_buildingEnum.EMPTY) {
+				if (kingdom_getTerrainSouth(cell) == kingdom_terrainEnum.FOREST
+				&& kingdom_getConstructionSouth(cell) == kingdom_buildingEnum.EMPTY) {
 					kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 				}
-				if (kingdom_getTerrainWest(i) == kingdom_terrainEnum.FOREST
-				&& kingdom_getConstructionWest(i) == kingdom_buildingEnum.EMPTY) {
+				if (kingdom_getTerrainWest(cell) == kingdom_terrainEnum.FOREST
+				&& kingdom_getConstructionWest(cell) == kingdom_buildingEnum.EMPTY) {
 					kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 				}
 			}
@@ -212,8 +251,8 @@ var kingdom_buildings = [
 				link: null
 			}
 		],
-		canPlace: function (i) {
-			return kingdom_landscape[i] == kingdom_terrainEnum.FOREST;
+		canPlace: function (cell) {
+			return kingdom_landscape[cell] == kingdom_terrainEnum.FOREST;
 		},
 		aquatic: false
 	},
@@ -239,12 +278,12 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (i) {
-			if (kingdom_roadMap[i] == 1) {
+        output: function (cell) {
+			if (kingdom_roadMap[cell] == 1) {
 				kingdom_outputs.resource[kingdom_resourceEnum.RESEARCH] += 1;
 			}
 			else {
-				kingdom_failMap[i] = 1;
+				kingdom_failMap[cell] = 1;
 			}
 		},
 		unlocked: true,
@@ -265,8 +304,8 @@ var kingdom_buildings = [
 				link: null
 			}
 		],
-		canPlace: function (i) {
-			return kingdom_roadMap[i] == 1;
+		canPlace: function (cell) {
+			return kingdom_roadMap[cell] == 1;
 		},
 		aquatic: false
 	},
@@ -281,7 +320,7 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (i) {
+        output: function (cell) {
 			kingdom_outputs.resource[kingdom_resourceEnum.STONE] += 1;
 		},
 		unlocked: false,
@@ -296,8 +335,8 @@ var kingdom_buildings = [
 				link: null
 			}
 		],
-		canPlace: function (i) {
-			return kingdom_landscape[i] == kingdom_terrainEnum.HILLS;
+		canPlace: function (cell) {
+			return kingdom_landscape[cell] == kingdom_terrainEnum.HILLS;
 		},
 		aquatic: false
 	},
@@ -323,13 +362,13 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (i) {
+        output: function (cell) {
 			let x = 1;
 			if (game.kingdom.upgrades[kingdom_upgradeEnum.SAWMILLEFFICIENCY]) {
-				if (kingdom_getConstructionNorth(i) == kingdom_buildingEnum.WOODCUTTER
-				|| kingdom_getConstructionEast(i) == kingdom_buildingEnum.WOODCUTTER
-				|| kingdom_getConstructionSouth(i) == kingdom_buildingEnum.WOODCUTTER
-				|| kingdom_getConstructionWest(i) == kingdom_buildingEnum.WOODCUTTER) {
+				if (kingdom_getConstructionNorth(cell) == kingdom_buildingEnum.WOODCUTTER
+				|| kingdom_getConstructionEast(cell) == kingdom_buildingEnum.WOODCUTTER
+				|| kingdom_getConstructionSouth(cell) == kingdom_buildingEnum.WOODCUTTER
+				|| kingdom_getConstructionWest(cell) == kingdom_buildingEnum.WOODCUTTER) {
 					x = 2;
 				}
 			}
@@ -357,7 +396,7 @@ var kingdom_buildings = [
 				link: null
 			}
 		],
-		canPlace: function (i) {
+		canPlace: function (cell) {
 			return true;
 		},
 		aquatic: false
@@ -384,7 +423,7 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (i) {
+        output: function (cell) {
 			kingdom_outputs.resource[kingdom_resourceEnum.LABOUR] += 1;
 		},
 		unlocked: false,
@@ -417,7 +456,7 @@ var kingdom_buildings = [
 				link: null
 			}
 		],
-		canPlace: function (i) {
+		canPlace: function (cell) {
 			return true;
 		},
 		aquatic: false
@@ -444,9 +483,9 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (i) {
+        output: function (cell) {
 			let x = 1;
-			if (kingdom_roadMap[i] == 1) {
+			if (kingdom_roadMap[cell] == 1) {
 				x = 2;
 			}
 			kingdom_outputs.resource[kingdom_resourceEnum.MILITARY] += x;
@@ -475,7 +514,7 @@ var kingdom_buildings = [
 				link: null
 			}
 		],
-		canPlace: function (i) {
+		canPlace: function (cell) {
 			return true;
 		},
 		aquatic: false
@@ -502,9 +541,9 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (i) {
-			if (kingdom_roadMap[i] != 1) {
-				kingdom_failMap[i] = 1;
+        output: function (cell) {
+			if (kingdom_roadMap[cell] != 1) {
+				kingdom_failMap[cell] = 1;
 			}
 		},
 		unlocked: false,
@@ -525,13 +564,14 @@ var kingdom_buildings = [
 				link: null
 			}
 		],
-		canPlace: function (i) {
-			return kingdom_roadMap[i] == 1;
+		canPlace: function (cell) {
+			return kingdom_roadMap[cell] == 1;
 		},
 		aquatic: false
 	}
 ];
 
+//Returns html for use in the infoPanels if placing next to the Castle or its road network is a requirement
 function kingdom_getCastleAdjacentRequirementText() {
 	let text = "<p><strong>Can only be placed adjacent to the Castle";
 	if (game.kingdom.upgrades[kingdom_upgradeEnum.ROAD]) {
@@ -541,6 +581,7 @@ function kingdom_getCastleAdjacentRequirementText() {
 	return text;
 }
 
+//Returns text for use in the infoPanels if placing next to the Castle or its road network provides a bonus but is not required
 function kingdom_getCastleAdjacentBonusText() {
 	let text = "if adjacent to the Castle";
 	if (game.kingdom.upgrades[kingdom_upgradeEnum.ROAD]) {
@@ -550,6 +591,7 @@ function kingdom_getCastleAdjacentBonusText() {
 	return text;
 }
 
+//This object stores the data for income each tick.
 var kingdom_outputs = {
     yellowCoins: 0,
 	exp: 0,
@@ -570,6 +612,19 @@ const kingdom_upgradeEnum = {
 	ROAD: 6
 }
 
+/*Array of data structures for upgrades
+-----
+idNumber: The idNumber according to its position in the array. kingdom_upgradeEnum should match this
+name: String containing displayed upgrade name.
+id: String containing the html id for the container div in the building panel
+idLink: should be included but set to null. kingdom_init() will set this to the html container div element so we don't have to search the DOM for it again
+buttonLink: should be included but set to null. kingdom_init() will set this to the html Purchase button element so we don't have to search the DOM for it again
+unlocked: Boolean if the upgrade has been unlocked. This should show the unlock state at the start of a new game, kingdom_unlocks() may change it later
+description: The html of the description we want to show in the infopanel when you mouse over it on the building panel
+cost: An array of data objects detailing each resource cost for this building:
+--type: The resource type
+--value: The amount of this resource needed to buy it
+-----*/
 var kingdom_upgrades = [
 	{
 		idNumber: kingdom_upgradeEnum.QUARRY,

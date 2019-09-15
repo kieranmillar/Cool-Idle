@@ -4,6 +4,8 @@ var kingdom_buildingStock = [];
 var kingdom_placing = 0;
 var kingdom_claimedTiles = 0;
 
+//This is run once when the game is loaded
+//It creates HTML elements for all of the resources/buildings etc. and also calculates things that aren't stored in the game object
 function kingdom_init() {
     //Dynamically create resource list
     kingdom_resources.forEach(resource => {
@@ -95,6 +97,10 @@ function kingdom_init() {
     kingdom_calculateOutput();
 }
 
+//This is called by the game loop to trigger all of the once per second updates this feature requires
+//We try to calculate as much of this as we can outside of the tick loop using kingdom_calculateOutput()
+//However buildings that consume/convert other resources can change each tick if they run out of resources
+//So we have to handle them here.
 function kingdom_tick () {
     for (let i = 0; i < game.kingdom.resource.length; i++) {
         game.kingdom.resource[i] += kingdom_outputs.resource[i] * game.level;
@@ -113,6 +119,7 @@ function kingdom_tick () {
     gainExp(kingdom_outputs.exp);
 }
 
+//Work out what should be unlocked
 function kingdom_unlocks() {
     kingdom_range = 1;
     if (game.kingdom.upgrades[kingdom_upgradeEnum.QUARRY]) {
@@ -140,6 +147,8 @@ function kingdom_unlocks() {
     }
 }
 
+//Running through the entire map to work out what is being generated every tick would be slow.
+//Therefore we try and work out all of the resource incomes any time something changes and store it, so only the end result is read each tick
 function kingdom_calculateOutput () {
     kingdom_claimedTiles = -9;
     for (let i = 0; i < game.kingdom.borders.length; i++) {
@@ -167,6 +176,8 @@ function kingdom_calculateOutput () {
     }
 }
 
+//Sometimes buildings can fail. e.g. if you place a chain of roads then remove one in the middle.
+//This map is read to see which buildings on the map should have their image replaced with the big red X of failure.
 var kingdom_failMap = [
     0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -179,6 +190,7 @@ var kingdom_failMap = [
     0, 0, 0, 0, 0, 0, 0, 0, 0,
 ];
 
+//This map stores what tiles count as "adjacent to the Castle", which is extended via roads
 var kingdom_roadMap = [
     0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -191,19 +203,20 @@ var kingdom_roadMap = [
     0, 0, 0, 0, 0, 0, 0, 0, 0,
 ];
 
-var kingdom_roadList = [];
-
+//Calculate the road map
+//We use a floodfill from the Castle, pushing any connected roads to a list once and popping them off again until the list is empty.
 function kingdom_calculateRoadMap() {
+    let roadList = [];
     kingdom_roadMap[40] = 1;
-    kingdom_roadList.push(40);
-    while (kingdom_roadList.length > 0) {
-        let currentCell = kingdom_roadList.pop();
+    roadList.push(40);
+    while (roadList.length > 0) {
+        let currentCell = roadList.pop();
         let northCell = currentCell - 9;
         if (northCell > 0) {
             if (kingdom_roadMap[northCell] == 0) {
                 kingdom_roadMap[northCell] = 1;
                 if (kingdom_getConstructionNorth(currentCell) == kingdom_buildingEnum.ROAD) {
-                    kingdom_roadList.push(northCell);
+                    roadList.push(northCell);
                 }
             }
         }
@@ -212,7 +225,7 @@ function kingdom_calculateRoadMap() {
             if (kingdom_roadMap[eastCell] == 0) {
                 kingdom_roadMap[eastCell] = 1;
                 if (kingdom_getConstructionEast(currentCell) == kingdom_buildingEnum.ROAD) {
-                    kingdom_roadList.push(eastCell);
+                    roadList.push(eastCell);
                 }
             }
         }
@@ -221,7 +234,7 @@ function kingdom_calculateRoadMap() {
             if (kingdom_roadMap[southCell] == 0) {
                 kingdom_roadMap[southCell] = 1;
                 if (kingdom_getConstructionSouth(currentCell) == kingdom_buildingEnum.ROAD) {
-                    kingdom_roadList.push(southCell);
+                    roadList.push(southCell);
                 }
             }
         }
@@ -230,13 +243,14 @@ function kingdom_calculateRoadMap() {
             if (kingdom_roadMap[westCell] == 0) {
                 kingdom_roadMap[westCell] = 1;
                 if (kingdom_getConstructionWest(currentCell) == kingdom_buildingEnum.ROAD) {
-                    kingdom_roadList.push(westCell);
+                    roadList.push(westCell);
                 }
             }
         }
     }
 }
 
+//Returns what terrain is to the North. Returns 0 if at the Northern edge of the map
 function kingdom_getTerrainNorth(currentTile) {
     let northTile = currentTile - 9;
     if (northTile > 0) {
@@ -247,6 +261,7 @@ function kingdom_getTerrainNorth(currentTile) {
     }
 }
 
+//Returns what building is to the North. Returns 0 if at the Northern edge of the map
 function kingdom_getConstructionNorth(currentTile) {
     let northTile = currentTile - 9;
     if (northTile > 0) {
@@ -257,6 +272,7 @@ function kingdom_getConstructionNorth(currentTile) {
     }
 }
 
+//Returns what terrain is to the East. Returns 0 if at the Eastern edge of the map
 function kingdom_getTerrainEast(currentTile) {
     if (currentTile % 9 < 8) {
         return kingdom_landscape[currentTile + 1];
@@ -266,6 +282,7 @@ function kingdom_getTerrainEast(currentTile) {
     }
 }
 
+//Returns what building is to the East. Returns 0 if at the Eastern edge of the map
 function kingdom_getConstructionEast(currentTile) {
     if (currentTile % 9 < 8) {
         return game.kingdom.constructions[currentTile + 1];
@@ -275,6 +292,7 @@ function kingdom_getConstructionEast(currentTile) {
     }
 }
 
+//Returns what terrain is to the South. Returns 0 if at the Southern edge of the map
 function kingdom_getTerrainSouth(currentTile) {
     let southTile = currentTile + 9;
     if (southTile < kingdom_cells.length) {
@@ -285,6 +303,7 @@ function kingdom_getTerrainSouth(currentTile) {
     }
 }
 
+//Returns what building is to the South. Returns 0 if at the Southern edge of the map
 function kingdom_getConstructionSouth(currentTile) {
     let southTile = currentTile + 9;
     if (southTile < kingdom_cells.length) {
@@ -295,6 +314,7 @@ function kingdom_getConstructionSouth(currentTile) {
     }
 }
 
+//Returns what terrain is to the West. Returns 0 if at the Western edge of the map
 function kingdom_getTerrainWest(currentTile) {
     if (currentTile % 9 > 0) {
         return kingdom_landscape[currentTile - 1];
@@ -304,6 +324,7 @@ function kingdom_getTerrainWest(currentTile) {
     }
 }
 
+//Returns what building is to the West. Returns 0 if at the Western edge of the map
 function kingdom_getConstructionWest(currentTile) {
     if (currentTile % 9 > 0) {
         return game.kingdom.constructions[currentTile - 1];
@@ -327,6 +348,7 @@ const kingdom_infoPanelEnum = {
     CLAIMTILE: 4
 }
 
+//This is called every time you mouse over a map tile. Takes the cell number as an argument
 function kingdom_mousedOverCell(cell) {
     if (game.kingdom.borders[cell] != kingdom_rangeEnum.OUTOFBORDERS) {
         kingdom_currentCell = cell;
@@ -334,6 +356,8 @@ function kingdom_mousedOverCell(cell) {
     }
 }
 
+//This is called when you click on a map tile. Takes the cell number as an argument.
+//We store what we're trying to do with that click in the increasingly inaccurately named global variable kingdom_placing.
 function kingdom_clickedCell(cell) {
     if (kingdom_placing == -2) {
         //We are trying to claim a tile
@@ -353,6 +377,7 @@ function kingdom_clickedCell(cell) {
 	}
 }
 
+//This is called by kingdom_clickedCell if you were trying to claim that tile to add it to our borders
 function kingdom_claimTile(cell) {
     if (game.kingdom.borders[cell] != kingdom_rangeEnum.OUTSKIRTS) {
         return;
@@ -394,6 +419,8 @@ function kingdom_claimTile(cell) {
     save();
 }
 
+//This is called by kingdom_clickedCell if you were trying to remove the building on that cell
+//It should never be called on cells that don't have buildings on them
 function kingdom_removeBuilding(cell) {
     let building = game.kingdom.constructions[cell];
     if (building == kingdom_buildingEnum.CASTLE || building == kingdom_buildingEnum.EMPTY) {
@@ -407,6 +434,7 @@ function kingdom_removeBuilding(cell) {
     save();
 }
 
+//Removes all buildings (except the Castle, of course)
 function kingdom_removeAllBuildings() {
     for (let i = 0; i < game.kingdom.constructions.length; i ++) {
         let building = game.kingdom.constructions[i];
@@ -421,6 +449,8 @@ function kingdom_removeAllBuildings() {
     save();
 }
 
+//This is called if you click on the Remove building button
+//It signifies that we want to try and remove a building if we click on a map tile
 function kingdom_pickupRemoveBuilding() {
     if (kingdom_placing == -1) {
         kingdom_placing = 0;
@@ -431,6 +461,8 @@ function kingdom_pickupRemoveBuilding() {
     kingdom_updateBuildings();
 }
 
+//This is called if you click on the Claim Tile button
+//It signifies that we want to try and claim a tile if we click on a map tile
 function kingdom_pickupClaimTile() {
     let cost = Math.floor(kingdom_claimTileCostBase * Math.pow(kingdom_claimTileCostFactor, kingdom_claimedTiles));
     if (game.kingdom.resource[kingdom_resourceEnum.LABOUR] >= cost && game.kingdom.resource[kingdom_resourceEnum.MILITARY] >= cost) {
@@ -444,10 +476,25 @@ function kingdom_pickupClaimTile() {
     }
 }
 
+//This is called if you click on the Place button for a building. It takes the building type as an argument
+//It signifies that we want to try and place a building if we click on a map tile
+//The type of building is stored in kingdom_placing
+function kingdom_pickupBuilding(building) {
+    if (kingdom_placing == building) {
+        kingdom_placing = 0;
+    }
+    else {
+        kingdom_placing = building;
+    }
+    kingdom_updateBuildings();
+}
+
+//This is called if we mouse over a building on the buildings panel (not a placed building on the map!)
 function kingdom_mousedOverBuilding(building) {
     kingdom_updateinfoPanel (kingdom_infoPanelEnum.BUILDING, building);
 }
 
+//This is called is we mouse over an upgrade on the buildings panel
 function kingdom_mousedOverUpgrade(upgrade) {
     kingdom_updateinfoPanel (kingdom_infoPanelEnum.UPGRADE, upgrade);
 }
@@ -483,16 +530,7 @@ function kingdom_build(building) {
     save();
 }
 
-function kingdom_pickupBuilding(building) {
-    if (kingdom_placing == building) {
-        kingdom_placing = 0;
-    }
-    else {
-        kingdom_placing = building;
-    }
-    kingdom_updateBuildings();
-}
-
+//Try to place a building on a map tile
 function kingdom_place(cell) {
     if (kingdom_placing != 0
     && game.kingdom.constructions[cell] == kingdom_buildingEnum.EMPTY

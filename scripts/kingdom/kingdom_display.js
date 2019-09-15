@@ -7,6 +7,7 @@ const kingdom_claimTileButtonLink = $("#kingdom_claimTileButton");
 const kingdom_claimTileLabourCost = $("#kingdom_claimTileLabourCost");
 const kingdom_claimTileMilitaryCost = $("#kingdom_claimTileMilitaryCost");
 
+//Redraws everything, calling every drawing function
 function kingdom_redraw () {
 	if (activeTab != "kingdom") {
 		return;
@@ -18,6 +19,38 @@ function kingdom_redraw () {
 	kingdom_updateUpgrades ();
 }
 
+//Redraws the resource panel
+function kingdom_updateResources () {
+	if (activeTab != "kingdom") {
+		return;
+	}
+	$(".kingdom_resource").hide();
+	for (let i = 0; i < kingdom_resources.length; i++) {
+		if (game.kingdom.resource[i] > 0 || kingdom_outputs.resource[i] != 0) {
+			kingdom_resources[i].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[i], kingdom_outputs.resourceDisplay[i]));
+			kingdom_resources[i].idLink.show();
+		}
+	}
+}
+
+//Returns the html to be displayed for resource value and income. Takes the value and income as arguments. Called by kingdom_updateResources()
+function kingdom_resourceHtml (total, income) {
+	if (activeTab != "kingdom") {
+		return;
+	}
+	let text = displayNum(total);
+	if (income != 0)
+	{
+		text += " (";
+		if (income > 0) {
+			text += "+";
+		}
+		text += displayNum(income) + ")";
+	}
+	return text;
+}
+
+//Redraws the map
 function kingdom_populateTileImages () {
 	if (activeTab != "kingdom") {
 		return;
@@ -54,35 +87,7 @@ function kingdom_populateTileImages () {
 	}
 }
 
-function kingdom_updateResources () {
-	if (activeTab != "kingdom") {
-		return;
-	}
-	$(".kingdom_resource").hide();
-	for (let i = 0; i < kingdom_resources.length; i++) {
-		if (game.kingdom.resource[i] > 0 || kingdom_outputs.resource[i] != 0) {
-			kingdom_resources[i].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[i], kingdom_outputs.resourceDisplay[i]));
-			kingdom_resources[i].idLink.show();
-		}
-	}
-}
-
-function kingdom_resourceHtml (total, income) {
-	if (activeTab != "kingdom") {
-		return;
-	}
-	let text = displayNum(total);
-	if (income != 0)
-	{
-		text += " (";
-		if (income > 0) {
-			text += "+";
-		}
-		text += displayNum(income) + ")";
-	}
-	return text;
-}
-
+//Redraws the infoPanel. Takes two arguments, the infoPanel type, and one optional accompanying value (based on the infoPanel type)
 function kingdom_updateinfoPanel (infoPanelType, value) {
 	if (activeTab != "kingdom") {
 		return;
@@ -119,6 +124,13 @@ function kingdom_updateinfoPanel (infoPanelType, value) {
 	}
 }
 
+//The infoPanel for buildings is more complicated, so this function handles it, setting the dscription html
+/*Arguments:
+initialTitleText: Will either be an empty string, or contain the image and name of the terrain on the same cell as the building
+building: The id of the building
+terrain: The id of the terrain, used as some buildings have multiple images based on the terrain the are on
+isFailing: Boolean if the building is failing or not, adds an explanation to the top of the description.
+*/
 function kingdom_updateinfoPanel_building (initialTitleText, building, terrain, isFailing) {
 	kingdom_infoTitle.html(initialTitleText + "<img src = './images/kingdom/" + kingdom_buildings[building].imageLink(terrain) + "' alt='" + kingdom_buildings[building].name + "'>" + kingdom_buildings[building].name);
 	let text = "";
@@ -128,6 +140,7 @@ function kingdom_updateinfoPanel_building (initialTitleText, building, terrain, 
 	kingdom_infoDescription.html(text + kingdom_buildings[building].description());
 }
 
+//Redraws the buildings in the building panel
 function kingdom_updateBuildings () {
 	if (activeTab != "kingdom") {
 		return;
@@ -195,6 +208,7 @@ function kingdom_updateBuildings () {
 	}
 }
 
+//Redraws the upgrades in the building panel
 function kingdom_updateUpgrades () {
 	if (activeTab != "kingdom") {
 		return;

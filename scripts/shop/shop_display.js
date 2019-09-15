@@ -1,3 +1,4 @@
+//Drawing Cool-Mart
 function shop_redraw () {
     if (game.shop[shop_itemEnum.FEATUREKINGDOM] == 1) {
         $('#shop_kingdom').addClass('purchased');

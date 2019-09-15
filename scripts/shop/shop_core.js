@@ -1,3 +1,5 @@
+//Buying items from Cool-Mart
+//TODO: Genericise this, storing the data in data structures
 function shop_buy (item) {
     switch (item) {
         case "kingdom":

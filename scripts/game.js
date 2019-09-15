@@ -1,5 +1,7 @@
 //The game object is the only object that is saved to local storage.
-//Anything that should be stored between sessions should be placed as a property of this object.
+//Anything that should be stored between sessions should be a property of this object.
+//Some systems/browsers, particularly on mobile, have small storage space available.
+//So we try to save minimal data and recalculate anything else we can when the game loads.
 
 var game = {
     version: 1,
@@ -39,11 +41,13 @@ var game = {
     }
 };
 
+//Save the game to local storage
 function save()
 {
 	localStorage.setItem("gameStored", JSON.stringify(game));
 }
 
+//Load the game from local storage
 function load()
 {
     if (localStorage.getItem("gameStored") != null)
@@ -56,6 +60,7 @@ function load()
     }
 }
 
+//Delete save file and reload the page
 function wipe() {
 	var confirmation = confirm("Are you sure you want to permanently erase your savefile?");
 	if(confirmation === true){

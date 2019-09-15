@@ -12,19 +12,21 @@ var id_yellowCoins = $("#yellowCoins");
 var id_greenCoins = $("#greenCoins");
 var id_blueCoins = $("#blueCoins");
 
+//A tick is the current date and time, in seconds.
 function getTick() {
     return Math.floor (Date.now() / 1000);
 }
 
+//This function executes once every second (tick).
 function gameLoop ()
 {
 	let currentTick = getTick();
 	ticks = currentTick - game.previousTick;
 	if (ticks > maxTicks)
 	{
-		ticks = maxTicks;
+		ticks = maxTicks; // TODO: Replace with offline calculation eventually
 	}
-	while (ticks > 0)
+	while (ticks > 0) //If the game is running slowly, we should perform multiple second's worth of updates at once
 	{
         // Per second stuff goes here
         if (game.shop[shop_itemEnum.FEATUREKINGDOM] == 1) {
@@ -38,6 +40,7 @@ function gameLoop ()
         ticks --;
         ticksSinceSave ++;
     }
+    //TODO: Put topbar display code into its own function, so can update whenever we gain or spend exp or coins
     id_level.html(game.level);
     id_exp.html(displayNum(game.exp));
     id_maxExp.html(displayNum(getMaxExp()));
@@ -55,6 +58,7 @@ function gameLoop ()
     }
 }
 
+//Swapping between feature tabs
 function goToLocation (location)
 {
     activeTab = location;
@@ -82,6 +86,7 @@ function goToLocation (location)
     }
 }
 
+//Figure out and display currently unlocked tabs. Also updates documentation on Help tab
 function displayFeatures() {
     $(".tab").hide();
     $("#tab_help").show();
@@ -94,6 +99,7 @@ function displayFeatures() {
     }
 }
 
+//Call this every time you want to gain Exp as it also handles levelling up
 function gainExp (amount) {
     game.exp += amount;
     while (game.exp >= getMaxExp()) {
@@ -119,6 +125,7 @@ function gainGreenCoins (amount) {
     game.greenCoins += amount;
 }
 
+//Displays numbers with suffixes. I stole this from Derivative Clicker
 function displayNum(num) {
     if (num < 1000) {
         return num;
@@ -132,6 +139,7 @@ function displayNum(num) {
     return parseFloat(num).toFixed(2);
 }
 
+//This executes when the whole page has finished loading. This is where the code "starts"
 $(document).ready(function(){
     load();
     displayFeatures();

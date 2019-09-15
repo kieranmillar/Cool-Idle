@@ -38,8 +38,13 @@ function kingdom_populateTileImages () {
 		}
 		if (game.kingdom.constructions[i] != kingdom_buildingEnum.EMPTY)
 		{
-			let y = game.kingdom.constructions[i];
-			kingdom_cells.eq(i).html("<img src = './images/kingdom/" + kingdom_buildings[y].imageLink(kingdom_landscape[i]) + "' alt='" + kingdom_buildings[y].name + "'>");
+			if (kingdom_failMap[i] == 1) {
+				kingdom_cells.eq(i).html("<img src = './images/kingdom/building_fail.png' alt='Failing Building'>");
+			}
+			else {
+				let y = game.kingdom.constructions[i];
+				kingdom_cells.eq(i).html("<img src = './images/kingdom/" + kingdom_buildings[y].imageLink(kingdom_landscape[i]) + "' alt='" + kingdom_buildings[y].name + "'>");
+			}
 		}
 		else
 		{
@@ -95,7 +100,7 @@ function kingdom_updateinfoPanel (infoPanelType, value) {
 		kingdom_infoDescription.html(kingdom_upgrades[value].description);
 	}
 	else if (infoPanelType == kingdom_infoPanelEnum.BUILDING) {
-		kingdom_updateinfoPanel_building("", value, kingdom_terrainEnum.PLAINS);
+		kingdom_updateinfoPanel_building("", value, kingdom_terrainEnum.PLAINS, false);
 	}
 	else {
 		var terrain = kingdom_landscape[value];
@@ -109,14 +114,18 @@ function kingdom_updateinfoPanel (infoPanelType, value) {
 			kingdom_infoDescription.html(description);
 		}
 		else {
-			kingdom_updateinfoPanel_building(titleText, game.kingdom.constructions[value], terrain);
+			kingdom_updateinfoPanel_building(titleText, game.kingdom.constructions[value], terrain, kingdom_failMap[value]);
 		}
 	}
 }
 
-function kingdom_updateinfoPanel_building (initialTitleText, building, terrain) {
+function kingdom_updateinfoPanel_building (initialTitleText, building, terrain, isFailing) {
 	kingdom_infoTitle.html(initialTitleText + "<img src = './images/kingdom/" + kingdom_buildings[building].imageLink(terrain) + "' alt='" + kingdom_buildings[building].name + "'>" + kingdom_buildings[building].name);
-	kingdom_infoDescription.html(kingdom_buildings[building].description());
+	let text = "";
+	if (isFailing) {
+		text += "<p class='kingdom_infoPanel_red'>This building is not functioning as a requirement is not being met.</p>";
+	}
+	kingdom_infoDescription.html(text + kingdom_buildings[building].description());
 }
 
 function kingdom_updateBuildings () {

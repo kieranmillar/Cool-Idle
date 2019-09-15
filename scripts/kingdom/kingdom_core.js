@@ -141,14 +141,16 @@ function kingdom_unlocks() {
 }
 
 function kingdom_calculateOutput () {
-    kingdom_calculateRoadMap ();
     kingdom_claimedTiles = -9;
     for (let i = 0; i < game.kingdom.borders.length; i++) {
+        //Loop through a number of maps that store important info about the kingdom state
+        kingdom_failMap[i] = 0;
+        kingdom_roadMap[i] = 0;
         if (game.kingdom.borders[i] == 2) {
             kingdom_claimedTiles ++;
         }
     }
-
+    kingdom_calculateRoadMap ();
     for (let i = 0; i < kingdom_outputs.resource.length; i++) {
         kingdom_outputs.resource[i] = 0;
     }
@@ -165,12 +167,24 @@ function kingdom_calculateOutput () {
     }
 }
 
+var kingdom_failMap = [
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+];
+
 var kingdom_roadMap = [
     0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 1, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -180,9 +194,6 @@ var kingdom_roadMap = [
 var kingdom_roadList = [];
 
 function kingdom_calculateRoadMap() {
-    for (let i = 0; i < kingdom_roadMap.length; i++) {
-        kingdom_roadMap[i] = 0;
-    }
     kingdom_roadMap[40] = 1;
     kingdom_roadList.push(40);
     while (kingdom_roadList.length > 0) {

@@ -100,7 +100,7 @@ const kingdom_terrain = [
 	{
 		name: "Water",
 		imageLink: "tile_water.png",
-		description: "<p>It's like rain, except on the ground.</p><p>Is a source of water.</p><p><strong>Most buildings cannot be placed on this tile.</strong></p><p class='kingdom_infoPanel_red'>You cannot claim this tile until you purchase a particular upgrade.</p>"
+		description: "<p>It's like rain, except on the ground.</p><p>Is a source of water.</p><p><strong>Most buildings cannot be placed on this tile.</strong></p><p class='kingdom_infoPanel_red'>You do not yet have the means to claim water tiles.</p>"
 	},
 	{
 		name: "Volcano",
@@ -242,6 +242,9 @@ var kingdom_buildings = [
         output: function (i) {
 			if (kingdom_roadMap[i] == 1) {
 				kingdom_outputs.resource[kingdom_resourceEnum.RESEARCH] += 1;
+			}
+			else {
+				kingdom_failMap[i] = 1;
 			}
 		},
 		unlocked: true,
@@ -499,7 +502,11 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (i) {},
+        output: function (i) {
+			if (kingdom_roadMap[i] != 1) {
+				kingdom_failMap[i] = 1;
+			}
+		},
 		unlocked: false,
 		description: function() {
 			return "<p>Follow the grey stone road.</p><p>Any building adjacent to a road counts as being adjacent to the Castle, provided the road ultimately links back to the Castle.</p><p>Any road that does not link back to the Castle has no effect.</p>" + kingdom_getCastleAdjacentRequirementText();

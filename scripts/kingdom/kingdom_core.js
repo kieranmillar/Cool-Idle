@@ -100,8 +100,9 @@ function kingdom_tick () {
         game.kingdom.resource[i] += kingdom_outputs.resource[i] * game.level;
         kingdom_outputs.resourceDisplay[i] = kingdom_outputs.resource[i];
     }
-    let expectedWood = (kingdom_outputs.resource[kingdom_resourceEnum.WOOD] - kingdom_outputs.conversion.sawmill) * game.level;
-    if (expectedWood > 0 || Math.abs(expectedWood) < game.kingdom.resource[kingdom_resourceEnum.WOOD]) {
+    let totalWoodIncome = (kingdom_outputs.resource[kingdom_resourceEnum.WOOD] - kingdom_outputs.conversion.sawmill) * game.level;
+    let totalWoodConsumption = kingdom_outputs.conversion.sawmill * game.level;
+    if (totalWoodIncome > 0 || totalWoodConsumption <= game.kingdom.resource[kingdom_resourceEnum.WOOD]) {
         // Turn on wood consumption
         game.kingdom.resource[kingdom_resourceEnum.WOOD] -= kingdom_outputs.conversion.sawmill * game.level;
         kingdom_outputs.resourceDisplay[kingdom_resourceEnum.WOOD] -= kingdom_outputs.conversion.sawmill;

@@ -99,7 +99,7 @@ const kingdom_terrain = [
 	{
 		name: "Water",
 		imageLink: "tile_water.png",
-		description: "<p>It's like rain, except on the ground.</p><p>Most buildings cannot be placed on this tile.</p>"
+		description: "<p>It's like rain, except on the ground.</p><p>Most buildings cannot be placed on this tile.</p><p>You probably shouldn't claim this tile until you get a building you can place on it.</p>"
 	}
 ];
 

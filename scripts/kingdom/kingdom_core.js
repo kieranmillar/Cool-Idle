@@ -138,8 +138,6 @@ function kingdom_unlocks() {
     }
     if (game.kingdom.upgrades[kingdom_upgradeEnum.BARRACKS]) {
         kingdom_buildings[kingdom_buildingEnum.BARRACKS].unlocked = true;
-    }
-    if (game.shop[shop_itemEnum.KINGDOMCLAIMTILE]) {
         kingdom_upgrades[kingdom_upgradeEnum.ROAD].unlocked = true;
     }
     if (game.kingdom.upgrades[kingdom_upgradeEnum.ROAD]) {

@@ -553,13 +553,13 @@ var kingdom_buildings = [
 		cost: [
 			{
 				type: kingdom_resourceEnum.LABOUR,
-				base: 100,
+				base: 250,
 				factor: 2,
 				link: null
 			},
 			{
 				type: kingdom_resourceEnum.STONE,
-				base: 200,
+				base: 500,
 				factor: 3,
 				link: null
 			}
@@ -727,7 +727,7 @@ var kingdom_upgrades = [
 		cost: [
 			{
 				type: kingdom_resourceEnum.RESEARCH,
-				value: 1500
+				value: 5000
 			}
 		]
 	}

@@ -8,6 +8,9 @@ const kingdom_claimTileLabourCost = $("#kingdom_claimTileLabourCost");
 const kingdom_claimTileMilitaryCost = $("#kingdom_claimTileMilitaryCost");
 
 function kingdom_redraw () {
+	if (activeTab != "kingdom") {
+		return;
+	}
 	kingdom_updateResources ();
 	kingdom_populateTileImages ();
 	kingdom_updateinfoPanel(false, kingdom_currentCell);
@@ -16,6 +19,9 @@ function kingdom_redraw () {
 }
 
 function kingdom_populateTileImages () {
+	if (activeTab != "kingdom") {
+		return;
+	}
 	for (let i = 0; i < kingdom_cells.length; i++)
 	{
 		let r = game.kingdom.borders[i];
@@ -44,6 +50,9 @@ function kingdom_populateTileImages () {
 }
 
 function kingdom_updateResources () {
+	if (activeTab != "kingdom") {
+		return;
+	}
 	$(".kingdom_resource").hide();
 	for (let i = 0; i < kingdom_resources.length; i++) {
 		if (game.kingdom.resource[i] > 0 || kingdom_outputs.resource[i] != 0) {
@@ -54,6 +63,9 @@ function kingdom_updateResources () {
 }
 
 function kingdom_resourceHtml (total, income) {
+	if (activeTab != "kingdom") {
+		return;
+	}
 	let text = displayNum(total);
 	if (income != 0)
 	{
@@ -67,6 +79,9 @@ function kingdom_resourceHtml (total, income) {
 }
 
 function kingdom_updateinfoPanel (infoPanelType, value) {
+	if (activeTab != "kingdom") {
+		return;
+	}
 	if (infoPanelType == kingdom_infoPanelEnum.REMOVE) {
 		kingdom_infoTitle.html("<img src = './images/kingdom/bulldozer.png' alt='Remove Building'/>Remove Building");
 		kingdom_infoDescription.html("<p>Remove a building, returning it to your stock. (You can then place it again later without paying for it again.)</p><p>You cannot remove the Castle.</p>");
@@ -105,6 +120,9 @@ function kingdom_updateinfoPanel_building (initialTitleText, building) {
 }
 
 function kingdom_updateBuildings () {
+	if (activeTab != "kingdom") {
+		return;
+	}
 	$(".kingdom_building").hide();
 	if (game.shop[shop_itemEnum.KINGDOMREMOVE]) {
 		kingdom_removeBuildingPanelLink.show();
@@ -169,6 +187,9 @@ function kingdom_updateBuildings () {
 }
 
 function kingdom_updateUpgrades () {
+	if (activeTab != "kingdom") {
+		return;
+	}
 	$(".kingdom_upgrade").hide();
 	for (let i = 0; i < kingdom_upgrades.length; i++) {
 		if (kingdom_upgrades[i].unlocked && game.kingdom.upgrades[i] == 0) {

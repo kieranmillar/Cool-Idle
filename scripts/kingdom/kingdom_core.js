@@ -329,6 +329,22 @@ function kingdom_removeBuilding(cell) {
     save();
 }
 
+function kingdom_removeAllBuildings() {
+    for (let i = 0; i < game.kingdom.constructions.length; i ++) {
+        let building = game.kingdom.constructions[i];
+        if (building == kingdom_buildingEnum.CASTLE || building == kingdom_buildingEnum.EMPTY) {
+            continue;
+        }
+        game.kingdom.constructions[i] = kingdom_buildingEnum.EMPTY;
+        kingdom_buildingStock[building] ++;
+    }
+    kingdom_calculateOutput();
+    kingdom_updateResources();
+    kingdom_populateTileImages();
+    kingdom_updateBuildings();
+    save();
+}
+
 function kingdom_pickupRemoveBuilding() {
     if (kingdom_placing == -1) {
         kingdom_placing = 0;

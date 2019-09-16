@@ -24,7 +24,9 @@ function kingdom_updateResources () {
 	if (activeTab != "kingdom") {
 		return;
 	}
-	$(".kingdom_resource").hide();
+	kingdom_resourceClass.forEach(resource => {
+		resource.hide();
+	});
 	for (let i = 0; i < kingdom_resources.length; i++) {
 		if (game.kingdom.resource[i] > 0 || kingdom_outputs.resource[i] != 0) {
 			kingdom_resources[i].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[i], kingdom_outputs.resourceDisplay[i]));
@@ -145,8 +147,10 @@ function kingdom_updateBuildings () {
 	if (activeTab != "kingdom") {
 		return;
 	}
-	$(".kingdom_building").hide();
-	if (game.shop[shop_itemEnum.KINGDOMREMOVE]) {
+	kingdom_buildingClass.forEach(building => {
+		building.hide();
+	});
+	if (game.shop.kingdom[shop_kingdomEnum.REMOVE]) {
 		kingdom_removeBuildingPanelLink.show();
 	}
 	if (kingdom_placing == -1) {
@@ -155,7 +159,7 @@ function kingdom_updateBuildings () {
 	else {
 		kingdom_removeButtonLink.html('Remove');
 	}
-	if (game.shop[shop_itemEnum.KINGDOMCLAIMTILE]) {
+	if (game.shop.kingdom[shop_kingdomEnum.CLAIMTILE]) {
 		kingdom_claimTilePanelLink.show();
 		let cost = Math.floor(kingdom_claimTileCostBase * Math.pow(kingdom_claimTileCostFactor, kingdom_claimedTiles));
 		if (game.kingdom.resource[kingdom_resourceEnum.LABOUR] >= cost && game.kingdom.resource[kingdom_resourceEnum.MILITARY] >= cost) {
@@ -213,7 +217,9 @@ function kingdom_updateUpgrades () {
 	if (activeTab != "kingdom") {
 		return;
 	}
-	$(".kingdom_upgrade").hide();
+	kingdom_upgradeClass.forEach(upgrade => {
+		upgrade.hide();
+	});
 	for (let i = 0; i < kingdom_upgrades.length; i++) {
 		if (kingdom_upgrades[i].unlocked && game.kingdom.upgrades[i] == 0) {
 			kingdom_upgrades[i].idLink.show();

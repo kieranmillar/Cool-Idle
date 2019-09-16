@@ -29,7 +29,7 @@ function gameLoop ()
 	while (ticks > 0) //If the game is running slowly, we should perform multiple second's worth of updates at once
 	{
         // Per second stuff goes here
-        if (game.shop[shop_itemEnum.FEATUREKINGDOM] == 1) {
+        if (game.shop.features[shop_featureEnum.KINGDOM] == 1) {
             kingdom_tick();
             if (activeTab = "kingdom") {
                 kingdom_updateResources();
@@ -93,7 +93,7 @@ function displayFeatures() {
     $("#tab_settings").show();
     $("#tab_shop").show();
     $(".help").hide();
-    if (game.shop[shop_itemEnum.FEATUREKINGDOM] == 1) {
+    if (game.shop.features[shop_featureEnum.KINGDOM] == 1) {
         $("#tab_kingdom").show();
         $("#help_kingdom").show();
     }

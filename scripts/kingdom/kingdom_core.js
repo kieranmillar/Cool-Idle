@@ -1,6 +1,10 @@
-var kingdom_cells;
-var kingdom_currentCell = 40;
+var kingdom_cells = [];
+var kingdom_resourceClass = [];
+var kingdom_buildingClass = [];
+var kingdom_upgradeClass = [];
+
 var kingdom_buildingStock = [];
+var kingdom_currentCell = 40;
 var kingdom_placing = 0;
 var kingdom_claimedTiles = 0;
 
@@ -14,6 +18,7 @@ function kingdom_init() {
 		newElement.addClass("kingdom_resource");
 		newElement.html("<img src = './images/kingdom/" + resource.imageLink + "' alt='" + resource.name + "'/><span id='" + resource.value + "'/></span>");
         $("#kingdom_resourcePanel").append(newElement);
+        kingdom_resourceClass.push(newElement);
         resource.idLink = $("#" + resource.id);
         resource.valueLink = $("#" + resource.value);
     });
@@ -57,6 +62,8 @@ function kingdom_init() {
         newElement.html(htmlText);
         
         $("#kingdom_buildingList").append(newElement);
+        kingdom_buildingClass.push(newElement);
+
         building.idLink = $("#" + building.id);
         building.valueLink = $("#" + building.id + "Stock");
         building.buildButtonLink = $("#" + building.id + "BuildButton");
@@ -65,6 +72,8 @@ function kingdom_init() {
             building.cost[i].link = $("#" + building.id + kingdom_resources[building.cost[i].type].name + "Cost");
         }
     });
+    kingdom_buildingClass.push($("#kingdom_removeBuildingPanel"));
+    kingdom_buildingClass.push($("#kingdom_claimTilePanel"));
 
     //Calculate building stock
     kingdom_buildingStock = [ ...game.kingdom.building ];
@@ -89,6 +98,8 @@ function kingdom_init() {
 		newElement.html(htmlText);
         
         $("#kingdom_upgradeList").append(newElement);
+        kingdom_upgradeClass.push(newElement);
+
         upgrade.idLink = $("#" + upgrade.id);
         upgrade.buttonLink = $("#" + upgrade.id + "UpgradeButton");
     });

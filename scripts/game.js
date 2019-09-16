@@ -11,7 +11,10 @@ var game = {
 	yellowCoins: 0,
     greenCoins: 0,
     blueCoins: 0,
-    shop: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    shop: {
+        features: [0],
+        kingdom: [0, 0]
+    },
     kingdom: {
         resource: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         building: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

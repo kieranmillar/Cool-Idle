@@ -89,7 +89,7 @@ const kingdom_terrainEnum = {
 //TODO: Eventually the description might want to be a lambda function so we can update later e.g. when we unlock the ability to claim water tiles
 /*Array of data structures for terrain
 -----
-name: String containing displayed resource name.
+name: String containing displayed terrain name.
 imageLink: The name of the image stored in ../images/kingdom/
 description: The html of the description we want to show in the infopanel when you mouse over an unoccupied tile on the map
 -----*/

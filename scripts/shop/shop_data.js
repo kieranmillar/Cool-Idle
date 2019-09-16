@@ -1,11 +1,36 @@
-const shop_featureEnum = {
-    KINGDOM: 0,
-}
-
 const shop_costEnum = {
     YELLOWCOINS: 0,
     BLUECOINS: 1,
     GREENCOINS: 2
+}
+
+/*Array of data structures for shop cost resources (coins)
+-----
+idNumber: The idNumber according to its position in the array. shop_costEnum should match this
+name: String containing the cost resource name. This only shows up in the image alt text
+imageLink: A lambda function that returns the name of the image stored in ../images/ .
+-----*/
+var shop_costs = [
+    {
+        idNumber: shop_costEnum.YELLOWCOINS,
+        name: "Yellow coins",
+        imageLink: "coin_yellow.png"
+    },
+    {
+        idNumber: shop_costEnum.BLUECOINS,
+        name: "Blue coins",
+        imageLink: "coin_blue.png"
+    },
+    {
+        idNumber: shop_costEnum.GREENCOINS,
+        name: "Green coins",
+        imageLink: "coin_green.png"
+    }
+]
+
+const shop_featureEnum = {
+    KINGDOM: 0,
+    DUNGEON: 1
 }
 
 /*Array of data structures for feature shop items
@@ -17,7 +42,7 @@ description: String containing the html for the description
 cost: An array of data objects detailing each cost for this item. An empty array means it's free:
 --type: The resource type
 --value: The amount of this resource needed to buy it
-onPurchase: A lambda function with the code of what should happen when the item is purchased
+onPurchase: A lambda function with the code of what should happen when the item is purchased, saving the unlock to the game object and subtracting cost is already handled in shop_buy()
 idLink: should be included but set to null. shop_init() will set this to the html container div element so we don't have to search the DOM for it again
 costLink: should be included but set to null. shop_init() will set this to the html span element so we don't have to search the DOM for it again
 -----*/
@@ -29,7 +54,23 @@ var shop_item_feature = [
         description: "<p>Build and expand an empire, producing goods every second!</p>",
         cost: [],
         onPurchase: function () {
-            game.shop.features[shop_featureEnum.KINGDOM] = 1;
+            displayFeatures();
+        },
+        idLink: null,
+        costLink: null
+    },
+    {
+        idNumber: shop_featureEnum.DUNGEON,
+        name: "Dungeon",
+        id: "shop_feature_dungeon",
+        description: "<p>Not implemented yet. But get hyped!</p>",
+        cost: [
+            {
+                type: shop_costEnum.GREENCOINS,
+                value: 10
+            }
+        ],
+        onPurchase: function () {
             displayFeatures();
         },
         idLink: null,
@@ -51,7 +92,7 @@ description: String containing the html for the description
 cost: An array of data objects detailing each cost for this item:
 --type: The resource type
 --value: The amount of this resource needed to buy it
-onPurchase: A lambda function with the code of what should happen when the item is purchased
+onPurchase: A lambda function with the code of what should happen when the item is purchased, saving the unlock to the game object and subtracting cost is already handled in shop_buy()
 idLink: should be included but set to null. shop_init() will set this to the html container div element so we don't have to search the DOM for it again
 costLink: should be included but set to null. shop_init() will set this to the html span element so we don't have to search the DOM for it again
 -----*/
@@ -68,8 +109,6 @@ var shop_item_kingdom = [
             }
         ],
         onPurchase: function () {
-            game.shop.kingdom[shop_kingdomEnum.REMOVE] = 1;
-            game.yellowCoins -= 250;
             kingdom_unlocks();
         },
         idLink: null,
@@ -87,8 +126,6 @@ var shop_item_kingdom = [
             }
         ],
         onPurchase: function () {
-            game.shop.kingdom[shop_kingdomEnum.CLAIMTILE] = 1;
-            game.yellowCoins -= 250;
             kingdom_unlocks();
         },
         idLink: null,

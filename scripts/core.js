@@ -142,8 +142,9 @@ function displayNum(num) {
 //This executes when the whole page has finished loading. This is where the code "starts"
 $(document).ready(function(){
     load();
-    displayFeatures();
+    shop_init();
     kingdom_init();
+    displayFeatures();
     goToLocation ("help");
     $("#version").html(game.version);
     gameLoop();

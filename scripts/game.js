@@ -8,11 +8,11 @@ var game = {
     previousTick: 0,
 	exp: 0,
 	level: 1,
-	yellowCoins: 0,
-    greenCoins: 0,
+    yellowCoins: 0,
     blueCoins: 0,
+    greenCoins: 0,
     shop: {
-        features: [0],
+        features: [0, 0],
         kingdom: [0, 0]
     },
     kingdom: {

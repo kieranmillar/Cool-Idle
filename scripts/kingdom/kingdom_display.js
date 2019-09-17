@@ -61,9 +61,9 @@ function kingdom_drawCanvas() {
 	var ctx = kingdom_canvas.getContext("2d");
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fillRect(0, 0, 360, 360);
-	for (let i = 0; i < 9; i++) {
-		for (let j = 0; j < 9; j++) {
-			let cell = (i * 9) + j;
+	for (let j = 0; j < 9; j++) {
+		for (let i = 0; i < 9; i++) {
+			let cell = i  + (j * 9);
 			let x = i * 40;
 			let y = j * 40;
 			let b = game.kingdom.borders[cell];

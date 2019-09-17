@@ -1,3 +1,6 @@
+var kingdom_terrainImages = [];
+var kingdom_buildingImages = [];
+var kingdom_buildingFailImage;
 var kingdom_cells = [];
 var kingdom_resourceClass = [];
 var kingdom_buildingClass = [];
@@ -11,6 +14,21 @@ var kingdom_claimedTiles = 0;
 //This is run once when the game is loaded
 //It creates HTML elements for all of the resources/buildings etc. and also calculates things that aren't stored in the game object
 function kingdom_init() {
+    //Populate terrain tile images Array (used when drawing the canvas)
+    for (let i = 0; i < kingdom_terrain.length; i++) {
+        kingdom_terrainImages[i] = new Image();
+        kingdom_terrainImages[i].src = './images/kingdom/' + kingdom_terrain[i].imageLink;
+    }
+
+    //Populate building tile images Array (used when drawing the canvas)
+    //TODO: Fix this to accept multiple images per building!
+    for (let i = 1; i < kingdom_buildings.length; i++) {
+        kingdom_buildingImages[i] = new Image();
+        kingdom_buildingImages[i].src = './images/kingdom/' + kingdom_buildings[i].imageLink;
+    }
+    kingdom_buildingFailImage = new Image();
+    kingdom_buildingFailImage.src = './images/kingdom/building_fail.png';
+
     //Dynamically create resource list
     kingdom_resources.forEach(resource => {
         var newElement = $('<div></div>');
@@ -22,23 +40,6 @@ function kingdom_init() {
         resource.idLink = $("#" + resource.id);
         resource.valueLink = $("#" + resource.value);
     });
-
-    //Dynamically create terrain map
-    let count = 0;
-    for (let i = 0; i < 9; i++) {
-        var row = $('<div></div>');
-        row.addClass("kingdom_tileRow");
-        for (let j = 0; j < 9; j++) {
-            var cell = $('<div></div>');
-            cell.addClass("kingdom_tileCell");
-            cell.click({ value: count }, function (event) {kingdom_clickedCell(event.data.value)});
-            cell.mouseenter({ value: count }, function (event) {kingdom_mousedOverCell(event.data.value)});
-            row.append(cell);
-            count ++;
-        }
-        $("#kingdom_mainGrid").append(row);
-    }
-    kingdom_cells = $(".kingdom_tileCell");
 
     $("#kingdom_removeBuildingPanel").mouseenter(function () {kingdom_updateinfoPanel(kingdom_infoPanelEnum.REMOVE, 0)});
     $("#kingdom_claimTilePanel").mouseenter(function () {kingdom_updateinfoPanel(kingdom_infoPanelEnum.CLAIMTILE, 0)});

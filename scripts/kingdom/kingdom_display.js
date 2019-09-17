@@ -6,6 +6,7 @@ const kingdom_claimTilePanelLink = $("#kingdom_claimTilePanel");
 const kingdom_claimTileButtonLink = $("#kingdom_claimTileButton");
 const kingdom_claimTileLabourCost = $("#kingdom_claimTileLabourCost");
 const kingdom_claimTileMilitaryCost = $("#kingdom_claimTileMilitaryCost");
+const kingdom_canvas = document.getElementById("kingdom_canvas"); //JQuery objects are not canvases, so have to resort to old-school JS
 
 //Redraws everything, calling every drawing function
 function kingdom_redraw () {
@@ -13,7 +14,7 @@ function kingdom_redraw () {
 		return;
 	}
 	kingdom_updateResources ();
-	kingdom_populateTileImages ();
+	kingdom_drawCanvas();
 	kingdom_updateinfoPanel(false, kingdom_currentCell);
 	kingdom_updateBuildings ();
 	kingdom_updateUpgrades ();
@@ -50,6 +51,46 @@ function kingdom_resourceHtml (total, income) {
 		text += displayNum(income) + ")";
 	}
 	return text;
+}
+
+//Redraws the canvas (map)
+function kingdom_drawCanvas() {
+	if (activeTab != "kingdom") {
+		return;
+	}
+	var ctx = kingdom_canvas.getContext("2d");
+	ctx.fillStyle = "#FFFFFF";
+	ctx.fillRect(0, 0, 360, 360);
+	for (let i = 0; i < 9; i++) {
+		for (let j = 0; j < 9; j++) {
+			let cell = (i * 9) + j;
+			let x = i * 40;
+			let y = j * 40;
+			let b = game.kingdom.borders[cell];
+			if (b == kingdom_rangeEnum.OUTOFBORDERS) {
+				continue;
+			}
+			else if (b == kingdom_rangeEnum.OUTSKIRTS) {
+				ctx.globalAlpha = 0.5;
+			}
+			else {
+				ctx.globalAlpha = 1;
+			}
+			if (game.kingdom.constructions[cell] != kingdom_buildingEnum.EMPTY)
+			{
+				if (kingdom_failMap[cell] == 1) {
+					ctx.drawImage(kingdom_buildingFailImage, x, y);
+				}
+				else {
+					ctx.drawImage(kingdom_buildingImages[game.kingdom.constructions[cell]], x, y);
+				}
+			}
+			else
+			{
+				ctx.drawImage(kingdom_terrainImages[kingdom_landscape[cell]], x, y);
+			}
+		}
+	}
 }
 
 //Redraws the map

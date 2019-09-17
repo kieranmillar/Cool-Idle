@@ -4,7 +4,6 @@ var kingdom_terrainImages = [];
 var kingdom_buildingImages = [];
 var kingdom_buildingFailImage;
 
-
 var kingdom_resourceClass = [];
 var kingdom_buildingClass = [];
 var kingdom_upgradeClass = [];
@@ -31,6 +30,23 @@ function kingdom_init() {
     }
     kingdom_buildingFailImage = new Image();
     kingdom_buildingFailImage.src = './images/kingdom/building_fail.png';
+
+    //Handle the mouse interacting with the canvas
+    kingdom_canvas.addEventListener('mousemove', function(evt) {
+        var rect = kingdom_canvas.getBoundingClientRect();
+        let x = evt.clientX - rect.left;
+        let y = evt.clientY - rect.top;
+        cell = Math.floor(x / 40) + (Math.floor(y / 40) * 9);
+        kingdom_mousedOverCell(cell)
+    }, false);
+
+    kingdom_canvas.addEventListener('click', function(evt) {
+        var rect = kingdom_canvas.getBoundingClientRect();
+        let x = evt.clientX - rect.left;
+        let y = evt.clientY - rect.top;
+        cell = Math.floor(x / 40) + (Math.floor(y / 40) * 9);
+        kingdom_clickedonCell(cell)
+    }, false);
 
     //Dynamically create resource list
     kingdom_resources.forEach(resource => {
@@ -308,7 +324,7 @@ function kingdom_getConstructionEast(currentTile) {
 //Returns what terrain is to the South. Returns 0 if at the Southern edge of the map
 function kingdom_getTerrainSouth(currentTile) {
     let southTile = currentTile + 9;
-    if (southTile < kingdom_GRIDSIZE.length) {
+    if (southTile < kingdom_GRIDSIZE) {
         return kingdom_landscape[southTile];
     }
     else {
@@ -319,7 +335,7 @@ function kingdom_getTerrainSouth(currentTile) {
 //Returns what building is to the South. Returns 0 if at the Southern edge of the map
 function kingdom_getConstructionSouth(currentTile) {
     let southTile = currentTile + 9;
-    if (southTile < kingdom_GRIDSIZE.length) {
+    if (southTile < kingdom_GRIDSIZE) {
         return game.kingdom.constructions[southTile];
     }
     else {
@@ -371,7 +387,7 @@ function kingdom_mousedOverCell(cell) {
 
 //This is called when you click on a map tile. Takes the cell number as an argument.
 //We store what we're trying to do with that click in the increasingly inaccurately named global variable kingdom_placing.
-function kingdom_clickedCell(cell) {
+function kingdom_clickedonCell(cell) {
     if (kingdom_placing == -2) {
         //We are trying to claim a tile
         kingdom_claimTile(cell);

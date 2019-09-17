@@ -126,8 +126,6 @@ body {
   background-color: #FFFFFF;
   height: 100vh;
   margin: 0;
-  display: flex;
-  flex-flow: column;
   max-width: 1000px;
   min-width: 400px;
   margin-left: auto;
@@ -166,6 +164,23 @@ p, span, li {
 
 img {
   vertical-align: middle;
+}
+
+#loading {
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  bottom: 50%;
+  width: 1000px;
+}
+
+#game {
+  display: none;
+  flex-flow: column;
+  height: 100%;
+}
+#game.flex {
+  display: flex;
 }
 
 #topbar {

@@ -15,7 +15,7 @@ var kingdom_claimedTiles = 0;
 //It creates HTML elements for all of the resources/buildings etc. and also calculates things that aren't stored in the game object
 function kingdom_init() {
     //Populate terrain tile images Array (used when drawing the canvas)
-    for (let i = 0; i < kingdom_terrain.length; i++) {
+    for (let i = 1; i < kingdom_terrain.length; i++) {
         kingdom_terrainImages[i] = new Image();
         kingdom_terrainImages[i].src = './images/kingdom/' + kingdom_terrain[i].imageLink;
     }

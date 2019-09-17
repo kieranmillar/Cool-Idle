@@ -149,4 +149,6 @@ $(document).ready(function(){
     $("#version").html(game.version);
     gameLoop();
     setInterval (gameLoop, 1000);
+    $("#loading").hide();
+    $("#game").addClass("flex");
 });

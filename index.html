@@ -24,130 +24,131 @@
 		
 	</head>
 	<body>
-		<div id="topbar">
-			<div id="title">
-				<h1>
-					Cool Idle
-				</h1>
-				<h2>
-					A game by
-					<br>
-					Kieran Millar
-				</h2>
-			</div>
-			<div id="expBar">
-				<div id="topbar_levelRow">
-					<span id="topbar_level">Level: <span id="level"></span></span>
-					<span class="topbar_coin"><img src="./images/coin_yellow.png" alt= "Yellow Coins"/><span id="yellowCoins"></span></span>
-					<span class="topbar_coin"><img src="./images/coin_blue.png" alt= "Blue Coins"/><span id="blueCoins"></span></span>
-					<span class="topbar_coin"><img src="./images/coin_green.png" alt= "Green Coins"/><span id="greenCoins"></span></span>
+		<div id="loading">Cool Idle is loading! Be cool!</div>
+		<div id="game">
+			<div id="topbar">
+				<div id="title">
+					<h1>Cool Idle</h1>
+					<h2>
+						A game by
+						<br>
+						Kieran Millar
+					</h2>
 				</div>
-				<div>
-					<img src="./images/exp.png" alt= "Exp"/>
-					<span id="exp"></span> / <span id="maxExp"></span>
+				<div id="expBar">
+					<div id="topbar_levelRow">
+						<span id="topbar_level">Level: <span id="level"></span></span>
+						<span class="topbar_coin"><img src="./images/coin_yellow.png" alt= "Yellow Coins"/><span id="yellowCoins"></span></span>
+						<span class="topbar_coin"><img src="./images/coin_blue.png" alt= "Blue Coins"/><span id="blueCoins"></span></span>
+						<span class="topbar_coin"><img src="./images/coin_green.png" alt= "Green Coins"/><span id="greenCoins"></span></span>
+					</div>
+					<div>
+						<img src="./images/exp.png" alt= "Exp"/>
+						<span id="exp"></span> / <span id="maxExp"></span>
+					</div>
+					<progress id="expProgress" value="0" max="1"></progress>
 				</div>
-				<progress id="expProgress" value="0" max="1"></progress>
 			</div>
-		</div>
-		<div id="tabs">
-			<h3 id="tab_help" class="tab active" onclick="goToLocation('help')">Help</h3>
-			<h3 id="tab_settings" class="tab" onclick="goToLocation('settings')">Settings</h3>
-			<h3 id="tab_shop" class="tab" onclick="goToLocation('shop')">Cool-Mart</h3>
-			<h3 id="tab_kingdom" class="tab" onclick="goToLocation('kingdom')">Kingdom</h3>
-		</div>
-		<div id="locations">
-			<div id="loc_help" class="location">
-				<p><strong>This game is currently in early development, and you should frequently delete your save file in the settings screen as major breaking changes frequently occur.</strong></p>
-				<p>Welcome to Cool Idle!</p>
-				<p>Click on the tabs above to swap locations.</p>
-				<p>This page tells you all you need to know to play the game. Come back as you unlock more gameplay features to learn how they work!</p>
-				<p>You are currently playing version <span id="version"></span>.</p>
+			<div id="tabs">
+				<h3 id="tab_help" class="tab active" onclick="goToLocation('help')">Help</h3>
+				<h3 id="tab_settings" class="tab" onclick="goToLocation('settings')">Settings</h3>
+				<h3 id="tab_shop" class="tab" onclick="goToLocation('shop')">Cool-Mart</h3>
+				<h3 id="tab_kingdom" class="tab" onclick="goToLocation('kingdom')">Kingdom</h3>
+			</div>
+			<div id="locations">
+				<div id="loc_help" class="location">
+					<p><strong>This game is currently in early development, and you should frequently delete your save file in the settings screen as major breaking changes frequently occur.</strong></p>
+					<p>Welcome to Cool Idle!</p>
+					<p>Click on the tabs above to swap locations.</p>
+					<p>This page tells you all you need to know to play the game. Come back as you unlock more gameplay features to learn how they work!</p>
+					<p>You are currently playing version <span id="version"></span>.</p>
 
-				<hr>
-				<h2>Level and Experience</h2>
-
-				<p>The aim of the game is to increase your level. At the top of the screen you will see your level and the experience needed to reach the next level. Interacting with the gameplay features you unlock will lead to ways to gain more experience.</p>
-				<p>As your level goes up, parts of each gameplay feature will become more powerful. Progress in each feature so you can gain experience and improve your level, which will in turn have an impact on all features.</p>
-
-				<hr>
-				<h2>Coins</h2>
-				<p>At the top of your screen you will find 3 types of coins:</p>
-				<ul>
-					<li>Yellow coins: A common currency you can earn in each feature.</li>
-					<li>Blue coins: A rarer currency that you only earn in features by performing more difficult tasks.</li>
-					<li>Green coins: These coins can only be earned by levelling up. When you level up you earn a number of green coins equal to the level you just completed, e.g. when levelling up from level 4 to level 5, you earn 4 green coins.</li>
-				</ul>
-				<p>Coins are spent in Cool-Mart to unlock and upgrade game features!</p>
-
-				<div id="help_kingdom" class="help">
 					<hr>
-					<h2>Kingdom</h2>
-					<p><strong>Level bonus:</strong> All building effects except exp and coin gain are multiplied by your level.</p>
-					<p>Build and place buildings which produce resources every second. Use these resources to build more buildings, or unlock upgrades. The output of buildings can often be improved by building them on, or next to, various terrain features or other buildings. The resources produced by buildings can also include experience and coins.</p>
-				</div>
+					<h2>Level and Experience</h2>
 
-			</div>
+					<p>The aim of the game is to increase your level. At the top of the screen you will see your level and the experience needed to reach the next level. Interacting with the gameplay features you unlock will lead to ways to gain more experience.</p>
+					<p>As your level goes up, parts of each gameplay feature will become more powerful. Progress in each feature so you can gain experience and improve your level, which will in turn have an impact on all features.</p>
 
-			<div id="loc_settings" class="location">
-				<button type="button" onclick="save()">
-					Manually save the game (autosaves every 20 seconds or after you do something important)
-				</button>
-				<button type="button" onclick="wipe()">
-					Delete save file and hard reset (Don't press this!)
-				</button>
-			</div>
-
-			<div id="loc_shop" class="location">
-				<div id="shop_section_features">
-					<h1>Features</h1>
-					<div id="shop_section_features_list" class="shop_section"></div>
-				</div>
-				<div id="shop_section_kingdom">
 					<hr>
-					<h1>Kingdom</h1>
-					<div id="shop_section_kingdom_list" class="shop_section"></div>
-				</div>
-			</div>
+					<h2>Coins</h2>
+					<p>At the top of your screen you will find 3 types of coins:</p>
+					<ul>
+						<li>Yellow coins: A common currency you can earn in each feature.</li>
+						<li>Blue coins: A rarer currency that you only earn in features by performing more difficult tasks.</li>
+						<li>Green coins: These coins can only be earned by levelling up. When you level up you earn a number of green coins equal to the level you just completed, e.g. when levelling up from level 4 to level 5, you earn 4 green coins.</li>
+					</ul>
+					<p>Coins are spent in Cool-Mart to unlock and upgrade game features!</p>
 
-			<div id="loc_kingdom" class="location">
-				<div id="kingdom_resourcePanel" class="kingdom_column"></div>
-				<div id="kingdom_mainArea" class="kingdom_column">
-					<div id="kingdom_canvas_container">
-						<canvas id="kingdom_canvas" width="360" height="360"></canvas>
+					<div id="help_kingdom" class="help">
+						<hr>
+						<h2>Kingdom</h2>
+						<p><strong>Level bonus:</strong> All building effects except exp and coin gain are multiplied by your level.</p>
+						<p>Build and place buildings which produce resources every second. Use these resources to build more buildings, or unlock upgrades. The output of buildings can often be improved by building them on, or next to, various terrain features or other buildings. The resources produced by buildings can also include experience and coins.</p>
 					</div>
-					<div id="kingdom_infoPanel">
-						<div id="kingdom_infoTitle" class="kingdom_infoPanel"></div>
-						<div id="kingdom_infoDescription" class="kingdom_infoPanel"></div>
+
+				</div>
+
+				<div id="loc_settings" class="location">
+					<button type="button" onclick="save()">
+						Manually save the game (autosaves every 20 seconds or after you do something important)
+					</button>
+					<button type="button" onclick="wipe()">
+						Delete save file and hard reset (Don't press this!)
+					</button>
+				</div>
+
+				<div id="loc_shop" class="location">
+					<div id="shop_section_features">
+						<h1>Features</h1>
+						<div id="shop_section_features_list" class="shop_section"></div>
+					</div>
+					<div id="shop_section_kingdom">
+						<hr>
+						<h1>Kingdom</h1>
+						<div id="shop_section_kingdom_list" class="shop_section"></div>
 					</div>
 				</div>
-				<div id="kingdom_purchasePanel" class="kingdom_column">
-					<div id="kingdom_removeBuildingPanel" class="kingdom_building">
-						<div class="kingdom_building_row">
-							<img src="./images/kingdom/bulldozer.png" alt= "Remove Building" class='kingdom_buildingImage'/>
-							<span class="kingdom_buildingName">Remove Building</span>
-							<button type="button" class="button clickable" onclick="kingdom_removeAllBuildings()">Remove All</button>
-							<button type="button" id="kingdom_removeButton" class="button clickable" onclick="kingdom_pickupRemoveBuilding()">Remove</button>
+
+				<div id="loc_kingdom" class="location">
+					<div id="kingdom_resourcePanel" class="kingdom_column"></div>
+					<div id="kingdom_mainArea" class="kingdom_column">
+						<div id="kingdom_canvas_container">
+							<canvas id="kingdom_canvas" width="360" height="360"></canvas>
+						</div>
+						<div id="kingdom_infoPanel">
+							<div id="kingdom_infoTitle" class="kingdom_infoPanel"></div>
+							<div id="kingdom_infoDescription" class="kingdom_infoPanel"></div>
 						</div>
 					</div>
-					<div id="kingdom_claimTilePanel" class="kingdom_building">
-						<div class="kingdom_building_row">
-							<img src="./images/kingdom/swords.png" alt= "Claim Tile" class='kingdom_buildingImage'/>
-							<span class="kingdom_buildingName">Claim Tile</span>
-							<button type="button" id="kingdom_claimTileButton" class="button" onclick="kingdom_pickupClaimTile()">Claim Tile</button>
+					<div id="kingdom_purchasePanel" class="kingdom_column">
+						<div id="kingdom_removeBuildingPanel" class="kingdom_building">
+							<div class="kingdom_building_row">
+								<img src="./images/kingdom/bulldozer.png" alt= "Remove Building" class='kingdom_buildingImage'/>
+								<span class="kingdom_buildingName">Remove Building</span>
+								<button type="button" class="button clickable" onclick="kingdom_removeAllBuildings()">Remove All</button>
+								<button type="button" id="kingdom_removeButton" class="button clickable" onclick="kingdom_pickupRemoveBuilding()">Remove</button>
+							</div>
 						</div>
-						<div class="kingdom_building_row">
-							<span class="kingdom_buildingCost">
-								<img src="./images/kingdom/resource_labour.png" alt="Labour"/>
-								<span id="kingdom_claimTileLabourCost"></span>
-								<img src="./images/kingdom/resource_military.png" alt="Military"/>
-								<span id="kingdom_claimTileMilitaryCost"></span>
-							</span>
+						<div id="kingdom_claimTilePanel" class="kingdom_building">
+							<div class="kingdom_building_row">
+								<img src="./images/kingdom/swords.png" alt= "Claim Tile" class='kingdom_buildingImage'/>
+								<span class="kingdom_buildingName">Claim Tile</span>
+								<button type="button" id="kingdom_claimTileButton" class="button" onclick="kingdom_pickupClaimTile()">Claim Tile</button>
+							</div>
+							<div class="kingdom_building_row">
+								<span class="kingdom_buildingCost">
+									<img src="./images/kingdom/resource_labour.png" alt="Labour"/>
+									<span id="kingdom_claimTileLabourCost"></span>
+									<img src="./images/kingdom/resource_military.png" alt="Military"/>
+									<span id="kingdom_claimTileMilitaryCost"></span>
+								</span>
+							</div>
 						</div>
+						<h3>Buildings</h3>
+						<div id="kingdom_buildingList"></div>
+						<h3>Upgrades</h3>
+						<div id="kingdom_upgradeList"></div>
 					</div>
-					<h3>Buildings</h3>
-					<div id="kingdom_buildingList"></div>
-					<h3>Upgrades</h3>
-					<div id="kingdom_upgradeList"></div>
 				</div>
 			</div>
 		</div>

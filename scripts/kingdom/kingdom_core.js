@@ -1,7 +1,10 @@
+const kingdom_GRIDSIZE = 81;
+
 var kingdom_terrainImages = [];
 var kingdom_buildingImages = [];
 var kingdom_buildingFailImage;
-var kingdom_cells = [];
+
+
 var kingdom_resourceClass = [];
 var kingdom_buildingClass = [];
 var kingdom_upgradeClass = [];
@@ -24,7 +27,7 @@ function kingdom_init() {
     //TODO: Fix this to accept multiple images per building!
     for (let i = 1; i < kingdom_buildings.length; i++) {
         kingdom_buildingImages[i] = new Image();
-        kingdom_buildingImages[i].src = './images/kingdom/' + kingdom_buildings[i].imageLink;
+        kingdom_buildingImages[i].src = './images/kingdom/' + kingdom_buildings[i].imageLink(kingdom_terrainEnum.PLAINS);
     }
     kingdom_buildingFailImage = new Image();
     kingdom_buildingFailImage.src = './images/kingdom/building_fail.png';
@@ -78,7 +81,7 @@ function kingdom_init() {
 
     //Calculate building stock
     kingdom_buildingStock = [ ...game.kingdom.building ];
-    for (let i = 0; i < kingdom_cells.length; i++) {
+    for (let i = 0; i < kingdom_GRIDSIZE; i++) {
         if (game.kingdom.constructions[i] != kingdom_buildingEnum.EMPTY && game.kingdom.constructions[i] != kingdom_buildingEnum.CASTLE) {
             kingdom_buildingStock [game.kingdom.constructions[i]] --;
         }
@@ -176,7 +179,7 @@ function kingdom_calculateOutput () {
     kingdom_outputs.exp = 0;
     kingdom_outputs.yellowCoins = 0;
     Object.keys(kingdom_outputs.conversion).forEach(v => kingdom_outputs.conversion[v] = 0);
-    for (let i = 0; i < kingdom_cells.length; i++) {
+    for (let i = 0; i < kingdom_GRIDSIZE; i++) {
         const currentConstruction = game.kingdom.constructions[i];
         if (currentConstruction != kingdom_buildingEnum.EMPTY) {
             if (kingdom_buildings[currentConstruction].hasOwnProperty('output')) {
@@ -305,7 +308,7 @@ function kingdom_getConstructionEast(currentTile) {
 //Returns what terrain is to the South. Returns 0 if at the Southern edge of the map
 function kingdom_getTerrainSouth(currentTile) {
     let southTile = currentTile + 9;
-    if (southTile < kingdom_cells.length) {
+    if (southTile < kingdom_GRIDSIZE.length) {
         return kingdom_landscape[southTile];
     }
     else {
@@ -316,7 +319,7 @@ function kingdom_getTerrainSouth(currentTile) {
 //Returns what building is to the South. Returns 0 if at the Southern edge of the map
 function kingdom_getConstructionSouth(currentTile) {
     let southTile = currentTile + 9;
-    if (southTile < kingdom_cells.length) {
+    if (southTile < kingdom_GRIDSIZE.length) {
         return game.kingdom.constructions[southTile];
     }
     else {

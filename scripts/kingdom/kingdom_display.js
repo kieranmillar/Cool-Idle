@@ -93,43 +93,6 @@ function kingdom_drawCanvas() {
 	}
 }
 
-//Redraws the map
-function kingdom_populateTileImages () {
-	if (activeTab != "kingdom") {
-		return;
-	}
-	for (let i = 0; i < kingdom_cells.length; i++)
-	{
-		let r = game.kingdom.borders[i];
-		if (r == kingdom_rangeEnum.OUTOFBORDERS) {
-			kingdom_cells[i].style.visibility = "hidden";
-		}
-		else if (r == kingdom_rangeEnum.OUTSKIRTS) {
-			kingdom_cells[i].style.opacity = "0.5";
-			kingdom_cells[i].style.visibility = "visible";
-		}
-		else {
-			kingdom_cells[i].style.opacity = "1";
-			kingdom_cells[i].style.visibility = "visible";
-		}
-		if (game.kingdom.constructions[i] != kingdom_buildingEnum.EMPTY)
-		{
-			if (kingdom_failMap[i] == 1) {
-				kingdom_cells.eq(i).html("<img src = './images/kingdom/building_fail.png' alt='Failing Building'>");
-			}
-			else {
-				let y = game.kingdom.constructions[i];
-				kingdom_cells.eq(i).html("<img src = './images/kingdom/" + kingdom_buildings[y].imageLink(kingdom_landscape[i]) + "' alt='" + kingdom_buildings[y].name + "'>");
-			}
-		}
-		else
-		{
-			let y = kingdom_landscape[i];
-			kingdom_cells.eq(i).html("<img src = './images/kingdom/" + kingdom_terrain[y].imageLink + "' alt='" + kingdom_terrain[y].name + "'>");
-		}
-	}
-}
-
 //Redraws the infoPanel. Takes two arguments, the infoPanel type, and one optional accompanying value (based on the infoPanel type)
 function kingdom_updateinfoPanel (infoPanelType, value) {
 	if (activeTab != "kingdom") {

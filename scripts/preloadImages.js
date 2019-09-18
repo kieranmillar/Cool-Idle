@@ -1,13 +1,13 @@
 //Executes all of the following methods.
 //TODO: Make all of this asynchronous?
 function preloadImages () {
-    kingdom_preloadImages();
+    preloadKingdomImages();
 }
 
 var kingdom_buildingFailImage;
 
 //Pre-loads the images for the kingdom feature so they can be drawn onto a canvas
-function kingdom_preloadImages() {
+function preloadKingdomImages() {
     //Populate terrain tile images Array (used when drawing the canvas)
     for (let i = 1; i < kingdom_terrain.length; i++) {
         kingdom_terrain[i].imageCache = new Image();

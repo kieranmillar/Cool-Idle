@@ -1,7 +1,5 @@
 const kingdom_GRIDSIZE = 81;
 
-var kingdom_terrainImages = [];
-var kingdom_buildingImages = [];
 var kingdom_buildingFailImage;
 
 var kingdom_resourceClass = [];
@@ -18,15 +16,29 @@ var kingdom_claimedTiles = 0;
 function kingdom_init() {
     //Populate terrain tile images Array (used when drawing the canvas)
     for (let i = 1; i < kingdom_terrain.length; i++) {
-        kingdom_terrainImages[i] = new Image();
-        kingdom_terrainImages[i].src = './images/kingdom/' + kingdom_terrain[i].imageLink;
+        kingdom_terrain[i].imageCache = new Image();
+        kingdom_terrain[i].imageCache.src = './images/kingdom/' + kingdom_terrain[i].imageLink;
     }
 
     //Populate building tile images Array (used when drawing the canvas)
     //TODO: Fix this to accept multiple images per building!
     for (let i = 1; i < kingdom_buildings.length; i++) {
-        kingdom_buildingImages[i] = new Image();
-        kingdom_buildingImages[i].src = './images/kingdom/' + kingdom_buildings[i].imageLink(kingdom_terrainEnum.PLAINS);
+        if (kingdom_buildings[i].hasOwnProperty("imageCache")) {
+            kingdom_buildings[i].imageCache = new Image();
+            kingdom_buildings[i].imageCache.src = './images/kingdom/' + kingdom_buildings[i].imageLink();
+        }
+        if (kingdom_buildings[i].hasOwnProperty("imageCachePlains")) {
+            kingdom_buildings[i].imageCachePlains = new Image();
+            kingdom_buildings[i].imageCachePlains.src = './images/kingdom/' + kingdom_buildings[i].imageLink(kingdom_terrainEnum.PLAINS);
+        }
+        if (kingdom_buildings[i].hasOwnProperty("imageCacheHills")) {
+            kingdom_buildings[i].imageCacheHills = new Image();
+            kingdom_buildings[i].imageCacheHills.src = './images/kingdom/' + kingdom_buildings[i].imageLink(kingdom_terrainEnum.HILLS);
+        }
+        if (kingdom_buildings[i].hasOwnProperty("imageCacheForest")) {
+            kingdom_buildings[i].imageCacheForest = new Image();
+            kingdom_buildings[i].imageCacheForest.src = './images/kingdom/' + kingdom_buildings[i].imageLink(kingdom_terrainEnum.FOREST);
+        }
     }
     kingdom_buildingFailImage = new Image();
     kingdom_buildingFailImage.src = './images/kingdom/building_fail.png';

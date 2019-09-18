@@ -82,12 +82,27 @@ function kingdom_drawCanvas() {
 					ctx.drawImage(kingdom_buildingFailImage, x, y);
 				}
 				else {
-					ctx.drawImage(kingdom_buildingImages[game.kingdom.constructions[cell]], x, y);
+					if (kingdom_buildings[game.kingdom.constructions[cell]].hasOwnProperty("imageCache")) {
+						ctx.drawImage(kingdom_buildings[game.kingdom.constructions[cell]].imageCache, x, y);
+					}
+					else {
+						switch (kingdom_landscape[cell]) {
+							case kingdom_terrainEnum.PLAINS:
+								ctx.drawImage(kingdom_buildings[game.kingdom.constructions[cell]].imageCachePlains, x, y);
+								break;
+							case kingdom_terrainEnum.HILLS:
+								ctx.drawImage(kingdom_buildings[game.kingdom.constructions[cell]].imageCacheHills, x, y);
+								break;
+							case kingdom_terrainEnum.FOREST:
+								ctx.drawImage(kingdom_buildings[game.kingdom.constructions[cell]].imageCacheForest, x, y);
+								break;
+						}
+					}
 				}
 			}
 			else
 			{
-				ctx.drawImage(kingdom_terrainImages[kingdom_landscape[cell]], x, y);
+				ctx.drawImage(kingdom_terrain[kingdom_landscape[cell]].imageCache, x, y);
 			}
 		}
 	}

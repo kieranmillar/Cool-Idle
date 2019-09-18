@@ -141,6 +141,7 @@ function displayNum(num) {
 
 //This executes when the whole page has finished loading. This is where the code "starts"
 $(document).ready(function(){
+    preloadImages();
     load();
     shop_init();
     kingdom_init();

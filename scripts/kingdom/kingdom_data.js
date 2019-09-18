@@ -92,37 +92,44 @@ const kingdom_terrainEnum = {
 name: String containing displayed terrain name.
 imageLink: The name of the image stored in ../images/kingdom/
 description: The html of the description we want to show in the infopanel when you mouse over an unoccupied tile on the map
+imageCache: A pre-loaded version of the image used to draw on the canvas
 -----*/
 const kingdom_terrain = [
 	{
 		name: "",
 		imageLink: "",
-		description: ""
+		description: "",
+		imageCache: null
 	},
 	{
 		name: "Plains",
 		imageLink: "tile_plains.png",
-		description: "<p>Just plain boring.</p>"
+		description: "<p>Just plain boring.</p>",
+		imageCache: null
 	},
 	{
 		name: "Forest",
 		imageLink: "tile_forest.png",
-		description: "<p>Wood you believe it, there's trees growing here!</p><p>Is a source of wood.</p>"
+		description: "<p>Wood you believe it, there's trees growing here!</p><p>Is a source of wood.</p>",
+		imageCache: null
 	},
 	{
 		name: "Hills",
 		imageLink: "tile_hills.png",
-		description: "<p>For when you want to take the high ground.</p>"
+		description: "<p>For when you want to take the high ground.</p>",
+		imageCache: null
 	},
 	{
 		name: "Water",
 		imageLink: "tile_water.png",
-		description: "<p>It's like rain, except on the ground.</p><p>Is a source of water.</p><p><strong>Most buildings cannot be placed on this tile.</strong></p><p class='kingdom_infoPanel_red'>You do not yet have the means to claim water tiles.</p>"
+		description: "<p>It's like rain, except on the ground.</p><p>Is a source of water.</p><p><strong>Most buildings cannot be placed on this tile.</strong></p><p class='kingdom_infoPanel_red'>You do not yet have the means to claim water tiles.</p>",
+		imageCache: null
 	},
 	{
 		name: "Volcano",
 		imageLink: "tile_volcano.png",
-		description: "<p>Prime real estate for super-villains.</p><p>Is a source of heat.</p><p><strong>Buildings cannot be placed on this tile.</strong></p>"
+		description: "<p>Prime real estate for super-villains.</p><p>Is a source of heat.</p><p><strong>Buildings cannot be placed on this tile.</strong></p>",
+		imageCache: null
 	}
 ];
 
@@ -165,6 +172,10 @@ idNumber: The idNumber according to its position in the array. kingdom_buildingE
 name: String containing displayed building name.
 id: String containing the html id for the container div in the building panel
 imageLink: A lambda function that returns the name of the image stored in ../images/kingdom/ . Takes the terrain type as an argument
+optional - imageCache: A pre-loaded version of the image used to draw on the canvas, when the object has only one image
+optional - imageCachePlains: A pre-loaded version of the image used to draw on the canvas, when the object has multiple images, one of which is on plains
+optional - imageCacheHills: A pre-loaded version of the image used to draw on the canvas, when the object has multiple images, one of which is on hills
+optional - imageCacheForest: A pre-loaded version of the image used to draw on the canvas, when the object has multiple images, one of which is on forest
 idLink: should be included but set to null. kingdom_init() will set this to the html container div element so we don't have to search the DOM for it again
 valueLink: should be included but set to null. kingdom_init() will set this to the html span element so we don't have to search the DOM for it again
 buildButtonLink: should be included but set to null. kingdom_init() will set this to the html build button element so we don't have to search the DOM for it again
@@ -192,6 +203,7 @@ var kingdom_buildings = [
 		imageLink: function (terrain) {
 			return "building_castle.png";
 		},
+		imageCache: null,
         output: function (cell) {
             kingdom_outputs.resource[kingdom_resourceEnum.LABOUR] += 1;
             kingdom_outputs.yellowCoins += 1;
@@ -210,6 +222,7 @@ var kingdom_buildings = [
 		imageLink: function (terrain) {
 			return "building_woodcutter.png";
 		},
+		imageCache: null,
 		idLink: null,
 		valueLink: null,
 		buildButtonLink: null,
@@ -274,6 +287,9 @@ var kingdom_buildings = [
 					break;
 			}
 		},
+		imageCachePlains: null,
+		imageCacheHills: null,
+		imageCacheForest: null,
 		idLink: null,
 		valueLink: null,
 		buildButtonLink: null,
@@ -316,6 +332,7 @@ var kingdom_buildings = [
 		imageLink: function (terrain) {
 			return "building_quarry.png";
 		},
+		imageCache: null,
 		idLink: null,
 		valueLink: null,
 		buildButtonLink: null,
@@ -358,6 +375,9 @@ var kingdom_buildings = [
 					break;
 			}
 		},
+		imageCachePlains: null,
+		imageCacheHills: null,
+		imageCacheForest: null,
 		idLink: null,
 		valueLink: null,
 		buildButtonLink: null,
@@ -419,6 +439,9 @@ var kingdom_buildings = [
 					break;
 			}
 		},
+		imageCachePlains: null,
+		imageCacheHills: null,
+		imageCacheForest: null,
 		idLink: null,
 		valueLink: null,
 		buildButtonLink: null,
@@ -479,6 +502,9 @@ var kingdom_buildings = [
 					break;
 			}
 		},
+		imageCachePlains: null,
+		imageCacheHills: null,
+		imageCacheForest: null,
 		idLink: null,
 		valueLink: null,
 		buildButtonLink: null,
@@ -537,6 +563,9 @@ var kingdom_buildings = [
 					break;
 			}
 		},
+		imageCachePlains: null,
+		imageCacheHills: null,
+		imageCacheForest: null,
 		idLink: null,
 		valueLink: null,
 		buildButtonLink: null,

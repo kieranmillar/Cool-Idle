@@ -6,6 +6,7 @@ const kingdom_claimTilePanelLink = $("#kingdom_claimTilePanel");
 const kingdom_claimTileButtonLink = $("#kingdom_claimTileButton");
 const kingdom_claimTileLabourCost = $("#kingdom_claimTileLabourCost");
 const kingdom_claimTileMilitaryCost = $("#kingdom_claimTileMilitaryCost");
+const kingdom_canvas = document.getElementById("kingdom_canvas"); //JQuery objects are not canvases, so have to resort to old-school JS
 
 //Redraws everything, calling every drawing function
 function kingdom_redraw () {
@@ -13,7 +14,7 @@ function kingdom_redraw () {
 		return;
 	}
 	kingdom_updateResources ();
-	kingdom_populateTileImages ();
+	kingdom_drawCanvas();
 	kingdom_updateinfoPanel(false, kingdom_currentCell);
 	kingdom_updateBuildings ();
 	kingdom_updateUpgrades ();
@@ -52,39 +53,57 @@ function kingdom_resourceHtml (total, income) {
 	return text;
 }
 
-//Redraws the map
-function kingdom_populateTileImages () {
+//Redraws the canvas (map)
+function kingdom_drawCanvas() {
 	if (activeTab != "kingdom") {
 		return;
 	}
-	for (let i = 0; i < kingdom_cells.length; i++)
-	{
-		let r = game.kingdom.borders[i];
-		if (r == kingdom_rangeEnum.OUTOFBORDERS) {
-			kingdom_cells[i].style.visibility = "hidden";
-		}
-		else if (r == kingdom_rangeEnum.OUTSKIRTS) {
-			kingdom_cells[i].style.opacity = "0.5";
-			kingdom_cells[i].style.visibility = "visible";
-		}
-		else {
-			kingdom_cells[i].style.opacity = "1";
-			kingdom_cells[i].style.visibility = "visible";
-		}
-		if (game.kingdom.constructions[i] != kingdom_buildingEnum.EMPTY)
-		{
-			if (kingdom_failMap[i] == 1) {
-				kingdom_cells.eq(i).html("<img src = './images/kingdom/building_fail.png' alt='Failing Building'>");
+	var ctx = kingdom_canvas.getContext("2d");
+	ctx.fillStyle = "#FFFFFF";
+	ctx.fillRect(0, 0, 360, 360);
+	for (let j = 0; j < 9; j++) {
+		for (let i = 0; i < 9; i++) {
+			let cell = i  + (j * 9);
+			let x = i * 40;
+			let y = j * 40;
+			let b = game.kingdom.borders[cell];
+			if (b == kingdom_rangeEnum.OUTOFBORDERS) {
+				continue;
+			}
+			else if (b == kingdom_rangeEnum.OUTSKIRTS) {
+				ctx.globalAlpha = 0.5;
 			}
 			else {
-				let y = game.kingdom.constructions[i];
-				kingdom_cells.eq(i).html("<img src = './images/kingdom/" + kingdom_buildings[y].imageLink(kingdom_landscape[i]) + "' alt='" + kingdom_buildings[y].name + "'>");
+				ctx.globalAlpha = 1;
 			}
-		}
-		else
-		{
-			let y = kingdom_landscape[i];
-			kingdom_cells.eq(i).html("<img src = './images/kingdom/" + kingdom_terrain[y].imageLink + "' alt='" + kingdom_terrain[y].name + "'>");
+			if (game.kingdom.constructions[cell] != kingdom_buildingEnum.EMPTY)
+			{
+				if (kingdom_failMap[cell] == 1) {
+					ctx.drawImage(kingdom_buildingFailImage, x, y);
+				}
+				else {
+					if (kingdom_buildings[game.kingdom.constructions[cell]].hasOwnProperty("imageCache")) {
+						ctx.drawImage(kingdom_buildings[game.kingdom.constructions[cell]].imageCache, x, y);
+					}
+					else {
+						switch (kingdom_landscape[cell]) {
+							case kingdom_terrainEnum.PLAINS:
+								ctx.drawImage(kingdom_buildings[game.kingdom.constructions[cell]].imageCachePlains, x, y);
+								break;
+							case kingdom_terrainEnum.HILLS:
+								ctx.drawImage(kingdom_buildings[game.kingdom.constructions[cell]].imageCacheHills, x, y);
+								break;
+							case kingdom_terrainEnum.FOREST:
+								ctx.drawImage(kingdom_buildings[game.kingdom.constructions[cell]].imageCacheForest, x, y);
+								break;
+						}
+					}
+				}
+			}
+			else
+			{
+				ctx.drawImage(kingdom_terrain[kingdom_landscape[cell]].imageCache, x, y);
+			}
 		}
 	}
 }

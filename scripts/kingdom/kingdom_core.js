@@ -1,4 +1,5 @@
-var kingdom_cells = [];
+const kingdom_GRIDSIZE = 81;
+
 var kingdom_resourceClass = [];
 var kingdom_buildingClass = [];
 var kingdom_upgradeClass = [];
@@ -11,6 +12,23 @@ var kingdom_claimedTiles = 0;
 //This is run once when the game is loaded
 //It creates HTML elements for all of the resources/buildings etc. and also calculates things that aren't stored in the game object
 function kingdom_init() {
+    //Handle the mouse interacting with the canvas
+    kingdom_canvas.addEventListener('mousemove', function(evt) {
+        var rect = kingdom_canvas.getBoundingClientRect();
+        let x = evt.clientX - rect.left;
+        let y = evt.clientY - rect.top;
+        cell = Math.floor(x / 40) + (Math.floor(y / 40) * 9);
+        kingdom_mousedOverCell(cell)
+    }, false);
+
+    kingdom_canvas.addEventListener('click', function(evt) {
+        var rect = kingdom_canvas.getBoundingClientRect();
+        let x = evt.clientX - rect.left;
+        let y = evt.clientY - rect.top;
+        cell = Math.floor(x / 40) + (Math.floor(y / 40) * 9);
+        kingdom_clickedonCell(cell)
+    }, false);
+
     //Dynamically create resource list
     kingdom_resources.forEach(resource => {
         var newElement = $('<div></div>');
@@ -22,23 +40,6 @@ function kingdom_init() {
         resource.idLink = $("#" + resource.id);
         resource.valueLink = $("#" + resource.value);
     });
-
-    //Dynamically create terrain map
-    let count = 0;
-    for (let i = 0; i < 9; i++) {
-        var row = $('<div></div>');
-        row.addClass("kingdom_tileRow");
-        for (let j = 0; j < 9; j++) {
-            var cell = $('<div></div>');
-            cell.addClass("kingdom_tileCell");
-            cell.click({ value: count }, function (event) {kingdom_clickedCell(event.data.value)});
-            cell.mouseenter({ value: count }, function (event) {kingdom_mousedOverCell(event.data.value)});
-            row.append(cell);
-            count ++;
-        }
-        $("#kingdom_mainGrid").append(row);
-    }
-    kingdom_cells = $(".kingdom_tileCell");
 
     $("#kingdom_removeBuildingPanel").mouseenter(function () {kingdom_updateinfoPanel(kingdom_infoPanelEnum.REMOVE, 0)});
     $("#kingdom_claimTilePanel").mouseenter(function () {kingdom_updateinfoPanel(kingdom_infoPanelEnum.CLAIMTILE, 0)});
@@ -77,7 +78,7 @@ function kingdom_init() {
 
     //Calculate building stock
     kingdom_buildingStock = [ ...game.kingdom.building ];
-    for (let i = 0; i < kingdom_cells.length; i++) {
+    for (let i = 0; i < kingdom_GRIDSIZE; i++) {
         if (game.kingdom.constructions[i] != kingdom_buildingEnum.EMPTY && game.kingdom.constructions[i] != kingdom_buildingEnum.CASTLE) {
             kingdom_buildingStock [game.kingdom.constructions[i]] --;
         }
@@ -175,7 +176,7 @@ function kingdom_calculateOutput () {
     kingdom_outputs.exp = 0;
     kingdom_outputs.yellowCoins = 0;
     Object.keys(kingdom_outputs.conversion).forEach(v => kingdom_outputs.conversion[v] = 0);
-    for (let i = 0; i < kingdom_cells.length; i++) {
+    for (let i = 0; i < kingdom_GRIDSIZE; i++) {
         const currentConstruction = game.kingdom.constructions[i];
         if (currentConstruction != kingdom_buildingEnum.EMPTY) {
             if (kingdom_buildings[currentConstruction].hasOwnProperty('output')) {
@@ -304,7 +305,7 @@ function kingdom_getConstructionEast(currentTile) {
 //Returns what terrain is to the South. Returns 0 if at the Southern edge of the map
 function kingdom_getTerrainSouth(currentTile) {
     let southTile = currentTile + 9;
-    if (southTile < kingdom_cells.length) {
+    if (southTile < kingdom_GRIDSIZE) {
         return kingdom_landscape[southTile];
     }
     else {
@@ -315,7 +316,7 @@ function kingdom_getTerrainSouth(currentTile) {
 //Returns what building is to the South. Returns 0 if at the Southern edge of the map
 function kingdom_getConstructionSouth(currentTile) {
     let southTile = currentTile + 9;
-    if (southTile < kingdom_cells.length) {
+    if (southTile < kingdom_GRIDSIZE) {
         return game.kingdom.constructions[southTile];
     }
     else {
@@ -367,7 +368,7 @@ function kingdom_mousedOverCell(cell) {
 
 //This is called when you click on a map tile. Takes the cell number as an argument.
 //We store what we're trying to do with that click in the increasingly inaccurately named global variable kingdom_placing.
-function kingdom_clickedCell(cell) {
+function kingdom_clickedonCell(cell) {
     if (kingdom_placing == -2) {
         //We are trying to claim a tile
         kingdom_claimTile(cell);

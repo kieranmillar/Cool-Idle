@@ -49,32 +49,13 @@
 }
 #loc_kingdom #kingdom_mainArea {
   flex-grow: 1;
-  display: flex;
-  flex-direction: column;
   overflow-y: scroll;
 }
-#loc_kingdom #kingdom_mainArea #kingdom_mainGrid {
-  width: 100%;
-  flex-grow: 0;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-}
-#loc_kingdom #kingdom_mainArea #kingdom_mainGrid .kingdom_tileRow {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: center;
-}
-#loc_kingdom #kingdom_mainArea #kingdom_mainGrid .kingdom_tileRow .kingdom_tileCell {
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  margin: 0;
+#loc_kingdom #kingdom_mainArea #kingdom_canvas_container {
+  width: 360px;
+  margin: 0 auto;
 }
 #loc_kingdom #kingdom_mainArea #kingdom_infoPanel {
-  flex-grow: 0;
-  flex-shrink: 0;
   border: 1px solid black;
   margin: 2px;
   padding: 2px;
@@ -145,8 +126,6 @@ body {
   background-color: #FFFFFF;
   height: 100vh;
   margin: 0;
-  display: flex;
-  flex-flow: column;
   max-width: 1000px;
   min-width: 400px;
   margin-left: auto;
@@ -185,6 +164,23 @@ p, span, li {
 
 img {
   vertical-align: middle;
+}
+
+#loading {
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  bottom: 50%;
+  width: 1000px;
+}
+
+#game {
+  display: none;
+  flex-flow: column;
+  height: 100%;
+}
+#game.flex {
+  display: flex;
 }
 
 #topbar {

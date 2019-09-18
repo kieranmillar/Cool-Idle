@@ -12,7 +12,6 @@ function preloadKingdomImages() {
     for (let i = 1; i < kingdom_terrain.length; i++) {
         kingdom_terrain[i].imageCache = new Image();
         kingdom_terrain[i].imageCache.src = './images/kingdom/' + kingdom_terrain[i].imageLink;
-        kingdom_terrain[i].imageCache.onLoad(function () {terrainCount ++});
     }
 
     //Populate building tile images Array (used when drawing the canvas)

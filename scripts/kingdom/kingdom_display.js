@@ -82,7 +82,7 @@ function kingdom_drawCanvas() {
 					ctx.drawImage(kingdom_buildingFailImage, x, y);
 				}
 				else {
-					if (kingdom_buildings[game.kingdom.constructions[cell]].hasOwnProperty("imageCache")) {
+					if (kingdom_buildings[game.kingdom.constructions[cell]].singleImage) {
 						ctx.drawImage(kingdom_buildings[game.kingdom.constructions[cell]].imageCache, x, y);
 					}
 					else {

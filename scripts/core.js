@@ -141,15 +141,20 @@ function displayNum(num) {
 
 //This executes when the whole page has finished loading. This is where the code "starts"
 $(document).ready(function(){
-    preloadImages();
+    var preload = preloadImages();
     load();
     shop_init();
     kingdom_init();
     displayFeatures();
     goToLocation ("help");
     $("#version").html(game.version);
-    gameLoop();
-    setInterval (gameLoop, 1000);
-    $("#loading").hide();
-    $("#game").addClass("flex");
+    preload.then(() => {
+        gameLoop();
+        setInterval (gameLoop, 1000);
+        $("#loading").hide();
+        $("#game").addClass("flex");
+    })
+    .catch(() => {
+        $("#loading").html("Oh no! something went wrong with preloading images! Totally uncool!");
+    });
 });

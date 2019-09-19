@@ -154,6 +154,10 @@ function kingdom_unlocks() {
     }
     if (game.kingdom.upgrades[kingdom_upgradeEnum.ROAD]) {
         kingdom_buildings[kingdom_buildingEnum.ROAD].unlocked = true;
+        kingdom_upgrades[kingdom_upgradeEnum.GOLDMINE].unlocked = true;
+    }
+    if (game.kingdom.upgrades[kingdom_upgradeEnum.GOLDMINE]) {
+        kingdom_buildings[kingdom_buildingEnum.GOLDMINE].unlocked = true;
     }
 }
 

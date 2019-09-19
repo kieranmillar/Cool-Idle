@@ -163,7 +163,8 @@ const kingdom_buildingEnum = {
 	SAWMILL: 5,
 	LOGCABIN: 6,
 	BARRACKS: 7,
-	ROAD: 8
+	ROAD: 8,
+	GOLDMINE: 9
 }
 
 /*Array of data structures for buildings
@@ -606,6 +607,51 @@ var kingdom_buildings = [
 			return kingdom_roadMap[cell] == 1;
 		},
 		aquatic: false
+	},
+	{
+		idNumber: kingdom_buildingEnum.GOLDMINE,
+		name: "Gold Mine",
+		id: "kingdom_goldmine",
+		imageLink: function (terrain) {
+			return "building_goldmine.png";
+		},
+		singleImage: true,
+		imageCache: null,
+		idLink: null,
+		valueLink: null,
+		buildButtonLink: null,
+		placeButtonLink: null,
+        output: function (cell) {
+			kingdom_outputs.yellowCoins += 1;
+		},
+		unlocked: false,
+		description: function() {
+			return "<p>The worthless gold mined from these hills is smelted down into a much more valuable substance, pure Yellow.</p><p><strong>Can only be placed on hills.</strong></p><p>Yellow coins + 1</p>";
+		},
+		cost: [
+			{
+				type: kingdom_resourceEnum.LABOUR,
+				base: 1000,
+				factor: 5,
+				link: null
+			},
+			{
+				type: kingdom_resourceEnum.PLANK,
+				base: 1000,
+				factor: 5,
+				link: null
+			},
+			{
+				type: kingdom_resourceEnum.STONE,
+				base: 250,
+				factor: 5,
+				link: null
+			}
+		],
+		canPlace: function (cell) {
+			return kingdom_landscape[cell] == kingdom_terrainEnum.HILLS;
+		},
+		aquatic: false
 	}
 ];
 
@@ -647,7 +693,8 @@ const kingdom_upgradeEnum = {
 	LOGCABIN: 3,
 	SAWMILLEFFICIENCY: 4,
 	BARRACKS: 5,
-	ROAD: 6
+	ROAD: 6,
+	GOLDMINE: 7
 }
 
 /*Array of data structures for upgrades
@@ -766,6 +813,21 @@ var kingdom_upgrades = [
 			{
 				type: kingdom_resourceEnum.RESEARCH,
 				value: 5000
+			}
+		]
+	},
+	{
+		idNumber: kingdom_upgradeEnum.GOLDMINE,
+		name: "Gold Mine",
+		id: "kingdom_upgrade_goldmine",
+		idLink: null,
+		buttonLink: null,
+		unlocked: false,
+		description: "<p>Unlocks a new building that produces yellow coins from hills.</p>",
+		cost: [
+			{
+				type: kingdom_resourceEnum.RESEARCH,
+				value: 10000
 			}
 		]
 	}

@@ -1,3 +1,5 @@
+const kingdom_exp_amount = $("#kingdom_exp_amount");
+const kingdom_yellowcoin_amount = $("#kingdom_yellowcoin_amount");
 const kingdom_infoTitle = $("#kingdom_infoTitle");
 const kingdom_infoDescription = $("#kingdom_infoDescription");
 const kingdom_removeBuildingPanelLink = $("#kingdom_removeBuildingPanel");
@@ -34,6 +36,10 @@ function kingdom_updateResources () {
 			kingdom_resources[i].idLink.show();
 		}
 	}
+	kingdom_exp_amount.html("(+" + displayNum(kingdom_outputs.exp) + ")");
+	kingdom_exp_amount.show();
+	kingdom_yellowcoin_amount.html("(+" + displayNum(kingdom_outputs.yellowCoins) + ")");
+	kingdom_yellowcoin_amount.show();
 }
 
 //Returns the html to be displayed for resource value and income. Takes the value and income as arguments. Called by kingdom_updateResources()

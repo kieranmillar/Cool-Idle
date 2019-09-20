@@ -10,6 +10,9 @@ const kingdom_claimTileLabourCost = $("#kingdom_claimTileLabourCost");
 const kingdom_claimTileMilitaryCost = $("#kingdom_claimTileMilitaryCost");
 const kingdom_canvas = document.getElementById("kingdom_canvas"); //JQuery objects are not canvases, so have to resort to old-school JS
 
+var kingdom_infoPanelPreviousType = kingdom_infoPanelEnum.CELL;
+var kingdom_infoPanelPreviousValue = 40;
+
 //Redraws everything, calling every drawing function
 function kingdom_redraw () {
 	if (activeTab != "kingdom") {
@@ -17,7 +20,7 @@ function kingdom_redraw () {
 	}
 	kingdom_updateResources ();
 	kingdom_drawCanvas();
-	kingdom_updateinfoPanel(false, kingdom_currentCell);
+	kingdom_updateinfoPanel(kingdom_infoPanelEnum.PREVIOUS);
 	kingdom_updateBuildings ();
 	kingdom_updateUpgrades ();
 }
@@ -32,7 +35,7 @@ function kingdom_updateResources () {
 	});
 	for (let i = 0; i < kingdom_resources.length; i++) {
 		if (game.kingdom.resource[i] > 0 || kingdom_outputs.resource[i] != 0) {
-			kingdom_resources[i].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[i], kingdom_outputs.resourceDisplay[i]));
+			kingdom_resources[i].valueLink.html(kingdom_resourceHtml(game.kingdom.resource[i], kingdom_resourceIncomeDisplay(kingdom_outputs.resourceDisplay[i])));
 			kingdom_resources[i].idLink.show();
 		}
 	}
@@ -57,6 +60,17 @@ function kingdom_resourceHtml (total, income) {
 		text += displayNum(income) + ")";
 	}
 	return text;
+}
+
+//If the setting to display resorce income multiplied by your level is on, this does that
+function kingdom_resourceIncomeDisplay(value) {
+	if (game.settings[settingEnum.KINGDOMLEVELMULTIPLYDISPLAY])
+	{
+		return displayNum(value * game.level);
+	}
+	else {
+		return displayNum(value);
+	}
 }
 
 //Redraws the canvas (map)
@@ -118,6 +132,15 @@ function kingdom_drawCanvas() {
 function kingdom_updateinfoPanel (infoPanelType, value) {
 	if (activeTab != "kingdom") {
 		return;
+	}
+	//Sometimes we just want to refresh the panel with what we had last time
+	if (infoPanelType == kingdom_infoPanelEnum.PREVIOUS) {
+		infoPanelType = kingdom_infoPanelPreviousType;
+		value = kingdom_infoPanelPreviousValue;
+	}
+	else {
+		kingdom_infoPanelPreviousType = infoPanelType;
+		kingdom_infoPanelPreviousValue = value;
 	}
 	if (infoPanelType == kingdom_infoPanelEnum.REMOVE) {
 		kingdom_infoTitle.html("<img src = './images/kingdom/bulldozer.png' alt='Remove Building'/>Remove Building");

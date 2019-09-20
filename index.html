@@ -89,6 +89,8 @@
 				</div>
 
 				<div id="loc_settings" class="location">
+					<p id="setting_sciNotation"><input type="checkbox" id="setting_sciNotationBox" onclick="toggleSetting(settingEnum.SCINOTATION)"> Display large numbers with scientific notation instead of prefixes.</input></p>
+					<p id="setting_kingdomLevelMultiplyDisplay"><input type="checkbox" id="setting_kingdomLevelMultiplyDisplayBox" onclick="toggleSetting(settingEnum.KINGDOMLEVELMULTIPLYDISPLAY)"> Show Kingdom resource incomes multiplied by your level instead of base values (turning this off does not impact the resources earned, only how it is displayed).</input></p>
 					<button type="button" onclick="save()">
 						Manually save the game (autosaves every 20 seconds or after you do something important)
 					</button>
@@ -119,8 +121,6 @@
 							<img src="./images/coin_yellow.png" alt="Yellow Coin" />
 							<span id="kingdom_yellowcoin_amount"></span>
 						</div>
-						<hr />
-						<p>The following resource's incomes are multiplied by your level:</p>
 					</div>
 					<div id="kingdom_mainArea" class="kingdom_column">
 						<div id="kingdom_canvas_container">
@@ -170,6 +170,8 @@
 		<script src="./scripts/shop/shop_data.js"></script>
 		<script src="./scripts/shop/shop_core.js"></script>
 		<script src="./scripts/shop/shop_display.js"></script>
+		<script src="./scripts/settings/settings_core.js"></script>
+		<script src="./scripts/settings/settings_display.js"></script>
 		<script src="./scripts/preloadImages.js"></script>
 		<script src="./scripts/game.js"></script>
 		<script src="./scripts/core.js"></script>

@@ -355,11 +355,12 @@ const kingdom_rangeEnum = {
 }
 
 const kingdom_infoPanelEnum = {
-    CELL: 0,
-    BUILDING: 1,
-    UPGRADE: 2,
-    REMOVE: 3,
-    CLAIMTILE: 4
+    PREVIOUS: 0,
+    CELL: 1,
+    BUILDING: 2,
+    UPGRADE: 3,
+    REMOVE: 4,
+    CLAIMTILE: 5
 }
 
 //This is called every time you mouse over a map tile. Takes the cell number as an argument

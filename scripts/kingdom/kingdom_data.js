@@ -214,7 +214,7 @@ var kingdom_buildings = [
 		},
 		unlocked: false,
 		description: function() {
-			let text = "<p>You rule your kingdom from your trusty castle. This building cannot be removed or relocated.</p><p>Labour + 1</p><p>Yellow Coins + 1</p><p>Exp + 1</p>";
+			let text = "<p>You rule your kingdom from your trusty castle. This building cannot be removed or relocated.</p><p>Labour + " + kingdom_resourceIncomeDisplay(1) + "</p><p>Yellow Coins + 1</p><p>Exp + 1</p>";
 			return text;
 		}
 	},
@@ -254,9 +254,9 @@ var kingdom_buildings = [
 		},
 		unlocked: true,
 		description: function() {
-			let text = "<p>How much wood could a woodcutter cut if the woodcutter could cut wood?</p><p>Depends on how much wood is nearby.</p><p><strong>Can only be placed on forest.</strong></p><p>Wood + 1</p>";
+			let text = "<p>How much wood could a woodcutter cut if the woodcutter could cut wood?</p><p><strong>Can only be placed on forest.</strong></p><p>Wood + " + kingdom_resourceIncomeDisplay(1) + "</p>";
 			if (game.kingdom.upgrades[kingdom_upgradeEnum.WOODCUTTERADJACENCY]) {
-				text += "<p>Wood + 1 for each adjacent unoccupied forest.</p>";
+				text += "<p>Wood + " + kingdom_resourceIncomeDisplay(1) + " for each adjacent unoccupied forest.</p>";
 			}
 			return text;
 		},
@@ -309,7 +309,7 @@ var kingdom_buildings = [
 		},
 		unlocked: true,
 		description: function() {
-			return "<p>All of the best ideas happen when working alone in a shed, unless they involve the use of power tools.</p>" + kingdom_getCastleAdjacentRequirementText() + "<p>Research + 1</p>";
+			return "<p>All of the best ideas happen when working alone in a shed, unless they involve the use of power tools.</p>" + kingdom_getCastleAdjacentRequirementText() + "<p>Research + " + kingdom_resourceIncomeDisplay(1) + "</p>";
 		},
 		cost: [
 			{
@@ -348,7 +348,7 @@ var kingdom_buildings = [
 		},
 		unlocked: false,
 		description: function() {
-			return "<p>It's like hunting for buried treasure, if you consider all rocks to be treasure.</p><p><strong>Can only be placed on hills.</strong></p><p>Stone + 1</p>";
+			return "<p>It's like hunting for buried treasure, if you consider all rocks to be treasure.</p><p><strong>Can only be placed on hills.</strong></p><p>Stone + " + kingdom_resourceIncomeDisplay(1) + "</p>";
 		},
 		cost: [
 			{
@@ -403,7 +403,7 @@ var kingdom_buildings = [
 		},
 		unlocked: false,
 		description: function() {
-			let text = "<p>This building is a cut above the rest.</p><p>Converts 1 Wood into 1 Plank</p>";
+			let text = "<p>This building is a cut above the rest.</p><p>Converts " + kingdom_resourceIncomeDisplay(1) + " Wood into " + kingdom_resourceIncomeDisplay(1) + " Planks</p>";
 			if (game.kingdom.upgrades[kingdom_upgradeEnum.SAWMILLEFFICIENCY]) {
 				text += "<p>Doubled effect if adjacent to at least one Woodcutter's Hut.</p>";
 			}
@@ -459,7 +459,7 @@ var kingdom_buildings = [
 		},
 		unlocked: false,
 		description: function() {
-			return "<p>A place for your worker drones to live. I mean citizens.</p><p>Labour + 1</p>";
+			return "<p>A place for your worker drones to live. I mean citizens.</p><p>Labour + " + kingdom_resourceIncomeDisplay(1) + "</p>";
 		},
 		cost: [
 			{
@@ -527,7 +527,7 @@ var kingdom_buildings = [
 		},
 		unlocked: false,
 		description: function() {
-			return "<p>This building trains missionaries to spread the word of how great your leadership is, which encourages nearby lands to willingly join your side. Any claims otherwise are biased propoganda from our enemies.</p><p>Military + 1</p><p>Doubled effect " + kingdom_getCastleAdjacentBonusText() + "</p>";
+			return "<p>This building trains missionaries to spread the word of how great your leadership is, which encourages nearby lands to willingly join your side. Any claims otherwise are biased propoganda from our enemies.</p><p>Military + " + kingdom_resourceIncomeDisplay(1) + "</p><p>Doubled effect " + kingdom_getCastleAdjacentBonusText() + "</p>";
 		},
 		cost: [
 			{

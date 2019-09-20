@@ -72,6 +72,7 @@ function goToLocation (location)
         case "settings":
             $("#loc_settings").show();
             $("#tab_settings").addClass("active");
+            displaySettings ();
             break;
 		case "shop":
             $("#loc_shop").show();
@@ -102,10 +103,20 @@ function displayFeatures() {
 //Call this every time you want to gain Exp as it also handles levelling up
 function gainExp (amount) {
     game.exp += amount;
+    let redraw = false;
+    if (game.exp >= getMaxExp()) {
+        redraw = true;
+    }
     while (game.exp >= getMaxExp()) {
         gainGreenCoins (game.level);
         game.exp -= getMaxExp();
         game.level ++;
+    }
+    if (redraw) {
+        if (activeTab == "kingdom") {
+            kingdom_updateResources();
+            kingdom_updateinfoPanel(kingdom_infoPanelEnum.PREVIOUS);
+        }
     }
 }
 
@@ -130,10 +141,17 @@ function displayNum(num) {
     if (num < 1000) {
         return num;
     }
-	//if(player.sciNotation) return Math.abs(num) < 100000 ? (ifMoney ? parseFloat(num).toFixed(2) : num) : parseFloat(num).toPrecision(5);
+	if (game.settings[settingEnum.SCINOTATION]) {
+        return parseFloat(num).toPrecision(3);
+    }
 	for(var i = suffixes.length - 1; i >= 0; i--) {
 		if(Math.abs(num) >= Math.pow(10, 3*i + 3) * 0.99999) {
-			return i < 4 ? parseFloat(num/Math.pow(10, 3*i + 3)).toFixed(2) + suffixes[i] : parseFloat(num/Math.pow(10, 3*i + 3)).toFixed(2) + " " + suffixes[i]; //spaces out first four suffixes
+            if (i < 4) {
+                return parseFloat(num/Math.pow(10, 3*i + 3)).toFixed(2) + suffixes[i];
+            }
+            else {
+                parseFloat(num/Math.pow(10, 3*i + 3)).toFixed(2) + " " + suffixes[i]; //spaces out first four suffixes
+            }
 		}
     }
     return parseFloat(num).toFixed(2);

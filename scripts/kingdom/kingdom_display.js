@@ -13,7 +13,7 @@ const kingdom_canvas = document.getElementById("kingdom_canvas"); //JQuery objec
 var kingdom_infoPanelPreviousType = kingdom_infoPanelEnum.CELL;
 var kingdom_infoPanelPreviousValue = 40;
 
-//Redraws everything, calling every drawing function
+//Redraws everything
 function kingdom_redraw () {
 	if (activeTab != "kingdom") {
 		return;
@@ -280,5 +280,14 @@ function kingdom_updateUpgrades () {
 				$(kingdom_upgrades[i].buttonLink).removeClass('clickable');
 			}
 		}
+	}
+}
+
+//Redraws the upgrade costs, only needed when toggling a display setting
+function kingdom_refreshUpgradeCosts () {
+	for (let i = 0; i < kingdom_upgrades.length; i++) {
+		kingdom_upgrades[i].cost.forEach(costResource => {
+			$("#" + kingdom_upgrades[i].id + kingdom_resources[costResource.type].name + "Cost").html(displayNum(costResource.value));
+		});
 	}
 }

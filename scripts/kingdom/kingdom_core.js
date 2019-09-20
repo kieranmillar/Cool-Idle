@@ -93,7 +93,7 @@ function kingdom_init() {
         let htmlText = "<div class='kingdom_upgrade_row'><span class='kingdom_upgradeName'>" + upgrade.name + "</span><button type='button' id='" + upgrade.id + "UpgradeButton' class='kingdom_upgradeButton button' onclick='kingdom_purchaseUpgrade(" + upgrade.idNumber + ")' disabled>Purchase</button></div>";
         htmlText += "<div class='kingdom_upgrade_row'><span>";
         for (let i = 0; i < upgrade.cost.length; i ++) {
-            htmlText += "<img src = './images/kingdom/" + kingdom_resources[upgrade.cost[i].type].imageLink + "' alt='" + kingdom_resources[upgrade.cost[i].type].name + "'/>" + displayNum(upgrade.cost[i].value);
+            htmlText += "<img src = './images/kingdom/" + kingdom_resources[upgrade.cost[i].type].imageLink + "' alt='" + kingdom_resources[upgrade.cost[i].type].name + "'/><span id='" + upgrade.id + kingdom_resources[upgrade.cost[i].type].name + "Cost'>"+ displayNum(upgrade.cost[i].value) + "</span>";
         }
         htmlText += "</span></div>";
 		newElement.html(htmlText);

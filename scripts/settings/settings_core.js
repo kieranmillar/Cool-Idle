@@ -12,5 +12,8 @@ function toggleSetting (setting) {
         game.settings[setting] = 0;
     }
     displaySettings();
+    if (setting == settingEnum.SCINOTATION) {
+        kingdom_refreshUpgradeCosts();
+    }
     save();
 }

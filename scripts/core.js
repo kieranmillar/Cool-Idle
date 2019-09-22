@@ -83,7 +83,11 @@ function goToLocation (location)
             $("#loc_kingdom").show();
             $("#tab_kingdom").addClass("active");
             kingdom_redraw ();
-			break;
+            break;
+        case "dungeon":
+            $("#loc_dungeon").show();
+            $("#tab_dungeon").addClass("active");
+            break;
     }
 }
 
@@ -97,6 +101,10 @@ function displayFeatures() {
     if (game.shop.features[shop_featureEnum.KINGDOM] == 1) {
         $("#tab_kingdom").show();
         $("#help_kingdom").show();
+    }
+    if (game.shop.features[shop_featureEnum.DUNGEON] == 1) {
+        $("#tab_dungeon").show();
+        $("#help_dungeon").show();
     }
 }
 
@@ -163,6 +171,7 @@ $(document).ready(function(){
     load();
     shop_init();
     kingdom_init();
+    dungeon_init();
     displayFeatures();
     goToLocation ("help");
     $("#version").html(game.version);

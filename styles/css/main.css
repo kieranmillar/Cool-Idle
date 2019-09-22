@@ -122,6 +122,11 @@
   flex: 1 1 0px;
 }
 
+#loc_dungeon {
+  width: 100%;
+  height: 100%;
+}
+
 body {
   background-color: #FFFFFF;
   height: 100vh;

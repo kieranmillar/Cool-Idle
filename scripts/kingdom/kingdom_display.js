@@ -79,6 +79,7 @@ function kingdom_drawCanvas() {
 		return;
 	}
 	var ctx = kingdom_canvas.getContext("2d");
+	ctx.globalAlpha = 1;
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fillRect(0, 0, 360, 360);
 	for (let j = 0; j < 9; j++) {
@@ -91,7 +92,7 @@ function kingdom_drawCanvas() {
 				continue;
 			}
 			else if (b == kingdom_rangeEnum.OUTSKIRTS) {
-				ctx.globalAlpha = 0.5;
+				ctx.globalAlpha = 0.6;
 			}
 			else {
 				ctx.globalAlpha = 1;

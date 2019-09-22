@@ -1,5 +1,5 @@
 const dungeon_dungeonEnum = {
-    CASTLEBASEMENT = 0
+    BOOTCAMP = 0
 };
 
 /*Array of data structures for dungeons
@@ -11,19 +11,21 @@ idLink: should be included but set to null. dungeon_init() will set this to the 
 treasureLink: should be included but set to null. dungeon_init() will set this to the html container div element so we don't have to search the DOM for it again
 unlocked: Boolean if the dungeon has been unlocked. This should show the unlock state at the start of a new game, dungeon_unlocks() may change it later
 treasures: An array of treasures that can be found in this dungeon
+height: The height of the dungeon layout in cells
+width: The width of the dungeon layout in cells
 layout: An array of the dungeon's layout. See the relevant data arrays for more details:
 --0-9: terrain structures
 --10-99: temporary boost items
 --100-999: treasures
 --1000-9999: enemies
-startX: the x position of the player's start location
-startY: the y position of the player's start location
+startX: the x position of the player's start location. 0-indexed
+startY: the y position of the player's start location. 0-indexed
 -----*/
 var dungeon_dungeons = [
     {
-        idNumber: dungeon_dungeonEnum.CASTLEBASEMENT,
-        name: "Castle Basement",
-        id: "dungeon_castlebasement",
+        idNumber: dungeon_dungeonEnum.BOOTCAMP,
+        name: "Boot Camp",
+        id: "dungeon_bootcamp",
         idLink: null,
         treasureLink: null,
         unlocked: true,
@@ -31,36 +33,38 @@ var dungeon_dungeons = [
             dungeon_treasureEnum.ORIGAMISWORD,
             dungeon_treasureEnum.BLUECOINS1
         ],
+        height: 20,
+        width: 20,
         layout: [
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1,
+            1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1,
+            1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
         ],
-        startX: 4,
-        startY: 4
+        startX: 9,
+        startY: 0
     }
 ];
 
 const dungeon_treasureEnum = {
     ORIGAMISWORD: 0,
-    BLUECOINS1: 1
+    BLUECOINS01: 1
 }
 
 /*Array of data structures for treasures
@@ -68,11 +72,20 @@ const dungeon_treasureEnum = {
 idNumber: The idNumber according to its position in the array. dungeon_treasureEnum should match this
 name: String containing displayed treasure name.
 description: The description of the treasure that is shown when you open the chest
+effect: optional - any extra effect that happens immediately upon gaining the treasure.
 -----*/
 const dungeon_treasures = [
     {
         idNumber: dungeon_treasureEnum.ORIGAMISWORD,
         name: "an Oragami Sword",
-        description: "<p>This sword will deliver deadly papercuts to your foes.</p><p>You can only change your equipment outside of a dungeon.</p>"
+        description: "<p>This carefully folded sword will deliver painful papercuts to your foes.</p><p>You can only change your equipment outside of a dungeon.</p>"
+    },
+    {
+        idNumber: dungeon_treasureEnum.BLUECOINS01,
+        name: "100 Blue Coins",
+        description: "<p>You found a cache of 100 blue coins!</p>",
+        effect: function () {
+            gainBlueCoins (100);
+        }
     }
 ];

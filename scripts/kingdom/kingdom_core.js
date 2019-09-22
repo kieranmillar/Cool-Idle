@@ -155,9 +155,14 @@ function kingdom_unlocks() {
     if (game.kingdom.upgrades[kingdom_upgradeEnum.ROAD]) {
         kingdom_buildings[kingdom_buildingEnum.ROAD].unlocked = true;
         kingdom_upgrades[kingdom_upgradeEnum.GOLDMINE].unlocked = true;
+        kingdom_upgrades[kingdom_upgradeEnum.PUB].unlocked = true;
     }
     if (game.kingdom.upgrades[kingdom_upgradeEnum.GOLDMINE]) {
         kingdom_buildings[kingdom_buildingEnum.GOLDMINE].unlocked = true;
+    }
+    if (game.kingdom.upgrades[kingdom_upgradeEnum.PUB]) {
+        kingdom_buildings[kingdom_buildingEnum.PUB].unlocked = true;
+        kingdom_upgrades[kingdom_upgradeEnum.HAPPYCITIZENS].unlocked = true;
     }
 }
 
@@ -278,7 +283,7 @@ function kingdom_getTerrainNorth(currentTile) {
 //Returns what building is to the North. Returns 0 if at the Northern edge of the map
 function kingdom_getConstructionNorth(currentTile) {
     let northTile = currentTile - 9;
-    if (northTile > 0) {
+    if (northTile > 0 && kingdom_failMap[northTile] == 0) {
         return game.kingdom.constructions[northTile];
     }
     else {
@@ -298,8 +303,14 @@ function kingdom_getTerrainEast(currentTile) {
 
 //Returns what building is to the East. Returns 0 if at the Eastern edge of the map
 function kingdom_getConstructionEast(currentTile) {
+    let eastTile = currentTile + 1;
     if (currentTile % 9 < 8) {
-        return game.kingdom.constructions[currentTile + 1];
+        if (kingdom_failMap[eastTile] == 0) {
+            return game.kingdom.constructions[eastTile];
+        }
+        else {
+            return 0;
+        }
     }
     else {
         return 0;
@@ -320,7 +331,7 @@ function kingdom_getTerrainSouth(currentTile) {
 //Returns what building is to the South. Returns 0 if at the Southern edge of the map
 function kingdom_getConstructionSouth(currentTile) {
     let southTile = currentTile + 9;
-    if (southTile < kingdom_GRIDSIZE) {
+    if (southTile < kingdom_GRIDSIZE  && kingdom_failMap[southTile] == 0) {
         return game.kingdom.constructions[southTile];
     }
     else {
@@ -340,8 +351,14 @@ function kingdom_getTerrainWest(currentTile) {
 
 //Returns what building is to the West. Returns 0 if at the Western edge of the map
 function kingdom_getConstructionWest(currentTile) {
+    let westTile = currentTile - 1;
     if (currentTile % 9 > 0) {
-        return game.kingdom.constructions[currentTile - 1];
+        if (kingdom_failMap[westTile] == 0) {
+            return game.kingdom.constructions[westTile];
+        }
+        else {
+            return 0;
+        }
     }
     else {
         return 0;

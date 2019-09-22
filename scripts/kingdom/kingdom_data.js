@@ -1,5 +1,5 @@
 const kingdom_claimTileCostBase = 500;
-const kingdom_claimTileCostFactor = 2;
+const kingdom_claimTileCostFactor = 1.5;
 
 const kingdom_resourceEnum = {
 	RESEARCH: 0,
@@ -164,7 +164,8 @@ const kingdom_buildingEnum = {
 	LOGCABIN: 6,
 	BARRACKS: 7,
 	ROAD: 8,
-	GOLDMINE: 9
+	GOLDMINE: 9,
+	PUB: 10
 }
 
 /*Array of data structures for buildings
@@ -214,7 +215,7 @@ var kingdom_buildings = [
 		},
 		unlocked: false,
 		description: function() {
-			let text = "<p>You rule your kingdom from your trusty castle. This building cannot be removed or relocated.</p><p>Labour + " + kingdom_resourceIncomeDisplay(1) + "</p><p>Yellow Coins + 1</p><p>Exp + 1</p>";
+			let text = "<p>You rule your kingdom from your trusty castle. This building cannot be removed or relocated.</p><p>Labour + " + kingdom_resourceIncomeDisplay(1) + "</p><p>Yellow Coins + 1</p><p>EXP + 1</p>";
 			return text;
 		}
 	},
@@ -455,11 +456,24 @@ var kingdom_buildings = [
 		buildButtonLink: null,
 		placeButtonLink: null,
         output: function (cell) {
-			kingdom_outputs.resource[kingdom_resourceEnum.LABOUR] += 1;
+			let x = 1;
+			if (game.kingdom.upgrades[kingdom_upgradeEnum.HAPPYCITIZENS]) {
+				if (kingdom_getConstructionNorth(cell) == kingdom_buildingEnum.PUB
+				|| kingdom_getConstructionEast(cell) == kingdom_buildingEnum.PUB
+				|| kingdom_getConstructionSouth(cell) == kingdom_buildingEnum.PUB
+				|| kingdom_getConstructionWest(cell) == kingdom_buildingEnum.PUB) {
+					x = 2;
+				}
+			}
+			kingdom_outputs.resource[kingdom_resourceEnum.LABOUR] += x;
 		},
 		unlocked: false,
 		description: function() {
-			return "<p>A place for your worker drones to live. I mean citizens.</p><p>Labour + " + kingdom_resourceIncomeDisplay(1) + "</p>";
+			let text = "<p>A place for your worker drones to live. I mean citizens.</p><p>Labour + " + kingdom_resourceIncomeDisplay(1) + "</p>";
+			if (game.kingdom.upgrades[kingdom_upgradeEnum.HAPPYCITIZENS]) {
+				text += "<p>Doubled effect if adjacent to at least one Pub.</p>";
+			}
+			return text;
 		},
 		cost: [
 			{
@@ -652,6 +666,69 @@ var kingdom_buildings = [
 			return kingdom_landscape[cell] == kingdom_terrainEnum.HILLS;
 		},
 		aquatic: false
+	},
+	{
+		idNumber: kingdom_buildingEnum.PUB,
+		name: "Pub",
+		id: "kingdom_pub",
+		imageLink: function (terrain) {
+			switch (terrain) {
+				case kingdom_terrainEnum.HILLS:
+					return "building_pub_hills.png";
+					break;
+				case kingdom_terrainEnum.FOREST:
+					return "building_pub_forest.png";
+					break;
+				case kingdom_terrainEnum.PLAINS:
+				default:
+					return "building_pub_plains.png";
+					break;
+			}
+		},
+		singleImage: false,
+		imageCachePlains: null,
+		imageCacheHills: null,
+		imageCacheForest: null,
+		idLink: null,
+		valueLink: null,
+		buildButtonLink: null,
+		placeButtonLink: null,
+        output: function (cell) {
+			if (kingdom_roadMap[cell] == 1) {
+				kingdom_outputs.exp += 1;
+			}
+			else {
+				kingdom_failMap[cell] = 1;
+			}
+		},
+		unlocked: false,
+		description: function() {
+			return "<p>A Kingdom's success can be gauged entirely on one metric, the number of pubs.</p>" + kingdom_getCastleAdjacentRequirementText() + "<p>EXP + 1</p>";
+		},
+		cost: [
+			{
+				type: kingdom_resourceEnum.LABOUR,
+				base: 1000,
+				factor: 5,
+				link: null
+			},
+			{
+				type: kingdom_resourceEnum.PLANK,
+				base: 750,
+				factor: 5,
+				link: null
+			},
+			{
+				type: kingdom_resourceEnum.STONE,
+				base: 500,
+				factor: 5,
+				link: null
+			}
+		],
+		canPlace: function (cell) {
+			return kingdom_roadMap[cell] == 1;
+		},
+		aquatic: false
 	}
 ];
 
@@ -694,7 +771,9 @@ const kingdom_upgradeEnum = {
 	SAWMILLEFFICIENCY: 4,
 	BARRACKS: 5,
 	ROAD: 6,
-	GOLDMINE: 7
+	GOLDMINE: 7,
+	PUB: 8,
+	HAPPYCITIZENS: 9
 }
 
 /*Array of data structures for upgrades
@@ -812,7 +891,7 @@ var kingdom_upgrades = [
 		cost: [
 			{
 				type: kingdom_resourceEnum.RESEARCH,
-				value: 5000
+				value: 2000
 			}
 		]
 	},
@@ -827,7 +906,37 @@ var kingdom_upgrades = [
 		cost: [
 			{
 				type: kingdom_resourceEnum.RESEARCH,
-				value: 10000
+				value: 3500
+			}
+		]
+	},
+	{
+		idNumber: kingdom_upgradeEnum.PUB,
+		name: "Pub",
+		id: "kingdom_upgrade_pub",
+		idLink: null,
+		buttonLink: null,
+		unlocked: false,
+		description: "<p>Unlocks a new building that produces EXP. It must be placed next to the Castle or its road network.</p>",
+		cost: [
+			{
+				type: kingdom_resourceEnum.RESEARCH,
+				value: 3500
+			}
+		]
+	},
+	{
+		idNumber: kingdom_upgradeEnum.HAPPYCITIZENS,
+		name: "Happy Citizens",
+		id: "kingdom_upgrade_happycitizens",
+		idLink: null,
+		buttonLink: null,
+		unlocked: false,
+		description: "<p>Log Cabins will produce labour twice as fast if placed adjacent to at least one Pub.</p>",
+		cost: [
+			{
+				type: kingdom_resourceEnum.RESEARCH,
+				value: 5000
 			}
 		]
 	}

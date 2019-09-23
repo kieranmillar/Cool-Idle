@@ -19,8 +19,8 @@ function dungeon_drawCanvas() {
     ctx.fillRect(0, 0, 450, 450);
     for (let j = 0; j < 9; j++) {
 		for (let i = 0; i < 9; i++) {
-            let cellX = dungeon_playerX - 4 + i;
-            let cellY = dungeon_playerY - 4 + j;
+            let cellX = dungeon_player.x - 4 + i;
+            let cellY = dungeon_player.y - 4 + j;
             let cell = cellX  + (cellY * dungeon_dungeons[dungeon_currentDungeon].width);
 			let x = i * 50;
             let y = j * 50;
@@ -28,9 +28,18 @@ function dungeon_drawCanvas() {
             && cellX < dungeon_dungeons[dungeon_currentDungeon].width
             && cellY >= 0
             && cellY < dungeon_dungeons[dungeon_currentDungeon].height) {
-                ctx.drawImage(dungeon_terrain[dungeon_dungeons[dungeon_currentDungeon].layout[cell]].imageCache[dungeon_dungeons[dungeon_currentDungeon].style], x, y);
+                if (dungeon_layout[cell] < 10) {
+                    //terrain
+                    ctx.drawImage(dungeon_terrain[dungeon_layout[cell]].imageCache[dungeon_dungeons[dungeon_currentDungeon].style], x, y);
+                }
+                else if (dungeon_layout[cell] < 100) {
+                    //item
+                    ctx.drawImage(dungeon_terrain[dungeon_terrainEnum.FLOOR].imageCache[dungeon_dungeons[dungeon_currentDungeon].style], x, y);
+                    ctx.drawImage(dungeon_items[dungeon_layout[cell] - 10].imageCache, x, y);
+                }
             }
             else {
+                //cell out of bounds
                 ctx.drawImage(dungeon_terrain[dungeon_dungeons[dungeon_currentDungeon].outOfBounds].imageCache[dungeon_dungeons[dungeon_currentDungeon].style], x, y);
             }
         }

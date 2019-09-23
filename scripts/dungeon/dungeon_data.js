@@ -32,6 +32,34 @@ var dungeon_terrain = [
     }
 ];
 
+const dungeon_itemEnum = {
+    KEYYELLOW: 0,
+    KEYBLUE: 1,
+    KEYRED: 2
+};
+
+/*Array of data structures for collectable temporary items found in the dungeons
+-----
+idNumber: The idNumber according to its position in the array. dungeon_itemEnum should match this
+name: String containing displayed treasure name.
+description: The description of the treasure that is shown when you open the chest
+imageLink: The name of the image stored in ../images/dungeon/
+imageCache: Containins a pre-loaded version of the image used to draw on the canvas
+effect: a lambda function with what happens when you collect the item.
+-----*/
+const dungeon_items = [
+    {
+        idNumber: dungeon_itemEnum.KEYYELLOW,
+        name: "Yellow Key",
+        description: "A common key that will open a single yellow gate.",
+        imageLink: "key_yellow.png",
+        imageCache: null,
+        effect: function () {
+            dungeon_player.yellowkeys ++;
+        }
+    }
+];
+
 const dungeon_treasureEnum = {
     ORIGAMISWORD: 0,
     BLUECOINS01: 1
@@ -42,7 +70,7 @@ const dungeon_treasureEnum = {
 idNumber: The idNumber according to its position in the array. dungeon_treasureEnum should match this
 name: String containing displayed treasure name.
 description: The description of the treasure that is shown when you open the chest
-effect: optional - any extra effect that happens immediately upon gaining the treasure.
+effect: optional - a lambda function with any extra effect that happens immediately upon gaining the treasure.
 -----*/
 const dungeon_treasures = [
     {
@@ -109,7 +137,7 @@ var dungeon_dungeons = [
             1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 0, 10, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,

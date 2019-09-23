@@ -7,7 +7,8 @@ function preloadImages () {
         let kingdomTerrain = preloadKingdomTerrainImages();
         let kingdomBuilding = preloadKingdomBuildingImages();
         let dungeonTerrain = preloadDungeonTerrainImages();
-        Promise.all([kingdomTerrain, kingdomBuilding, dungeonTerrain])
+        let dungeonItem = preloadDungeonItemImages();
+        Promise.all([kingdomTerrain, kingdomBuilding, dungeonTerrain, dungeonItem])
         .then(() => {
             console.log("All images preloaded");
             resolve("All images preloaded");
@@ -18,16 +19,20 @@ function preloadImages () {
 //Pre-loads the terrain images for the kingdom feature so they can be drawn onto a canvas
 function preloadKingdomTerrainImages() {
     return new Promise (resolve => {
+        let startTime = Date.now();
+
+        let imageLoadedCallback = function () {
+            count ++;
+            if (count == kingdom_terrain.length) {
+                console.log("Kingdom terrain images preloaded - " + (Date.now() - startTime));
+                resolve("Kingdom terrain images preloaded");
+            }
+        };
+
         let count = 1;
         for (let i = 1; i < kingdom_terrain.length; i++) {
             kingdom_terrain[i].imageCache = new Image();
-            kingdom_terrain[i].imageCache.onload = function () {
-                count ++;
-                if (count == kingdom_terrain.length) {
-                    console.log("Kingdom terrain images preloaded");
-                    resolve("Kingdom terrain images preloaded");
-                }
-            };
+            kingdom_terrain[i].imageCache.onload = imageLoadedCallback;
             kingdom_terrain[i].imageCache.src = './images/kingdom/' + kingdom_terrain[i].imageLink;
         }
     });
@@ -36,10 +41,12 @@ function preloadKingdomTerrainImages() {
 //Pre-loads the building images for the kingdom feature so they can be drawn onto a canvas
 function preloadKingdomBuildingImages() {
     return new Promise (resolve => {
+        let startTime = Date.now();
+
         let imageLoadedCallback = function () {
             count ++;
             if (count == maxCount) {
-                console.log("Kingdom building images preloaded");
+                console.log("Kingdom building images preloaded - " + (Date.now() - startTime));
                 resolve("Kingdom building images preloaded");
             }
         };
@@ -95,13 +102,15 @@ function preloadKingdomBuildingImages() {
     });
 }
 
-//Pre-loads the images for the dungeon feature so they can be drawn onto a canvas
+//Pre-loads the terrain images for the dungeon feature so they can be drawn onto a canvas
 function preloadDungeonTerrainImages() {
     return new Promise (resolve => {
+        let startTime = Date.now();
+
         let imageLoadedCallback = function () {
             count ++;
             if (count == (dungeon_terrain.length * DUNGEON_TOTALSTYLES) + 1) {//+1 for player image
-                console.log("Dungeon terrain images preloaded");
+                console.log("Dungeon terrain images preloaded - " + (Date.now() - startTime));
                 resolve("Dungeon terrain images preloaded");
             }
         }
@@ -118,5 +127,27 @@ function preloadDungeonTerrainImages() {
         dungeon_playerImage = new Image();
         dungeon_playerImage.onload = imageLoadedCallback;
         dungeon_playerImage.src = './images/dungeon/player.png';
+    });
+}
+
+//Pre-loads the item images for the dungeon feature so they can be drawn onto a canvas
+function preloadDungeonItemImages() {
+    return new Promise (resolve => {
+        let startTime = Date.now();
+
+        let imageLoadedCallback = function () {
+            count ++;
+            if (count == dungeon_items.length) {
+                console.log("Dungeon item images preloaded - " + (Date.now() - startTime));
+                resolve("Dungeon item images preloaded");
+            }
+        }
+
+        let count = 0;
+        for (let i = 0; i < dungeon_items.length; i++) {
+            dungeon_items[i].imageCache = new Image();
+            dungeon_items[i].imageCache.onload = imageLoadedCallback;
+            dungeon_items[i].imageCache.src = './images/dungeon/' + dungeon_items[i].imageLink;
+        }
     });
 }

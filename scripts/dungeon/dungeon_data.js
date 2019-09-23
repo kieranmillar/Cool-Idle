@@ -62,6 +62,40 @@ var dungeon_dungeons = [
     }
 ];
 
+const dungeon_terrainEnum = {
+    FLOOR: 0,
+    WALL: 1,
+    PITEDGE: 2,
+    PIT: 3
+}
+
+const DUNGEON_TOTALSTYLES = 1;
+const dungeon_styleEnum = {
+    BRICK: 0
+}
+
+/*Array of data structures for terrain
+-----
+idNumber: The idNumber according to its position in the array. dungeon_terrainEnum should match this
+name: String containing displayed name.
+imageLink: An array containing the names of the image stored in ../images/dungeon/ , one for each style
+imageCache: An array containing pre-loaded versions of the image used to draw on the canvas, one for each style
+-----*/
+var dungeon_terrain = [
+    {
+        idNumber: dungeon_terrainEnum.FLOOR,
+        name: "Floor",
+        imageLink: ["floor.png"],
+        imageCache: [null]
+    },
+    {
+        idNumber: dungeon_terrainEnum.WALL,
+        name: "Wall",
+        imageLink: ["wall.png"],
+        imageCache: [null]
+    }
+]
+
 const dungeon_treasureEnum = {
     ORIGAMISWORD: 0,
     BLUECOINS01: 1

@@ -1,11 +1,13 @@
 var kingdom_buildingFailImage;
+var dungeon_playerImage;
 
 //Executes all of the following methods.
 function preloadImages () {
     return new Promise (resolve => {
         let kingdomTerrain = preloadKingdomTerrainImages();
         let kingdomBuilding = preloadKingdomBuildingImages();
-        Promise.all([kingdomTerrain, kingdomBuilding])
+        let dungeonTerrain = preloadDungeonTerrainImages();
+        Promise.all([kingdomTerrain, kingdomBuilding, dungeonTerrain])
         .then(() => {
             resolve("All images preloaded");
         });
@@ -87,5 +89,29 @@ function preloadKingdomBuildingImages() {
         kingdom_buildingFailImage = new Image();
         kingdom_buildingFailImage.onload = imageLoadedCallback;
         kingdom_buildingFailImage.src = './images/kingdom/building_fail.png';
+    });
+}
+
+//Pre-loads the images for the dungeon feature so they can be drawn onto a canvas
+function preloadDungeonTerrainImages() {
+    return new Promise (resolve => {
+        let imageLoadedCallback = function () {
+            count ++;
+            if (count == (dungeon_terrain.length * DUNGEON_TOTALSTYLES) + 1) {//+1 for player image
+                resolve("Dungeon terrain images preloaded");
+            }
+        }
+
+        let count = 0;
+        for (let i = 0; i < dungeon_terrain.length; i++) {
+            for (let j = 0; j < DUNGEON_TOTALSTYLES; j++)
+            dungeon_terrain[i].imageCache[j] = new Image();
+            dungeon_terrain[i].imageCache[j].onload = imageLoadedCallback;
+            dungeon_terrain[i].imageCache[j].src = './images/dungeon/' + kingdom_terrain[i].imageLink;
+        }
+
+        dungeon_playerImage = new Image();
+        dungeon_playerImage.onload = imageLoadedCallback;
+        dungeon_playerImage.src = './images/dungeon/player.png';
     });
 }

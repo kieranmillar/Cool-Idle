@@ -1,5 +1,67 @@
+const dungeon_terrainEnum = {
+    FLOOR: 0,
+    WALL: 1,
+    PITEDGE: 2,
+    PIT: 3
+};
+
+const DUNGEON_TOTALSTYLES = 1;
+const dungeon_styleEnum = {
+    BRICK: 0
+};
+
+/*Array of data structures for terrain
+-----
+idNumber: The idNumber according to its position in the array. dungeon_terrainEnum should match this
+name: String containing displayed name.
+imageLink: An array containing the names of the image stored in ../images/dungeon/ , one for each style
+imageCache: An array containing pre-loaded versions of the image used to draw on the canvas, one for each style
+-----*/
+var dungeon_terrain = [
+    {
+        idNumber: dungeon_terrainEnum.FLOOR,
+        name: "Floor",
+        imageLink: ["floor.png"],
+        imageCache: [null]
+    },
+    {
+        idNumber: dungeon_terrainEnum.WALL,
+        name: "Wall",
+        imageLink: ["wall.png"],
+        imageCache: [null]
+    }
+];
+
+const dungeon_treasureEnum = {
+    ORIGAMISWORD: 0,
+    BLUECOINS01: 1
+};
+
+/*Array of data structures for treasures
+-----
+idNumber: The idNumber according to its position in the array. dungeon_treasureEnum should match this
+name: String containing displayed treasure name.
+description: The description of the treasure that is shown when you open the chest
+effect: optional - any extra effect that happens immediately upon gaining the treasure.
+-----*/
+const dungeon_treasures = [
+    {
+        idNumber: dungeon_treasureEnum.ORIGAMISWORD,
+        name: "an Oragami Sword",
+        description: "<p>This carefully folded sword will deliver painful papercuts to your foes.</p><p>You can only change your equipment outside of a dungeon.</p>"
+    },
+    {
+        idNumber: dungeon_treasureEnum.BLUECOINS01,
+        name: "100 Blue Coins",
+        description: "<p>You found a cache of 100 blue coins!</p>",
+        effect: function () {
+            gainBlueCoins (100);
+        }
+    }
+];
+
 const dungeon_dungeonEnum = {
-    BOOTCAMP = 0
+    BOOTCAMP: 0
 };
 
 /*Array of data structures for dungeons
@@ -13,6 +75,8 @@ unlocked: Boolean if the dungeon has been unlocked. This should show the unlock 
 treasures: An array of treasures that can be found in this dungeon
 height: The height of the dungeon layout in cells
 width: The width of the dungeon layout in cells
+style: Which terrain style this dungeon uses
+outOfBounds: What terrain piece you want to display if trying to draw an area that is out of bounds
 layout: An array of the dungeon's layout. See the relevant data arrays for more details:
 --0-9: terrain structures
 --10-99: temporary boost items
@@ -35,6 +99,8 @@ var dungeon_dungeons = [
         ],
         height: 20,
         width: 20,
+        style: dungeon_styleEnum.BRICK,
+        outOfBounds: dungeon_terrainEnum.WALL,
         layout: [
             1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -59,67 +125,5 @@ var dungeon_dungeons = [
         ],
         startX: 9,
         startY: 0
-    }
-];
-
-const dungeon_terrainEnum = {
-    FLOOR: 0,
-    WALL: 1,
-    PITEDGE: 2,
-    PIT: 3
-}
-
-const DUNGEON_TOTALSTYLES = 1;
-const dungeon_styleEnum = {
-    BRICK: 0
-}
-
-/*Array of data structures for terrain
------
-idNumber: The idNumber according to its position in the array. dungeon_terrainEnum should match this
-name: String containing displayed name.
-imageLink: An array containing the names of the image stored in ../images/dungeon/ , one for each style
-imageCache: An array containing pre-loaded versions of the image used to draw on the canvas, one for each style
------*/
-var dungeon_terrain = [
-    {
-        idNumber: dungeon_terrainEnum.FLOOR,
-        name: "Floor",
-        imageLink: ["floor.png"],
-        imageCache: [null]
-    },
-    {
-        idNumber: dungeon_terrainEnum.WALL,
-        name: "Wall",
-        imageLink: ["wall.png"],
-        imageCache: [null]
-    }
-]
-
-const dungeon_treasureEnum = {
-    ORIGAMISWORD: 0,
-    BLUECOINS01: 1
-}
-
-/*Array of data structures for treasures
------
-idNumber: The idNumber according to its position in the array. dungeon_treasureEnum should match this
-name: String containing displayed treasure name.
-description: The description of the treasure that is shown when you open the chest
-effect: optional - any extra effect that happens immediately upon gaining the treasure.
------*/
-const dungeon_treasures = [
-    {
-        idNumber: dungeon_treasureEnum.ORIGAMISWORD,
-        name: "an Oragami Sword",
-        description: "<p>This carefully folded sword will deliver painful papercuts to your foes.</p><p>You can only change your equipment outside of a dungeon.</p>"
-    },
-    {
-        idNumber: dungeon_treasureEnum.BLUECOINS01,
-        name: "100 Blue Coins",
-        description: "<p>You found a cache of 100 blue coins!</p>",
-        effect: function () {
-            gainBlueCoins (100);
-        }
     }
 ];

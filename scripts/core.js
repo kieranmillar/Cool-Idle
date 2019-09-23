@@ -87,6 +87,7 @@ function goToLocation (location)
         case "dungeon":
             $("#loc_dungeon").show();
             $("#tab_dungeon").addClass("active");
+            dungeon_redraw ();
             break;
     }
 }

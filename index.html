@@ -181,7 +181,16 @@
 					</div>
 					<div id="dungeon_view_dungeon">
 						<div id="dungeon_statsColumn">
-
+							<div>
+								<button type="button" id="dungeon_moveButton" class="button clickable" onclick="dungeon_move('north')">NORTH</button>
+							</div>
+							<div>
+								<button type="button" id="dungeon_moveButton" class="button clickable" onclick="dungeon_move('east')">EAST</button>
+								<button type="button" id="dungeon_moveButton" class="button clickable" onclick="dungeon_move('west')">WEST</button>
+							</div>
+							<div>
+								<button type="button" id="dungeon_moveButton" class="button clickable" onclick="dungeon_move('south')">SOUTH</button>
+							</div>
 						</div>
 						<div id="dungeon_dungeonColumn">
 							<canvas id="dungeon_canvas" width="450" height="450">Your browser doesn't support canvases. I'm afaid you won't be able to play this game. Please upgrade to a better browser.</canvas>

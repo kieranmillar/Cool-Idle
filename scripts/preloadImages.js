@@ -9,6 +9,7 @@ function preloadImages () {
         let dungeonTerrain = preloadDungeonTerrainImages();
         Promise.all([kingdomTerrain, kingdomBuilding, dungeonTerrain])
         .then(() => {
+            console.log("All images preloaded");
             resolve("All images preloaded");
         });
     });
@@ -23,6 +24,7 @@ function preloadKingdomTerrainImages() {
             kingdom_terrain[i].imageCache.onload = function () {
                 count ++;
                 if (count == kingdom_terrain.length) {
+                    console.log("Kingdom terrain images preloaded");
                     resolve("Kingdom terrain images preloaded");
                 }
             };
@@ -37,6 +39,7 @@ function preloadKingdomBuildingImages() {
         let imageLoadedCallback = function () {
             count ++;
             if (count == maxCount) {
+                console.log("Kingdom building images preloaded");
                 resolve("Kingdom building images preloaded");
             }
         };
@@ -98,16 +101,18 @@ function preloadDungeonTerrainImages() {
         let imageLoadedCallback = function () {
             count ++;
             if (count == (dungeon_terrain.length * DUNGEON_TOTALSTYLES) + 1) {//+1 for player image
+                console.log("Dungeon terrain images preloaded");
                 resolve("Dungeon terrain images preloaded");
             }
         }
 
         let count = 0;
         for (let i = 0; i < dungeon_terrain.length; i++) {
-            for (let j = 0; j < DUNGEON_TOTALSTYLES; j++)
-            dungeon_terrain[i].imageCache[j] = new Image();
-            dungeon_terrain[i].imageCache[j].onload = imageLoadedCallback;
-            dungeon_terrain[i].imageCache[j].src = './images/dungeon/' + kingdom_terrain[i].imageLink;
+            for (let j = 0; j < DUNGEON_TOTALSTYLES; j++) {
+                dungeon_terrain[i].imageCache[j] = new Image();
+                dungeon_terrain[i].imageCache[j].onload = imageLoadedCallback;
+                dungeon_terrain[i].imageCache[j].src = './images/dungeon/' + dungeon_terrain[i].imageLink[j];
+            }
         }
 
         dungeon_playerImage = new Image();

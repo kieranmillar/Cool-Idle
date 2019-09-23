@@ -4,7 +4,7 @@ const dungeon_canvas = document.getElementById("dungeon_canvas"); //JQuery objec
 function dungeon_redraw () {
 	if (activeTab != "dungeon") {
 		return;
-	}
+    }
 	dungeon_drawCanvas();
 }
 
@@ -12,7 +12,7 @@ function dungeon_redraw () {
 function dungeon_drawCanvas() {
     if (activeTab != "dungeon") {
 		return;
-	}
+    }
 	var ctx = dungeon_canvas.getContext("2d");
 	ctx.globalAlpha = 1;
 	ctx.fillStyle = "#FFFFFF";
@@ -25,9 +25,9 @@ function dungeon_drawCanvas() {
 			let x = i * 50;
             let y = j * 50;
             if (cellX >= 0
-                && cellX < dungeon_dungeons[dungeon_currentDungeon].width
-                && cellY >= 0
-                && cellY < dungeon_dungeons[dungeon_currentDungeon].height) {
+            && cellX < dungeon_dungeons[dungeon_currentDungeon].width
+            && cellY >= 0
+            && cellY < dungeon_dungeons[dungeon_currentDungeon].height) {
                 ctx.drawImage(dungeon_terrain[dungeon_dungeons[dungeon_currentDungeon].layout[cell]].imageCache[dungeon_dungeons[dungeon_currentDungeon].style], x, y);
             }
             else {
@@ -35,4 +35,5 @@ function dungeon_drawCanvas() {
             }
         }
     }
+    ctx.drawImage(dungeon_playerImage, 200, 200);
 }

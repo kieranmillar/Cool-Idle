@@ -2,7 +2,12 @@ const dungeon_terrainEnum = {
     FLOOR: 0,
     WALL: 1,
     PITEDGE: 2,
-    PIT: 3
+    PIT: 3,
+    GATEYELLOW: 4,
+    GATEBLUE: 5,
+    GATERED: 6,
+    CHESTCLOSED: 7,
+    CHESTOPEN: 8
 };
 
 const DUNGEON_TOTALSTYLES = 1;
@@ -28,6 +33,24 @@ var dungeon_terrain = [
         idNumber: dungeon_terrainEnum.WALL,
         name: "Wall",
         imageLink: ["wall.png"],
+        imageCache: [null]
+    },
+    {
+        idNumber: dungeon_terrainEnum.PITEDGE,
+        name: "Pit Edge",
+        imageLink: ["floor.png"],
+        imageCache: [null]
+    },
+    {
+        idNumber: dungeon_terrainEnum.PIT,
+        name: "Pit",
+        imageLink: ["floor.png"],
+        imageCache: [null]
+    },
+    {
+        idNumber: dungeon_terrainEnum.GATEYELLOW,
+        name: "Yellow Gate",
+        imageLink: ["gate_yellow.png"],
         imageCache: [null]
     }
 ];
@@ -133,11 +156,11 @@ var dungeon_dungeons = [
             1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 4, 0, 0, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 0, 10, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 0, 100, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,

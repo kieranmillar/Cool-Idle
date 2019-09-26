@@ -28,14 +28,15 @@ function dungeon_drawCanvas() {
             && cellX < dungeon_dungeons[dungeon_currentDungeon].width
             && cellY >= 0
             && cellY < dungeon_dungeons[dungeon_currentDungeon].height) {
-                if (dungeon_layout[cell] < 10) {
+                if (dungeon_layout[cell] < 100) {
                     //terrain
+                    ctx.drawImage(dungeon_terrain[dungeon_terrainEnum.FLOOR].imageCache[dungeon_dungeons[dungeon_currentDungeon].style], x, y);
                     ctx.drawImage(dungeon_terrain[dungeon_layout[cell]].imageCache[dungeon_dungeons[dungeon_currentDungeon].style], x, y);
                 }
-                else if (dungeon_layout[cell] < 100) {
+                else if (dungeon_layout[cell] < 1000) {
                     //item
                     ctx.drawImage(dungeon_terrain[dungeon_terrainEnum.FLOOR].imageCache[dungeon_dungeons[dungeon_currentDungeon].style], x, y);
-                    ctx.drawImage(dungeon_items[dungeon_layout[cell] - 10].imageCache, x, y);
+                    ctx.drawImage(dungeon_items[dungeon_layout[cell] - 100].imageCache, x, y);
                 }
             }
             else {

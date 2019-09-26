@@ -48,9 +48,16 @@ function dungeon_move (direction) {
         if (dungeon_layout[cell] == dungeon_terrainEnum.FLOOR) {
             move = true;
         }
-        else if (dungeon_layout[cell] >= 10 && dungeon_layout[cell] < 100) {
+        if (dungeon_layout[cell] == dungeon_terrainEnum.GATEYELLOW) {
+            if (dungeon_player.yellowkeys > 0) {
+                dungeon_player.yellowkeys --;
+                dungeon_layout[cell] = dungeon_terrainEnum.FLOOR;
+                dungeon_redraw ();
+            }
+        }
+        else if (dungeon_layout[cell] >= 100 && dungeon_layout[cell] < 1000) {
             //item
-            dungeon_items[dungeon_layout[cell] - 10].effect();
+            dungeon_items[dungeon_layout[cell] - 100].effect();
             dungeon_layout[cell] = dungeon_terrainEnum.FLOOR;
             move = true;
         }

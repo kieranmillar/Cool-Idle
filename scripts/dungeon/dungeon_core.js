@@ -61,6 +61,14 @@ function dungeon_move (direction) {
             dungeon_layout[cell] = dungeon_terrainEnum.FLOOR;
             move = true;
         }
+        else if (dungeon_layout[cell] >= 1000 && dungeon_layout[cell] < 2000) {
+            //treasure
+            
+        }
+        else if (dungeon_layout[cell] >= 2000 && dungeon_layout[cell] < 3000) {
+            //enemy
+            dungeon_redraw ();
+        }
         if (move) {
             dungeon_player.x = cellX;
             dungeon_player.y = cellY;

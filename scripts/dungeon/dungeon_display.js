@@ -38,6 +38,14 @@ function dungeon_drawCanvas() {
                     ctx.drawImage(dungeon_terrain[dungeon_terrainEnum.FLOOR].imageCache[dungeon_dungeons[dungeon_currentDungeon].style], x, y);
                     ctx.drawImage(dungeon_items[dungeon_layout[cell] - 100].imageCache, x, y);
                 }
+                else if (dungeon_layout[cell] < 2000) {
+                    //treasure
+                }
+                else if (dungeon_layout[cell] < 3000) {
+                    //enemy
+                    ctx.drawImage(dungeon_terrain[dungeon_terrainEnum.FLOOR].imageCache[dungeon_dungeons[dungeon_currentDungeon].style], x, y);
+                    ctx.drawImage(dungeon_enemies[dungeon_layout[cell] - 2000].imageCache, x, y);
+                }
             }
             else {
                 //cell out of bounds

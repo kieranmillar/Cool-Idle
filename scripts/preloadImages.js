@@ -8,7 +8,8 @@ function preloadImages () {
         let kingdomBuilding = preloadKingdomBuildingImages();
         let dungeonTerrain = preloadDungeonTerrainImages();
         let dungeonItem = preloadDungeonItemImages();
-        Promise.all([kingdomTerrain, kingdomBuilding, dungeonTerrain, dungeonItem])
+        let dungeonEnemy = preloadDungeonEnemyImages();
+        Promise.all([kingdomTerrain, kingdomBuilding, dungeonTerrain, dungeonItem, dungeonEnemy])
         .then(() => {
             console.log("All images preloaded");
             resolve("All images preloaded");
@@ -148,6 +149,28 @@ function preloadDungeonItemImages() {
             dungeon_items[i].imageCache = new Image();
             dungeon_items[i].imageCache.onload = imageLoadedCallback;
             dungeon_items[i].imageCache.src = './images/dungeon/' + dungeon_items[i].imageLink;
+        }
+    });
+}
+
+//Pre-loads the enemy images for the dungeon feature so they can be drawn onto a canvas
+function preloadDungeonEnemyImages() {
+    return new Promise (resolve => {
+        let startTime = Date.now();
+
+        let imageLoadedCallback = function () {
+            count ++;
+            if (count == dungeon_enemies.length) {
+                console.log("Dungeon enemy images preloaded - " + (Date.now() - startTime));
+                resolve("Dungeon enemy images preloaded");
+            }
+        }
+
+        let count = 0;
+        for (let i = 0; i < dungeon_enemies.length; i++) {
+            dungeon_enemies[i].imageCache = new Image();
+            dungeon_enemies[i].imageCache.onload = imageLoadedCallback;
+            dungeon_enemies[i].imageCache.src = './images/dungeon/' + dungeon_enemies[i].imageLink;
         }
     });
 }

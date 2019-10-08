@@ -111,6 +111,45 @@ const dungeon_treasures = [
     }
 ];
 
+const dungeon_enemyEnum = {
+    TRAININGDUMMY: 0,
+    ARMEDTRAININGDUMMY: 1
+};
+
+/*Array of data structures for enemies
+-----
+idNumber: The idNumber according to its position in the array. dungeon_enemyEnum should match this
+name: String containing displayed enemy name.
+description: Flavour text that displays in the infopanel
+imageLink: The name of the image stored in ../images/dungeon/
+imageCache: Containins a pre-loaded version of the image used to draw on the canvas
+hp: The enemy's HP
+atk: The enemy's ATK
+def: The enemy's DEF
+-----*/
+var dungeon_enemies = [
+    {
+        idNumber: dungeon_enemyEnum.TRAININGDUMMY,
+        name: "Training Dummy",
+        description: "A large training dummy. Big, bulky, and hurts your hands when you punch it.",
+        imageLink: "trainingdummy.png",
+        imageCache: null,
+        hp: 50,
+        atk: 20,
+        def: 0
+    },
+    {
+        idNumber: dungeon_enemyEnum.ARMEDTRAININGDUMMY,
+        name: "Armed Training Dummy",
+        description: "A regular training dummy, but with a small kinfe taped to the front.",
+        imageLink: "armedtrainingdummy.png",
+        imageCache: null,
+        hp: 50,
+        atk: 50,
+        def: 0
+    }
+];
+
 const dungeon_dungeonEnum = {
     BOOTCAMP: 0
 };
@@ -157,9 +196,9 @@ var dungeon_dungeons = [
             1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 4, 0, 0, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 0, 2000, 0, 0, 1, 1, 0, 2000, 0, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 0, 0, 0, 1, 2001, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 0, 100, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,

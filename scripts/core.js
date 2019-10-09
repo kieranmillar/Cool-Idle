@@ -31,7 +31,7 @@ function gameLoop ()
         // Per second stuff goes here
         if (game.shop.features[shop_featureEnum.KINGDOM] == 1) {
             kingdom_tick();
-            if (activeTab = "kingdom") {
+            if (activeTab == "kingdom") {
                 kingdom_updateResources();
                 kingdom_updateBuildings();
                 kingdom_updateUpgrades();
@@ -83,7 +83,12 @@ function goToLocation (location)
             $("#loc_kingdom").show();
             $("#tab_kingdom").addClass("active");
             kingdom_redraw ();
-			break;
+            break;
+        case "dungeon":
+            $("#loc_dungeon").show();
+            $("#tab_dungeon").addClass("active");
+            dungeon_redraw ();
+            break;
     }
 }
 
@@ -97,6 +102,10 @@ function displayFeatures() {
     if (game.shop.features[shop_featureEnum.KINGDOM] == 1) {
         $("#tab_kingdom").show();
         $("#help_kingdom").show();
+    }
+    if (game.shop.features[shop_featureEnum.DUNGEON] == 1) {
+        $("#tab_dungeon").show();
+        $("#help_dungeon").show();
     }
 }
 
@@ -157,15 +166,52 @@ function displayNum(num) {
     return parseFloat(num).toFixed(2);
 }
 
+function checkKey(event) {
+    if (event.defaultPrevented) {
+        return; // Do nothing if the event was already processed
+    }
+
+    if (activeTab == 'dungeon') {
+        switch (event.key) {
+            case "Left":
+            case "ArrowLeft":
+            case "a":
+                dungeon_move('east');
+                break;
+            case "Right":
+            case "ArrowRight":
+            case "d":
+                dungeon_move('west');
+                break;
+            case "Up":
+            case "ArrowUp":
+            case "w":
+                dungeon_move('north');
+                break;
+            case "Down":
+            case "ArrowDown":
+            case "s":
+                dungeon_move('south');
+                break;
+            default:
+                return;
+        }
+    }
+
+    event.preventDefault();
+}
+
 //This executes when the whole page has finished loading. This is where the code "starts"
 $(document).ready(function(){
     var preload = preloadImages();
     load();
     shop_init();
     kingdom_init();
+    dungeon_init();
     displayFeatures();
     goToLocation ("help");
     $("#version").html(game.version);
+    window.addEventListener('keydown', checkKey, true);
     preload.then(() => {
         gameLoop();
         setInterval (gameLoop, 1000);

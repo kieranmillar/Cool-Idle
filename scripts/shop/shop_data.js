@@ -63,7 +63,7 @@ var shop_item_feature = [
         idNumber: shop_featureEnum.DUNGEON,
         name: "Dungeon",
         id: "shop_feature_dungeon",
-        description: "<p>Not implemented yet. But get hyped!</p>",
+        description: "<p>In development. But get hyped!</p>",
         cost: [
             {
                 type: shop_costEnum.GREENCOINS,

@@ -1,3 +1,4 @@
+const dungeon_playerHpSpan = $("#dungeon_playerHpSpan");
 const dungeon_canvas = document.getElementById("dungeon_canvas"); //JQuery objects are not canvases, so have to resort to old-school JS
 
 //Redraws everything
@@ -5,6 +6,7 @@ function dungeon_redraw () {
 	if (activeTab != "dungeon") {
 		return;
     }
+    dungeon_playerHpSpan.text(dungeon_player.hp);
 	dungeon_drawCanvas();
 }
 

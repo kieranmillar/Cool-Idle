@@ -17,17 +17,19 @@ function getTick() {
     return Math.floor (Date.now() / 1000);
 }
 
-//This function executes once every second (tick).
-function gameLoop ()
-{
+//This function executes 50 times per second.
+//Ticks represent full seconds. Most game logic runs once per tick, while some smooth drawing will occur each execution.
+function gameLoop () {
+    let perSecondUpdate = false;
 	let currentTick = getTick();
-	ticks = currentTick - game.previousTick;
-	if (ticks > maxTicks)
-	{
+    ticks = currentTick - game.previousTick;
+    if (ticks > 0) {
+        perSecondUpdate = true;
+    }
+	if (ticks > maxTicks) {
 		ticks = maxTicks; // TODO: Replace with offline calculation eventually
-	}
-	while (ticks > 0) //If the game is running slowly, we should perform multiple second's worth of updates at once
-	{
+    }
+    while (ticks > 0) { //If the game is running slowly, we should perform multiple second's worth of updates at once
         // Per second stuff goes here
         if (game.shop.features[shop_featureEnum.KINGDOM] == 1) {
             kingdom_tick();
@@ -40,17 +42,22 @@ function gameLoop ()
         ticks --;
         ticksSinceSave ++;
     }
+    if (perSecondUpdate) { //Some per-second things we only ever want to update once, regardless of number of ticks.
+        id_level.html(game.level);
+        id_exp.html(displayNum(game.exp));
+        id_maxExp.html(displayNum(getMaxExp()));
+        id_expProgress.attr({
+            "value": game.exp,
+            "max": getMaxExp ()
+        });
+        id_yellowCoins.html(displayNum(game.yellowCoins));
+        id_greenCoins.html(displayNum(game.greenCoins));
+        id_blueCoins.html(displayNum(game.blueCoins));
+    }
+    if (activeTab == "dungeon") {
+        dungeon_drawDamageNumbers();
+    }
     //TODO: Put topbar display code into its own function, so can update whenever we gain or spend exp or coins
-    id_level.html(game.level);
-    id_exp.html(displayNum(game.exp));
-    id_maxExp.html(displayNum(getMaxExp()));
-    id_expProgress.attr({
-		"value": game.exp,
-		"max": getMaxExp ()
-    });
-    id_yellowCoins.html(displayNum(game.yellowCoins));
-    id_greenCoins.html(displayNum(game.greenCoins));
-    id_blueCoins.html(displayNum(game.blueCoins));
     game.previousTick = currentTick;
     if (ticksSinceSave >= ticksToSave) {
         save();
@@ -201,6 +208,11 @@ function checkKey(event) {
     event.preventDefault();
 }
 
+//A helpful function for delaying things for e.g. animations
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 //This executes when the whole page has finished loading. This is where the code "starts"
 $(document).ready(function(){
     var preload = preloadImages();
@@ -214,7 +226,7 @@ $(document).ready(function(){
     window.addEventListener('keydown', checkKey, true);
     preload.then(() => {
         gameLoop();
-        setInterval (gameLoop, 1000);
+        setInterval (gameLoop, 20);
         $("#loading").hide();
         $("#game").addClass("flex");
     })

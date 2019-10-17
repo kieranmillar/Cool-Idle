@@ -1,13 +1,15 @@
 const dungeon_playerHpSpan = $("#dungeon_playerHpSpan");
 const dungeon_canvas = document.getElementById("dungeon_canvas"); //JQuery objects are not canvases, so have to resort to old-school JS
 
+var dungeon_damageNumbers = [];
+
 //Redraws everything
 function dungeon_redraw () {
 	if (activeTab != "dungeon") {
 		return;
     }
     dungeon_playerHpSpan.text(dungeon_player.hp);
-	dungeon_drawCanvas();
+    dungeon_drawCanvas();
 }
 
 //Redraws the canvas
@@ -56,4 +58,44 @@ function dungeon_drawCanvas() {
         }
     }
     ctx.drawImage(dungeon_playerImage, 200, 200);
+}
+
+//Create a damage number and add it to the array
+function dungeon_createDamageNumber(damage, x, y) {
+    dungeon_damageNumbers.push(new dungeon_damageNumber(damage, x, y));
+}
+
+//An object that handles drawing damage numbers to the screen.
+class dungeon_damageNumber {
+    constructor(value, x, y) {
+        this.value = value;
+        this.x = x;
+        this.y = y;
+        this.lifetime = 50;
+    }
+}
+
+//Draws damage numbers, if there are any in the array
+function dungeon_drawDamageNumbers() {
+    if (dungeon_damageNumbers.length == 0) {
+        return;
+    }
+    dungeon_redraw();
+    var ctx = dungeon_canvas.getContext("2d");
+    ctx.font = "30px Arial";
+    ctx.textAlign = "center";
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "#FF0000";
+    let count = 0;
+    dungeon_damageNumbers.forEach(number => {
+        ctx.fillText(number.value, number.x, number.y);
+        number.y --;
+        number.lifetime --;
+        if (number.lifetime <= 0) {
+            count ++;
+        }
+    });
+    if (count > 0) {
+        dungeon_damageNumbers = dungeon_damageNumbers.slice(count, dungeon_damageNumbers.length);
+    }
 }

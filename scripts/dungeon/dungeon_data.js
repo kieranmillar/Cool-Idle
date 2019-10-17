@@ -134,7 +134,7 @@ var dungeon_enemies = [
         description: "A large training dummy. Big, bulky, and hurts your hands when you punch it.",
         imageLink: "trainingdummy.png",
         imageCache: null,
-        hp: 50,
+        hp: 30,
         atk: 20,
         def: 0
     },
@@ -144,7 +144,7 @@ var dungeon_enemies = [
         description: "A regular training dummy, but with a small kinfe taped to the front.",
         imageLink: "armedtrainingdummy.png",
         imageCache: null,
-        hp: 50,
+        hp: 30,
         atk: 50,
         def: 0
     }

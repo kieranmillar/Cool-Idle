@@ -58,6 +58,10 @@ function dungeon_move (direction) {
     let cellX = dungeon_player.x + dX;
     let cellY = dungeon_player.y + dY;
     let cell = cellX  + (cellY * dungeon_dungeons[dungeon_currentDungeon].width);
+    dungeon_damageNumbers.forEach(number => {
+        number.x -= dX * 50;
+        number.y -= dY * 50;
+    });
     if (cellX >= 0
     && cellX < dungeon_dungeons[dungeon_currentDungeon].width
     && cellY >= 0
@@ -105,13 +109,19 @@ function dungeon_startCombat (enemyType, cell) {
 }
 
 //The player attacks in combat
-function dungeon_playerAttacks() {
+async function dungeon_playerAttacks() {
     var damage = Math.max(0, dungeon_player.atk - dungeon_enemies[dungeon_enemyType].def);
-    dungeon_enemyHp -= damage;
+    if (damage > 0) {
+        dungeon_enemyHp -= damage;
+        let enemyX = ((dungeon_enemyCell % dungeon_dungeons[dungeon_currentDungeon].width) - dungeon_player.x)*50 + 225;
+        let enemyY = (Math.floor(dungeon_enemyCell / dungeon_dungeons[dungeon_currentDungeon].width) - dungeon_player.y)*50 + 225;
+        dungeon_createDamageNumber(damage, enemyX, enemyY);
+    }
     if (dungeon_checkForCombatAbort(damage)) {
         return;
     }
     if (dungeon_enemyHp > 0) {
+        await sleep(500);
         dungeon_enemyAttacks();
     }
     else {
@@ -120,13 +130,17 @@ function dungeon_playerAttacks() {
 }
 
 //The enemy attacks in combat
-function dungeon_enemyAttacks() {
+async function dungeon_enemyAttacks() {
     var damage = Math.max(0, dungeon_enemies[dungeon_enemyType].atk - dungeon_player.def);
-    dungeon_player.hp -= damage;
+    if (damage > 0) {
+        dungeon_player.hp -= damage;
+        dungeon_createDamageNumber(damage, 225, 225);
+    }
     if (dungeon_checkForCombatAbort(damage)) {
         return;
     }
     if (dungeon_player.hp > 0) {
+        await sleep(500);
         dungeon_playerAttacks();
     }
     else {

@@ -11,7 +11,7 @@ var game = {
     yellowCoins: 0,
     blueCoins: 0,
     greenCoins: 0,
-    settings: [0, 1],
+    settings: [0, 1, 0],
     shop: {
         features: [0, 0],
         kingdom: [0, 0]

@@ -1,6 +1,7 @@
 const settingEnum = {
     SCINOTATION: 0,
-    KINGDOMLEVELMULTIPLYDISPLAY: 1
+    KINGDOMLEVELMULTIPLYDISPLAY: 1,
+    DUNGEONBATTLESPEED: 2
 }
 
 //Toggle settings
@@ -15,5 +16,12 @@ function toggleSetting (setting) {
     if (setting == settingEnum.SCINOTATION) {
         kingdom_refreshUpgradeCosts();
     }
+    save();
+}
+
+//Change the dungeon battle speed
+function setting_changeDungeonSpeed (value) {
+    game.settings[settingEnum.DUNGEONBATTLESPEED] = value;
+    displaySettings();
     save();
 }

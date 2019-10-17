@@ -121,7 +121,11 @@ async function dungeon_playerAttacks() {
         return;
     }
     if (dungeon_enemyHp > 0) {
-        await sleep(500);
+        let sleepTime = 200;
+        if (game.settings[settingEnum.DUNGEONBATTLESPEED] == 0) {
+            sleepTime = 500;
+        }
+        await sleep(sleepTime);
         dungeon_enemyAttacks();
     }
     else {
@@ -140,7 +144,11 @@ async function dungeon_enemyAttacks() {
         return;
     }
     if (dungeon_player.hp > 0) {
-        await sleep(500);
+        let sleepTime = 200;
+        if (game.settings[settingEnum.DUNGEONBATTLESPEED] == 0) {
+            sleepTime = 500;
+        }
+        await sleep(sleepTime);
         dungeon_playerAttacks();
     }
     else {

@@ -99,6 +99,12 @@
 				<div id="loc_settings" class="location">
 					<p id="setting_sciNotation"><input type="checkbox" id="setting_sciNotationBox" onclick="toggleSetting(settingEnum.SCINOTATION)"> Display large numbers with scientific notation instead of prefixes.</input></p>
 					<p id="setting_kingdomLevelMultiplyDisplay"><input type="checkbox" id="setting_kingdomLevelMultiplyDisplayBox" onclick="toggleSetting(settingEnum.KINGDOMLEVELMULTIPLYDISPLAY)"> Show Kingdom resource incomes multiplied by your level instead of base values (turning this off does not impact the resources earned, only how it is displayed).</input></p>
+					<form id="setting_dungeonBattleSpeedSettings">
+						<p>Dungeon battle speed:</p>
+						<p><input type="radio" id="setting_dungeonBattleSpeedSlow" onclick="setting_changeDungeonSpeed(0)"> Slow</p>
+						<p><input type="radio" id="setting_dungeonBattleSpeedFast" onclick="setting_changeDungeonSpeed(1)"> Fast</p>
+						<p><input type="radio" id="setting_dungeonBattleSpeedInstant" onclick="setting_changeDungeonSpeed(2)"> Instant</p>
+					  </form> 
 					<button type="button" onclick="save()">
 						Manually save the game (autosaves every 20 seconds or after you do something important)
 					</button>

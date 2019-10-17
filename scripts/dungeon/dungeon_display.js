@@ -87,15 +87,22 @@ function dungeon_drawDamageNumbers() {
     ctx.globalAlpha = 1;
     ctx.fillStyle = "#FF0000";
     let count = 0;
+    let speed = 2;
+    if (game.settings[settingEnum.DUNGEONBATTLESPEED] == 0) {
+        speed = 1;
+    }
     dungeon_damageNumbers.forEach(number => {
         ctx.fillText(number.value, number.x, number.y);
-        number.y --;
-        number.lifetime --;
+        number.y -= speed;
+        number.lifetime -= speed;
         if (number.lifetime <= 0) {
             count ++;
         }
     });
     if (count > 0) {
         dungeon_damageNumbers = dungeon_damageNumbers.slice(count, dungeon_damageNumbers.length);
+    }
+    if (dungeon_damageNumbers.length == 0) {
+        dungeon_redraw();
     }
 }

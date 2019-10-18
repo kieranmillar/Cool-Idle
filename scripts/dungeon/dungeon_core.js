@@ -105,7 +105,41 @@ function dungeon_startCombat (enemyType, cell) {
     dungeon_enemyCell = cell;
     dungeon_enemyHp = dungeon_enemies[enemyType].hp;
     dungeon_noDamageDealt = 0;
-    dungeon_playerAttacks();
+    if (game.settings[settingEnum.DUNGEONBATTLESPEED] == 2) {
+        let damage = dungeon_calculateBattleResult(enemyType);
+        dungeon_player.hp -= damage;
+        dungeon_createDamageNumber(damage, 225, 225);
+        if (dungeon_player.hp > 0) {
+            dungeon_winCombat();
+        }
+        else {
+            dungeon_loseCombat();
+        }
+    }
+    else {
+        dungeon_playerAttacks();
+    }
+}
+
+//Pre-calculate the damage the player will receive in combat. Returns the damage the player will take, or -1 if the combat is aborted
+function dungeon_calculateBattleResult(enemyType) {
+    let playerDamage = Math.max(0, dungeon_player.atk - dungeon_enemies[dungeon_enemyType].def);
+    let enemyDamage = Math.max(0, dungeon_enemies[dungeon_enemyType].atk - dungeon_player.def);
+    if (playerDamage == 0 && enemyDamage == 0) {
+        return -1;
+    }
+    let playerHp = dungeon_player.hp;
+    let enemyHp = dungeon_enemies[enemyType].hp;
+    let totalDamage = 0;
+    while (enemyHp > 0 && playerHp > 0) {
+        enemyHp -= playerDamage;
+        if (enemyHp <= 0) {
+            return totalDamage;
+        }
+        playerHp -= enemyDamage;
+        totalDamage += enemyDamage;
+    }
+    return totalDamage;
 }
 
 //The player attacks in combat

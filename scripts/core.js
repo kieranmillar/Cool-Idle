@@ -20,12 +20,8 @@ function getTick() {
 //This function executes 50 times per second.
 //Ticks represent full seconds. Most game logic runs once per tick, while some smooth drawing will occur each execution.
 function gameLoop () {
-    let perSecondUpdate = false;
 	let currentTick = getTick();
     ticks = currentTick - game.previousTick;
-    if (ticks > 0) {
-        perSecondUpdate = true;
-    }
 	if (ticks > maxTicks) {
 		ticks = maxTicks; // TODO: Replace with offline calculation eventually
     }
@@ -41,18 +37,6 @@ function gameLoop () {
         }
         ticks --;
         ticksSinceSave ++;
-    }
-    if (perSecondUpdate) { //Some per-second things we only ever want to update once, regardless of number of ticks.
-        id_level.html(game.level);
-        id_exp.html(displayNum(game.exp));
-        id_maxExp.html(displayNum(getMaxExp()));
-        id_expProgress.attr({
-            "value": game.exp,
-            "max": getMaxExp ()
-        });
-        id_yellowCoins.html(displayNum(game.yellowCoins));
-        id_greenCoins.html(displayNum(game.greenCoins));
-        id_blueCoins.html(displayNum(game.blueCoins));
     }
     if (activeTab == "dungeon") {
         dungeon_drawDamageNumbers();
@@ -116,19 +100,40 @@ function displayFeatures() {
     }
 }
 
-//Call this every time you want to gain Exp as it also handles levelling up
+//Redraws the stats in the top bar
+function redrawTopBar() {
+    id_level.html(game.level);
+    id_exp.html(displayNum(game.exp));
+    id_maxExp.html(displayNum(getMaxExp()));
+    id_expProgress.attr({
+        "value": game.exp,
+        "max": getMaxExp ()
+    });
+    id_yellowCoins.html(displayNum(game.yellowCoins));
+    id_blueCoins.html(displayNum(game.blueCoins));
+    id_greenCoins.html(displayNum(game.greenCoins));
+}
+
+//Call this every time you want to gain Exp as it also handles levelling up and drawing
 function gainExp (amount) {
     game.exp += amount;
-    let redraw = false;
+    let levelledUp = false;
     if (game.exp >= getMaxExp()) {
-        redraw = true;
+        levelledUp = true;
     }
     while (game.exp >= getMaxExp()) {
         gainGreenCoins (game.level);
         game.exp -= getMaxExp();
         game.level ++;
     }
-    if (redraw) {
+    id_exp.html(displayNum(game.exp));
+    id_expProgress.attr({
+        "value": game.exp,
+        "max": getMaxExp ()
+    });
+    if (levelledUp) {
+        id_level.html(game.level);
+        id_maxExp.html(displayNum(getMaxExp()));
         if (activeTab == "kingdom") {
             kingdom_updateResources();
             kingdom_updateinfoPanel(kingdom_infoPanelEnum.PREVIOUS);
@@ -142,14 +147,17 @@ function getMaxExp () {
 
 function gainYellowCoins (amount) {
     game.yellowCoins += amount;
+    id_yellowCoins.html(displayNum(game.yellowCoins));
 }
 
 function gainBlueCoins (amount) {
     game.blueCoins += amount;
+    id_blueCoins.html(displayNum(game.blueCoins));
 }
 
 function gainGreenCoins (amount) {
     game.greenCoins += amount;
+    id_greenCoins.html(displayNum(game.greenCoins));
 }
 
 //Displays numbers with suffixes. I stole this from Derivative Clicker
@@ -220,6 +228,7 @@ $(document).ready(function(){
     shop_init();
     kingdom_init();
     dungeon_init();
+    redrawTopBar();
     displayFeatures();
     goToLocation ("help");
     $("#version").html(game.version);

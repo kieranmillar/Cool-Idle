@@ -107,8 +107,14 @@ function dungeon_startCombat (enemyType, cell) {
     dungeon_noDamageDealt = 0;
     if (game.settings[settingEnum.DUNGEONBATTLESPEED] == 2) {
         let damage = dungeon_calculateBattleResult(enemyType);
+        if (damage == -1) {
+            dungeon_busy = false;
+            return;
+        }
         dungeon_player.hp -= damage;
-        dungeon_createDamageNumber(damage, 225, 225);
+        if (damage > 0) {
+            dungeon_createDamageNumber(damage, 225, 225);
+        }
         if (dungeon_player.hp > 0) {
             dungeon_winCombat();
         }
@@ -121,11 +127,11 @@ function dungeon_startCombat (enemyType, cell) {
     }
 }
 
-//Pre-calculate the damage the player will receive in combat. Returns the damage the player will take, or -1 if the combat is aborted
+//Pre-calculate the damage the player will receive in combat. Returns the damage the player will take, or -1 if the player can't deal damage
 function dungeon_calculateBattleResult(enemyType) {
     let playerDamage = Math.max(0, dungeon_player.atk - dungeon_enemies[dungeon_enemyType].def);
     let enemyDamage = Math.max(0, dungeon_enemies[dungeon_enemyType].atk - dungeon_player.def);
-    if (playerDamage == 0 && enemyDamage == 0) {
+    if (playerDamage == 0) {
         return -1;
     }
     let playerHp = dungeon_player.hp;
@@ -152,6 +158,7 @@ async function dungeon_playerAttacks() {
         dungeon_createDamageNumber(damage, enemyX, enemyY);
     }
     if (dungeon_checkForCombatAbort(damage)) {
+        dungeon_busy = false;
         return;
     }
     if (dungeon_enemyHp > 0) {
@@ -175,6 +182,7 @@ async function dungeon_enemyAttacks() {
         dungeon_createDamageNumber(damage, 225, 225);
     }
     if (dungeon_checkForCombatAbort(damage)) {
+        dungeon_busy = false;
         return;
     }
     if (dungeon_player.hp > 0) {

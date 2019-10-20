@@ -58,7 +58,12 @@ var dungeon_terrain = [
 const dungeon_itemEnum = {
     KEYYELLOW: 0,
     KEYBLUE: 1,
-    KEYRED: 2
+    KEYRED: 2,
+    POTIONTINY: 3,
+    POTIONSMALL: 4,
+    POTIONMEDIUM: 5,
+    POTIONLARGE: 6,
+    POTIONHUGE: 7
 };
 
 /*Array of data structures for collectable temporary items found in the dungeons
@@ -78,7 +83,82 @@ const dungeon_items = [
         imageLink: "key_yellow.png",
         imageCache: null,
         effect: function () {
-            dungeon_player.yellowkeys ++;
+            dungeon_player.yellowKeys ++;
+        }
+    },
+    {
+        idNumber: dungeon_itemEnum.KEYBLUE,
+        name: "Blue Key",
+        description: "An uncommon key that will open a single blue gate.",
+        imageLink: "key_yellow.png",
+        imageCache: null,
+        effect: function () {
+            dungeon_player.blueKeys ++;
+        }
+    },
+    {
+        idNumber: dungeon_itemEnum.KEYRED,
+        name: "Red Key",
+        description: "A rare key that will open a single red gate.",
+        imageLink: "key_yellow.png",
+        imageCache: null,
+        effect: function () {
+            dungeon_player.redKeys ++;
+        }
+    },
+    {
+        idNumber: dungeon_itemEnum.POTIONTINY,
+        name: "Tiny Potion",
+        description: "A tiny vial of healing liquid that gives 100 HP.",
+        imageLink: "potion_tiny.png",
+        imageCache: null,
+        effect: function () {
+            dungeon_player.hp += 100;
+            dungeon_createDamageNumber(-100, 225, 225);
+        }
+    },
+    {
+        idNumber: dungeon_itemEnum.POTIONSMALL,
+        name: "Small Potion",
+        description: "A small healing potion that gives 500 HP.",
+        imageLink: "potion_small.png",
+        imageCache: null,
+        effect: function () {
+            dungeon_player.hp += 500;
+            dungeon_createDamageNumber(-500, 225, 225);
+        }
+    },
+    {
+        idNumber: dungeon_itemEnum.POTIONMEDIUM,
+        name: "Medium Potion",
+        description: "A regular-sized restorative potion that gives 2,000 HP.",
+        imageLink: "potion_medium.png",
+        imageCache: null,
+        effect: function () {
+            dungeon_player.hp += 2000;
+            dungeon_createDamageNumber(-2000, 225, 225);
+        }
+    },
+    {
+        idNumber: dungeon_itemEnum.POTIONLARGE,
+        name: "Large Potion",
+        description: "A bumper-sized health potion that gives a massive 10,000 HP!",
+        imageLink: "potion_large.png",
+        imageCache: null,
+        effect: function () {
+            dungeon_player.hp += 10000;
+            dungeon_createDamageNumber(-10000, 225, 225);
+        }
+    },
+    {
+        idNumber: dungeon_itemEnum.POTIONHUGE,
+        name: "Huge Potion",
+        description: "This absurdly big potion is almost as big as you, and gives a huge 50,000 HP!",
+        imageLink: "potion_huge.png",
+        imageCache: null,
+        effect: function () {
+            dungeon_player.hp += 50000;
+            dungeon_createDamageNumber(-50000, 225, 225);
         }
     }
 ];
@@ -198,13 +278,13 @@ var dungeon_dungeons = [
             1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 4, 0, 0, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 0, 2000, 0, 0, 1, 1, 0, 2000, 0, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 0, 0, 0, 1, 2001, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 0, 100, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 0, 0, 0, 1, 2001, 1, 1, 1, 1, 0, 2001, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 0, 100, 0, 1, 0, 0, 0, 0, 103, 0, 1, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-            1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2000, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 103, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 1, 0, 1, 2001, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1,
             1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1,
             1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1,

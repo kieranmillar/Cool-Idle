@@ -4,7 +4,9 @@ var dungeon_player = {
     hp: 0,
     atk: 0,
     def: 0,
-    yellowkeys: 0
+    yellowKeys: 0,
+    blueKeys: 0,
+    redKeys: 0
 };
 var dungeon_currentDungeon;
 var dungeon_layout = [];
@@ -30,7 +32,9 @@ function dungeon_begin(dungeon) {
     dungeon_player.hp = game.level * 50;
     dungeon_player.atk = 5;
     dungeon_player.def = 0;
-    dungeon_player.yellowkeys = 0;
+    dungeon_player.yellowKeys = 0;
+    dungeon_player.blueKeys = 0;
+    dungeon_player.redKeys = 0;
 }
 
 //Move the player. Takes the direction as a parameter, which is a lowercase string of one of the 4 ordinal directions
@@ -70,8 +74,8 @@ function dungeon_move (direction) {
             move = true;
         }
         if (dungeon_layout[cell] == dungeon_terrainEnum.GATEYELLOW) {
-            if (dungeon_player.yellowkeys > 0) {
-                dungeon_player.yellowkeys --;
+            if (dungeon_player.yellowKeys > 0) {
+                dungeon_player.yellowKeys --;
                 dungeon_layout[cell] = dungeon_terrainEnum.FLOOR;
                 dungeon_redraw ();
             }

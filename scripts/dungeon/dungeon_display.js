@@ -65,7 +65,7 @@ function dungeon_createDamageNumber(damage, x, y) {
     dungeon_damageNumbers.push(new dungeon_damageNumber(damage, x, y));
 }
 
-//An object that handles drawing damage numbers to the screen.
+//An object that handles drawing damage numbers to the screen. A negative value means healing and is displayed in green.
 class dungeon_damageNumber {
     constructor(value, x, y) {
         this.value = value;
@@ -85,14 +85,19 @@ function dungeon_drawDamageNumbers() {
     ctx.font = "30px Arial";
     ctx.textAlign = "center";
     ctx.globalAlpha = 1;
-    ctx.fillStyle = "#FF0000";
     let count = 0;
     let speed = 2;
     if (game.settings[settingEnum.DUNGEONBATTLESPEED] == 0) {
         speed = 1;
     }
     dungeon_damageNumbers.forEach(number => {
-        ctx.fillText(number.value, number.x, number.y);
+        if (number.value > 0) {
+            ctx.fillStyle = "#FF0000";
+        }
+        else {
+            ctx.fillStyle = "#00FF00";
+        }
+        ctx.fillText(Math.abs(number.value), number.x, number.y);
         number.y -= speed;
         number.lifetime -= speed;
         if (number.lifetime <= 0) {

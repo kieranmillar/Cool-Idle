@@ -82,7 +82,7 @@ function dungeon_drawDamageNumbers() {
     }
     dungeon_redraw();
     var ctx = dungeon_canvas.getContext("2d");
-    ctx.font = "30px Arial";
+    ctx.font = "30px Comic Sans MS";
     ctx.textAlign = "center";
     ctx.globalAlpha = 1;
     let count = 0;
@@ -98,6 +98,8 @@ function dungeon_drawDamageNumbers() {
             ctx.fillStyle = "#00FF00";
         }
         ctx.fillText(Math.abs(number.value), number.x, number.y);
+        ctx.fillStyle = "#000000";
+        ctx.strokeText(Math.abs(number.value), number.x, number.y);
         number.y -= speed;
         number.lifetime -= speed;
         if (number.lifetime <= 0) {

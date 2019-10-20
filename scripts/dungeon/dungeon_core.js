@@ -88,7 +88,13 @@ function dungeon_move (direction) {
         }
         else if (dungeon_layout[cell] >= 1000 && dungeon_layout[cell] < 2000) {
             //treasure
-            
+            let treasure = dungeon_layout[cell] - 1000;
+            if (game.dungeon.treasures[treasure] == 0) {
+                game.dungeon.treasures[treasure] = 1;
+                dungeon_treasures[treasure].effect();
+                save();
+                dungeon_redraw ();
+            }
         }
         else if (dungeon_layout[cell] >= 2000 && dungeon_layout[cell] < 3000) {
             //enemy

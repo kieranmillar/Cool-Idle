@@ -1,5 +1,7 @@
 var kingdom_buildingFailImage;
 var dungeon_playerImage;
+var dungeon_chestClosedImage;
+var dungeon_chestOpenImage;
 
 //Executes all of the following methods.
 function preloadImages () {
@@ -110,7 +112,7 @@ function preloadDungeonTerrainImages() {
 
         let imageLoadedCallback = function () {
             count ++;
-            if (count == (dungeon_terrain.length * DUNGEON_TOTALSTYLES) + 1) {//+1 for player image
+            if (count == (dungeon_terrain.length * DUNGEON_TOTALSTYLES) + 3) {//+3 for player and chest images
                 console.log("Dungeon terrain images preloaded - " + (Date.now() - startTime));
                 resolve("Dungeon terrain images preloaded");
             }
@@ -128,6 +130,14 @@ function preloadDungeonTerrainImages() {
         dungeon_playerImage = new Image();
         dungeon_playerImage.onload = imageLoadedCallback;
         dungeon_playerImage.src = './images/dungeon/player.png';
+
+        dungeon_chestClosedImage = new Image();
+        dungeon_chestClosedImage.onload = imageLoadedCallback;
+        dungeon_chestClosedImage.src = './images/dungeon/chest_closed.png';
+
+        dungeon_chestOpenImage = new Image();
+        dungeon_chestOpenImage.onload = imageLoadedCallback;
+        dungeon_chestOpenImage.src = './images/dungeon/chest_open.png';
     });
 }
 

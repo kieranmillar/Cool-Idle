@@ -44,6 +44,14 @@ function dungeon_drawCanvas() {
                 }
                 else if (dungeon_layout[cell] < 2000) {
                     //treasure
+                    ctx.drawImage(dungeon_terrain[dungeon_terrainEnum.FLOOR].imageCache[dungeon_dungeons[dungeon_currentDungeon].style], x, y);
+                    let treasure = dungeon_layout[cell] - 1000;
+                    if (game.dungeon.treasures[treasure] == 0) {
+                        ctx.drawImage(dungeon_chestClosedImage, x, y);
+                    }
+                    else {
+                        ctx.drawImage(dungeon_chestOpenImage, x, y);
+                    }
                 }
                 else if (dungeon_layout[cell] < 3000) {
                     //enemy

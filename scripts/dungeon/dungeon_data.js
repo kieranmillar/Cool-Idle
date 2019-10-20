@@ -172,19 +172,22 @@ const dungeon_treasureEnum = {
 -----
 idNumber: The idNumber according to its position in the array. dungeon_treasureEnum should match this
 name: String containing displayed treasure name.
+image: The image of the treasure
 description: The description of the treasure that is shown when you open the chest
 effect: optional - a lambda function with any extra effect that happens immediately upon gaining the treasure.
 -----*/
 const dungeon_treasures = [
     {
         idNumber: dungeon_treasureEnum.ORIGAMISWORD,
-        name: "an Oragami Sword",
-        description: "<p>This carefully folded sword will deliver painful papercuts to your foes.</p><p>You can only change your equipment outside of a dungeon.</p>"
+        name: "an Origami Sword",
+        image: "",
+        description: "This carefully folded sword will deliver painful papercuts to your foes.</p><p>You can only change your equipment outside of a dungeon."
     },
     {
         idNumber: dungeon_treasureEnum.BLUECOINS01,
         name: "100 Blue Coins",
-        description: "<p>You found a cache of 100 blue coins!</p>",
+        image: "coin_blue.png",
+        description: "You found a cache of 100 blue coins!",
         effect: function () {
             gainBlueCoins (100);
         }

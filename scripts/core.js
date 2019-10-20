@@ -11,6 +11,10 @@ var id_expProgress = $("#expProgress");
 var id_yellowCoins = $("#yellowCoins");
 var id_greenCoins = $("#greenCoins");
 var id_blueCoins = $("#blueCoins");
+var id_modal = $("#modal");
+var id_modalTitle = $("#modal_title");
+var id_modalImage = $("#modal_image");
+var id_modalText = $("#modal_text");
 
 //A tick is the current date and time, in seconds.
 function getTick() {
@@ -216,10 +220,23 @@ function checkKey(event) {
     event.preventDefault();
 }
 
+//Opens the modal and sets what it shhould display
+function modal_open(title, image, content) {
+    id_modal.css("display", "block");
+    id_modalTitle.text(title);
+    id_modalImage.attr("src", "./images/" + image);
+    id_modalText.text(content);
+}
+
+//Closes the modal
+function modal_close() {
+    id_modal.css("display", "none");
+}
+
 //A helpful function for delaying things for e.g. animations
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+}
 
 //This executes when the whole page has finished loading. This is where the code "starts"
 $(document).ready(function(){
@@ -233,6 +250,7 @@ $(document).ready(function(){
     goToLocation ("help");
     $("#version").html(game.version);
     window.addEventListener('keydown', checkKey, true);
+    id_modal.click(function() {modal_close();});
     preload.then(() => {
         gameLoop();
         setInterval (gameLoop, 20);

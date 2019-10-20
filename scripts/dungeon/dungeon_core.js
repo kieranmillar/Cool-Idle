@@ -92,6 +92,7 @@ function dungeon_move (direction) {
             if (game.dungeon.treasures[treasure] == 0) {
                 game.dungeon.treasures[treasure] = 1;
                 dungeon_treasures[treasure].effect();
+                modal_open("You found " + dungeon_treasures[treasure].name, dungeon_treasures[treasure].image, dungeon_treasures[treasure].description);
                 save();
                 dungeon_redraw ();
             }

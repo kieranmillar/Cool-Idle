@@ -62,10 +62,6 @@ function dungeon_move (direction) {
     let cellX = dungeon_player.x + dX;
     let cellY = dungeon_player.y + dY;
     let cell = cellX  + (cellY * dungeon_dungeons[dungeon_currentDungeon].width);
-    dungeon_damageNumbers.forEach(number => {
-        number.x -= dX * 50;
-        number.y -= dY * 50;
-    });
     if (cellX >= 0
     && cellX < dungeon_dungeons[dungeon_currentDungeon].width
     && cellY >= 0
@@ -104,6 +100,10 @@ function dungeon_move (direction) {
         if (move) {
             dungeon_player.x = cellX;
             dungeon_player.y = cellY;
+            dungeon_damageNumbers.forEach(number => {
+                number.x -= dX * 50;
+                number.y -= dY * 50;
+            });
             dungeon_redraw ();
         }
     }

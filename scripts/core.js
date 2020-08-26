@@ -154,13 +154,28 @@ function gainYellowCoins (amount) {
     id_yellowCoins.html(displayNum(game.yellowCoins));
 }
 
+function spendYellowCoins (amount) {
+    game.yellowCoins -= amount;
+    id_yellowCoins.html(displayNum(game.yellowCoins));
+}
+
 function gainBlueCoins (amount) {
     game.blueCoins += amount;
     id_blueCoins.html(displayNum(game.blueCoins));
 }
 
+function spendBlueCoins (amount) {
+    game.blueCoins -= amount;
+    id_blueCoins.html(displayNum(game.blueCoins));
+}
+
 function gainGreenCoins (amount) {
     game.greenCoins += amount;
+    id_greenCoins.html(displayNum(game.greenCoins));
+}
+
+function spendGreenCoins (amount) {
+    game.greenCoins -= amount;
     id_greenCoins.html(displayNum(game.greenCoins));
 }
 

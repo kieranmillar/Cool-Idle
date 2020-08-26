@@ -82,13 +82,13 @@ function shop_buy (category, item) {
     for (let i = 0; i < itemArray[item].cost.length; i ++) {
         switch (itemArray[item].cost[i].type) {
             case shop_costEnum.YELLOWCOINS:
-                game.yellowCoins -= itemArray[item].cost[i].value;
+                spendYellowCoins(itemArray[item].cost[i].value);
                 break;
             case shop_costEnum.BLUECOINS:
-                game.blueCoins -= itemArray[item].cost[i].value;
+                spendBlueCoins(itemArray[item].cost[i].value);
                 break;
             case shop_costEnum.GREENCOINS:
-                game.greenCoins -= itemArray[item].cost[i].value;
+                spendGreenCoins(itemArray[item].cost[i].value);
                 break;
         }
     }

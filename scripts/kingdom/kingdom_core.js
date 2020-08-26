@@ -179,6 +179,7 @@ function kingdom_calculateOutput () {
         }
     }
     kingdom_calculateRoadMap ();
+    kingdom_calculateFailMap ();
     for (let i = 0; i < kingdom_outputs.resource.length; i++) {
         kingdom_outputs.resource[i] = 0;
     }
@@ -186,10 +187,12 @@ function kingdom_calculateOutput () {
     kingdom_outputs.yellowCoins = 0;
     Object.keys(kingdom_outputs.conversion).forEach(v => kingdom_outputs.conversion[v] = 0);
     for (let i = 0; i < kingdom_GRIDSIZE; i++) {
-        const currentConstruction = game.kingdom.constructions[i];
-        if (currentConstruction != kingdom_buildingEnum.EMPTY) {
-            if (kingdom_buildings[currentConstruction].hasOwnProperty('output')) {
-                kingdom_buildings[currentConstruction].output(i);
+        if (kingdom_failMap[i] == 0) {
+            const currentConstruction = game.kingdom.constructions[i];
+            if (currentConstruction != kingdom_buildingEnum.EMPTY) {
+                if (kingdom_buildings[currentConstruction].hasOwnProperty('output')) {
+                    kingdom_buildings[currentConstruction].output(i);
+                }
             }
         }
     }
@@ -264,6 +267,19 @@ function kingdom_calculateRoadMap() {
                 if (kingdom_getConstructionWest(currentCell) == kingdom_buildingEnum.ROAD) {
                     roadList.push(westCell);
                 }
+            }
+        }
+    }
+}
+
+//Calculate which buildings are non-functional
+//Needs to be done before any buildings calculate their output
+function kingdom_calculateFailMap() {
+    for (let i = 0; i < kingdom_GRIDSIZE; i++) {
+        const currentConstruction = game.kingdom.constructions[i];
+        if (currentConstruction != kingdom_buildingEnum.EMPTY) {
+            if (kingdom_buildings[currentConstruction].hasOwnProperty('failure')) {
+                kingdom_buildings[currentConstruction].failure(i);
             }
         }
     }

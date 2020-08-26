@@ -183,7 +183,8 @@ idLink: should be included but set to null. kingdom_init() will set this to the 
 valueLink: should be included but set to null. kingdom_init() will set this to the html span element so we don't have to search the DOM for it again
 buildButtonLink: should be included but set to null. kingdom_init() will set this to the html build button element so we don't have to search the DOM for it again
 placeButtonLink: should be included but set to null. kingdom_init() will set this to the html place button element so we don't have to search the DOM for it again
-output: A lambda function that is called by kingdom_calculateOutput(). Takes the cell number as an argument. Should set the appropriate values in kindom_outputs, and also update kingdom_failMap if the building is non-functional
+failure: Optional. A lambda function that is called by kingdom_calculateFailMap(). Takes the cell number as an argument. If the building can fail, checks the criteria, and sets kingdom_failMap if so.
+output: Optional. A lambda function that is called by kingdom_calculateOutput(). Takes the cell number as an argument. Should set the appropriate values in kindom_outputs
 unlocked: Boolean if the building has been unlocked. This should show the unlock state at the start of a new game, kingdom_unlocks() may change it later
 description: A lambda function returning the html of the description we want to show in the infopanel when you mouse over it on the building panel or map
 cost: An array of data objects detailing each resource cost for this building:
@@ -282,14 +283,12 @@ var kingdom_buildings = [
 			switch (terrain) {
 				case kingdom_terrainEnum.HILLS:
 					return "building_shed_hills.png";
-					break;
 				case kingdom_terrainEnum.FOREST:
 					return "building_shed_forest.png";
-					break;
 				case kingdom_terrainEnum.PLAINS:
 				default:
 					return "building_shed_plains.png";
-					break;
+
 			}
 		},
 		singleImage: false,
@@ -300,12 +299,14 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
+		failure: function (cell) {
+			if (kingdom_roadMap[cell] != 1) {
+				kingdom_failMap[cell] = 1;
+			}
+		},
         output: function (cell) {
 			if (kingdom_roadMap[cell] == 1) {
 				kingdom_outputs.resource[kingdom_resourceEnum.RESEARCH] += 1;
-			}
-			else {
-				kingdom_failMap[cell] = 1;
 			}
 		},
 		unlocked: true,
@@ -372,14 +373,11 @@ var kingdom_buildings = [
 			switch (terrain) {
 				case kingdom_terrainEnum.HILLS:
 					return "building_sawmill_hills.png";
-					break;
 				case kingdom_terrainEnum.FOREST:
 					return "building_sawmill_forest.png";
-					break;
 				case kingdom_terrainEnum.PLAINS:
 				default:
 					return "building_sawmill_plains.png";
-					break;
 			}
 		},
 		singleImage: false,
@@ -437,14 +435,11 @@ var kingdom_buildings = [
 			switch (terrain) {
 				case kingdom_terrainEnum.HILLS:
 					return "building_logcabin_hills.png";
-					break;
 				case kingdom_terrainEnum.FOREST:
 					return "building_logcabin_forest.png";
-					break;
 				case kingdom_terrainEnum.PLAINS:
 				default:
 					return "building_logcabin_plains.png";
-					break;
 			}
 		},
 		singleImage: false,
@@ -514,14 +509,11 @@ var kingdom_buildings = [
 			switch (terrain) {
 				case kingdom_terrainEnum.HILLS:
 					return "building_barracks_hills.png";
-					break;
 				case kingdom_terrainEnum.FOREST:
 					return "building_barracks_forest.png";
-					break;
 				case kingdom_terrainEnum.PLAINS:
 				default:
 					return "building_barracks_plains.png";
-					break;
 			}
 		},
 		singleImage: false,
@@ -576,14 +568,11 @@ var kingdom_buildings = [
 			switch (terrain) {
 				case kingdom_terrainEnum.HILLS:
 					return "building_road_hills.png";
-					break;
 				case kingdom_terrainEnum.FOREST:
 					return "building_road_forest.png";
-					break;
 				case kingdom_terrainEnum.PLAINS:
 				default:
 					return "building_road_plains.png";
-					break;
 			}
 		},
 		singleImage: false,
@@ -594,7 +583,7 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (cell) {
+		failure: function (cell) {
 			if (kingdom_roadMap[cell] != 1) {
 				kingdom_failMap[cell] = 1;
 			}
@@ -675,14 +664,11 @@ var kingdom_buildings = [
 			switch (terrain) {
 				case kingdom_terrainEnum.HILLS:
 					return "building_pub_hills.png";
-					break;
 				case kingdom_terrainEnum.FOREST:
 					return "building_pub_forest.png";
-					break;
 				case kingdom_terrainEnum.PLAINS:
 				default:
 					return "building_pub_plains.png";
-					break;
 			}
 		},
 		singleImage: false,
@@ -693,12 +679,14 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
+		failure: function (cell) {
+			if (kingdom_roadMap[cell] != 1) {
+				kingdom_failMap[cell] = 1;
+			}
+		},
         output: function (cell) {
 			if (kingdom_roadMap[cell] == 1) {
 				kingdom_outputs.exp += 1;
-			}
-			else {
-				kingdom_failMap[cell] = 1;
 			}
 		},
 		unlocked: false,

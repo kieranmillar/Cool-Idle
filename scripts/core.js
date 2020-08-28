@@ -31,6 +31,12 @@ function gameLoop () {
     }
     while (ticks > 0) { //If the game is running slowly, we should perform multiple second's worth of updates at once
         // Per second stuff goes here
+        if (game.shop.features[shop_featureEnum.CAULDRON] == 1) {
+            cauldron_tick();
+            if (activeTab == "cauldron") {
+                cauldron_redraw();
+            }
+        }
         if (game.shop.features[shop_featureEnum.KINGDOM] == 1) {
             kingdom_tick();
             if (activeTab == "kingdom") {
@@ -73,7 +79,12 @@ function goToLocation (location)
             $("#loc_shop").show();
             $("#tab_shop").addClass("active");
             shop_redraw ();
-			break;
+            break;
+        case "cauldron":
+            $("#loc_cauldron").show();
+            $("#tab_cauldron").addClass("active");
+            cauldron_redraw ();
+            break;
 		case "kingdom":
             $("#loc_kingdom").show();
             $("#tab_kingdom").addClass("active");
@@ -94,6 +105,10 @@ function displayFeatures() {
     $("#tab_settings").show();
     $("#tab_shop").show();
     $(".help").hide();
+    if (game.shop.features[shop_featureEnum.CAULDRON] == 1) {
+        $("#tab_cauldron").show();
+        $("#help_cauldron").show();
+    }
     if (game.shop.features[shop_featureEnum.KINGDOM] == 1) {
         $("#tab_kingdom").show();
         $("#help_kingdom").show();
@@ -210,21 +225,25 @@ function checkKey(event) {
             case "Left":
             case "ArrowLeft":
             case "a":
+            case "4":
                 dungeon_move('east');
                 break;
             case "Right":
             case "ArrowRight":
             case "d":
+            case "6":
                 dungeon_move('west');
                 break;
             case "Up":
             case "ArrowUp":
             case "w":
+            case "8":
                 dungeon_move('north');
                 break;
             case "Down":
             case "ArrowDown":
             case "s":
+            case "2":
                 dungeon_move('south');
                 break;
             default:
@@ -258,6 +277,7 @@ $(document).ready(function(){
     var preload = preloadImages();
     load();
     shop_init();
+    cauldron_init();
     kingdom_init();
     dungeon_init();
     redrawTopBar();

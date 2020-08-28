@@ -14,7 +14,7 @@
 		content="Kieran Millar" />
 		
 		<meta name="revised"
-		content="Kieran Millar, 12/09/2019" />
+		content="Kieran Millar, 28/08/2020" />
 		
 		<link rel="stylesheet" type="text/css" href="styles/css/main.css">
 		
@@ -53,6 +53,7 @@
 				<h3 id="tab_help" class="tab active" onclick="goToLocation('help')">Help</h3>
 				<h3 id="tab_settings" class="tab" onclick="goToLocation('settings')">Settings</h3>
 				<h3 id="tab_shop" class="tab" onclick="goToLocation('shop')">Cool-Mart</h3>
+				<h3 id="tab_cauldron" class="tab" onclick="goToLocation('cauldron')">Cauldron</h3>
 				<h3 id="tab_kingdom" class="tab" onclick="goToLocation('kingdom')">Kingdom</h3>
 				<h3 id="tab_dungeon" class="tab" onclick="goToLocation('dungeon')">Dungeon</h3>
 			</div>
@@ -79,6 +80,13 @@
 						<li>Green coins: These coins can only be earned by levelling up. When you level up you earn a number of green coins equal to the level you just completed, e.g. when levelling up from level 4 to level 5, you earn 4 green coins.</li>
 					</ul>
 					<p>Coins are spent in Cool-Mart to unlock and upgrade game features!</p>
+
+					<div id="help_cauldron" class="help">
+						<hr>
+						<h2>Cauldron</h2>
+						<p><strong>Level bonus:</strong> Each scepter's base magic gain is equal to your level.</p>
+						<p>Gain magic over time. Spend the magic on items that produce more magic over time, or on powerful spells that can also improve things in other features.</p>
+					</div>
 
 					<div id="help_kingdom" class="help">
 						<hr>
@@ -108,7 +116,7 @@
 					<button type="button" onclick="save()">
 						Manually save the game (autosaves every 20 seconds or after you do something important)
 					</button>
-					<button type="button" onclick="wipe()">
+					<button type="button" onclick="wipe(true)">
 						Delete save file and hard reset (Don't press this!)
 					</button>
 				</div>
@@ -122,6 +130,20 @@
 						<hr>
 						<h1>Kingdom</h1>
 						<div id="shop_section_kingdom_list" class="shop_section"></div>
+					</div>
+				</div>
+
+				<div id="loc_cauldron" class="location">
+					<div id="cauldron_magicPanel" class="cauldron_column">
+						<h3>✨Magic: <span id="cauldron_magic"></span> (+<span id="cauldron_magicIncome"></span>)</h3>
+					</div>
+					<div id="cauldron_buildingPanel" class="cauldron_column">
+						<h3>Magical Items</h3>
+						<div id="cauldron_buildingList"></div>
+					</div>
+					<div id="cauldron_spellPanel" class="cauldron_column">
+						<h3>Spells</h3>
+						<div id="cauldron_spellList"></div>
 					</div>
 				</div>
 
@@ -218,6 +240,9 @@
 			</div>
 		</div>
 
+		<script src="./scripts/cauldron/cauldron_data.js"></script>
+		<script src="./scripts/cauldron/cauldron_core.js"></script>
+		<script src="./scripts/cauldron/cauldron_display.js"></script>
 		<script src="./scripts/kingdom/kingdom_data.js"></script>
 		<script src="./scripts/kingdom/kingdom_core.js"></script>
 		<script src="./scripts/kingdom/kingdom_display.js"></script>

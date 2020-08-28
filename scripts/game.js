@@ -4,7 +4,7 @@
 //So we try to save minimal data and recalculate anything else we can when the game loads.
 
 var game = {
-    version: 1,
+    version: 2,
     previousTick: 0,
 	exp: 0,
 	level: 1,
@@ -13,8 +13,13 @@ var game = {
     greenCoins: 0,
     settings: [0, 1, 0],
     shop: {
-        features: [0, 0],
+        features: [0, 0, 0],
         kingdom: [0, 0]
+    },
+    cauldron: {
+        magic: 10,
+        building: [0, 0, 0, 0],
+        spells: [0, 0, 0, 0],
     },
     kingdom: {
         resource: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -59,7 +64,13 @@ function load()
 {
     if (localStorage.getItem("gameStored") != null)
 	{
-		loadedGame = JSON.parse(localStorage.getItem("gameStored"));
+        loadedGame = JSON.parse(localStorage.getItem("gameStored"));
+        if (loadedGame.version == 1)
+        {
+            alert("The game has updated with a breaking change since you last played. Your save will now be wiped because this is still in alpha. Sorry!");
+            wipe(false);
+            return;
+        }
         $.extend(true, game, loadedGame);
     }
     else {
@@ -68,8 +79,14 @@ function load()
 }
 
 //Delete save file and reload the page
-function wipe() {
-	var confirmation = confirm("Are you sure you want to permanently erase your savefile?");
+function wipe(ask) {
+    if (ask) {
+        var confirmation = confirm("Are you sure you want to permanently erase your savefile?");
+    }
+    else
+    {
+        var confirmation = true;
+    }
 	if(confirmation === true){
 		localStorage.clear();
 		location.reload(); 

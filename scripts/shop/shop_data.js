@@ -29,8 +29,9 @@ var shop_costs = [
 ]
 
 const shop_featureEnum = {
-    KINGDOM: 0,
-    DUNGEON: 1
+    CAULDRON: 0,
+    KINGDOM: 1,
+    DUNGEON: 2,
 }
 
 /*Array of data structures for feature shop items
@@ -48,11 +49,28 @@ costLink: should be included but set to null. shop_init() will set this to the h
 -----*/
 var shop_item_feature = [
     {
+        idNumber: shop_featureEnum.CAULDRON,
+        name: "Cauldron",
+        id: "shop_feature_cauldron",
+        description: "<p>Gain magic power for spells!</p>",
+        cost: [],
+        onPurchase: function () {
+            displayFeatures();
+        },
+        idLink: null,
+        costLink: null
+    },
+    {
         idNumber: shop_featureEnum.KINGDOM,
         name: "Kingdom",
         id: "shop_feature_kingdom",
         description: "<p>Build and expand an empire, producing goods every second!</p>",
-        cost: [],
+        cost: [
+            {
+                type: shop_costEnum.GREENCOINS,
+                value: 1
+            }
+        ],
         onPurchase: function () {
             displayFeatures();
         },
@@ -67,7 +85,7 @@ var shop_item_feature = [
         cost: [
             {
                 type: shop_costEnum.GREENCOINS,
-                value: 10
+                value: 9
             }
         ],
         onPurchase: function () {
@@ -105,7 +123,7 @@ var shop_item_kingdom = [
         cost: [
             {
                 type: shop_costEnum.YELLOWCOINS,
-                value: 250
+                value: 500
             }
         ],
         onPurchase: function () {
@@ -122,7 +140,7 @@ var shop_item_kingdom = [
         cost: [
             {
                 type: shop_costEnum.YELLOWCOINS,
-                value: 250
+                value: 500
             }
         ],
         onPurchase: function () {

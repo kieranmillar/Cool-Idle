@@ -1,0 +1,71 @@
+#loc_cauldron {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+
+    h3 {
+        padding-left: 2px;
+    }
+
+    .cauldron_column {
+        overflow-y: auto;
+    }
+
+    #cauldron_magicPanel {
+        width: 294px;
+        height: 100%;
+        flex-grow: 0;
+        flex-shrink: 0;
+        border-right: 2px solid black;
+    }
+
+    #cauldron_buildingPanel {
+        width: 398px;
+        height: 100%;
+        flex-grow: 0;
+        flex-shrink: 0;
+        border-right: 2px solid black;
+    }
+
+    .cauldron_building {
+        max-width: 388px;
+        flex-direction: row;
+        align-items: center;
+        border: 1px solid black;
+        padding: 2px;
+        margin: 2px;
+    }
+
+    .cauldron_building_row {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .cauldron_buildingStock {
+        flex: 0 0 50px;
+        font-size: 24px;
+    }
+
+    .cauldron_buildingImage {
+        height: 40px;
+        width: 40px;
+        flex: 0 0 40px;
+    }
+
+    .cauldron_buildingName {
+        padding-left: 3px;
+        flex: 1 1 0px;
+    }
+
+    .cauldron_spread_row {
+        justify-content: space-between;
+    }
+
+    #cauldron_spellPanel {
+        width: 294px;
+        height: 100%;
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+}

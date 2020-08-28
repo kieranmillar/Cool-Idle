@@ -463,6 +463,7 @@ function kingdom_claimTile(cell) {
     }
     kingdom_placing = 0;
     kingdom_claimedTiles ++;
+    gainBlueCoins(kingdom_claimedTiles * 5);
     kingdom_redraw();
     save();
 }

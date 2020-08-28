@@ -133,7 +133,6 @@ function kingdom_tick () {
 
 //Work out what should be unlocked
 function kingdom_unlocks() {
-    kingdom_range = 1;
     if (game.kingdom.upgrades[kingdom_upgradeEnum.QUARRY]) {
         kingdom_buildings[kingdom_buildingEnum.QUARRY].unlocked = true;
     }
@@ -463,7 +462,7 @@ function kingdom_claimTile(cell) {
     }
     kingdom_placing = 0;
     kingdom_claimedTiles ++;
-    gainBlueCoins(kingdom_claimedTiles * 5);
+    gainBlueCoins(kingdom_claimedTiles * 10);
     kingdom_redraw();
     save();
 }

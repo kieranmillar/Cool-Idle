@@ -149,7 +149,7 @@ function kingdom_updateinfoPanel (infoPanelType, value) {
 	}
 	else if (infoPanelType == kingdom_infoPanelEnum.CLAIMTILE) {
 		kingdom_infoTitle.html("<img src = './images/kingdom/swords.png' alt='Claim Tile'/>Claim Tile");
-		kingdom_infoDescription.html("<p>Fight for more territory! Claim a tile just outside your borders as your own!</p><p>Claiming new territory also earns Blue Coins!</p><p>(Next claim: " + (kingdom_claimedTiles + 1) * 5 + " Blue Coins)</p>");
+		kingdom_infoDescription.html("<p>Fight for more territory! Claim a tile just outside your borders as your own!</p><p>Claiming new territory also earns Blue Coins!</p><p>(Next claim: " + (kingdom_claimedTiles + 1) * 10 + " Blue Coins)</p>");
 	}
 	else if (infoPanelType == kingdom_infoPanelEnum.UPGRADE) {
 		kingdom_infoTitle.html(kingdom_upgrades[value].name);

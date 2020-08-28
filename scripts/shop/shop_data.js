@@ -123,7 +123,7 @@ var shop_item_kingdom = [
         cost: [
             {
                 type: shop_costEnum.YELLOWCOINS,
-                value: 500
+                value: 1000
             }
         ],
         onPurchase: function () {
@@ -140,7 +140,7 @@ var shop_item_kingdom = [
         cost: [
             {
                 type: shop_costEnum.YELLOWCOINS,
-                value: 500
+                value: 1000
             }
         ],
         onPurchase: function () {

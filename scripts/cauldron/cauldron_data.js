@@ -1,5 +1,6 @@
 const cauldron_buildingEnum = {
     SCEPTER: 0,
+    MAGICBOOK: 1,
 }
 
 /*Array of data structures for buildings
@@ -10,12 +11,12 @@ id: String containing the html id for the container div in the building panel
 imageLink: The name of the image stored in ../images/cauldron/
 idLink: should be included but set to null. cauldron_init() will set this to the html container div element so we don't have to search the DOM for it again
 valueLink: should be included but set to null. cauldron_init() will set this to the html span element so we don't have to search the DOM for it again
-buildButtonLink: should be included but set to null. cauldron_init() will set this to the html build button element so we don't have to search the DOM for it again
+buttonLink: should be included but set to null. cauldron_init() will set this to the html button element so we don't have to search the DOM for it again
 output: A lambda function that is called by cauldron_calculateOutput(). Returns the amount of magic a single copy of that building will produce.
 onPurchase: A lambda function that is called by cauldron_build(). Applies bonus effect when you build a building.
 unlocked: Boolean if the building has been unlocked. This should show the unlock state at the start of a new game, cauldron_unlocks() may change it later
 description: A lambda function returning the html of the description
-cost: A data objects detailing each resourcethe cost for this building:
+cost: A data object detailing the cost for this building:
 --base: The amount of magic needed for the first time you build this building
 --factor: A multiplier for how much the cost increases each time you build this building
 --link: should be included but set to null. cauldron_init() will set this to the html resource value element so we don't have to search the DOM for it again
@@ -28,7 +29,7 @@ var cauldron_buildings = [
         imageLink: "scepter.png",
         idLink: null,
         valueLink: null,
-        buildButtonLink: null,
+        buttonLink: null,
         output: function() {
             return game.level;
         },
@@ -43,8 +44,64 @@ var cauldron_buildings = [
         },
         cost: {
             base: 10,
+            factor: 1.30,
+            link: null,
+        },
+    },
+    {
+        idNumber: 1,
+        name: "Magic Book",
+        id: "cauldron_magicBook",
+        imageLink: "greenBook.png",
+        idLink: null,
+        valueLink: null,
+        buttonLink: null,
+        output: function() {
+            return 5;
+        },
+        onPurchase: function() {
+            gainExp(game.cauldron.building[1] * 5);
+            gainYellowCoins(game.cauldron.building[1] * 5);
+            gainBlueCoins(5);
+        },
+        unlocked: false,
+        description: function () {
+            return "<p>The book does not contain any spells, but rather is made of magic.</p><p>Generates 5 ✨Magic per second.</p><p>On purchase: 5 EXP and 5 Yellow Coins for each magic book you own, and 5 Blue Coins.</p>"
+        },
+        cost: {
+            base: 50,
             factor: 1.35,
             link: null,
         },
+    },
+];
+
+const cauldron_spellEnum = {
+    LIBRARY: 0,
+}
+
+/*Array of data structures for spells
+-----
+idNumber: The idNumber according to its position in the array. cauldron_spellEnum should match this
+name: String containing displayed spell name.
+id: String containing the html id for the container div in the spell panel
+imageLink: The name of the image stored in ../images/cauldron/
+idLink: should be included but set to null. cauldron_init() will set this to the html container div element so we don't have to search the DOM for it again
+buttonLink: should be included but set to null. cauldron_init() will set this to the html button element so we don't have to search the DOM for it again
+unlocked: Boolean if the building has been unlocked. This should show the unlock state at the start of a new game, cauldron_unlocks() may change it later
+description: The html of the description
+cost: The cost of this spell
+-----*/
+var cauldron_spells = [
+    {
+        idNumber: 0,
+        name: "Library",
+        id: "cauldron_upgrade_library",
+        imageLink: "greenBook.png",
+        idLink: null,
+        buttonLink: null,
+        unlocked: true,
+        description: "<p>Create a library to store magic books.</p><p>Unlocks a new magic item, Magic Book.</p>",
+        cost: 25,
     },
 ];

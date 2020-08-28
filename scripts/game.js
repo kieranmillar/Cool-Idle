@@ -65,7 +65,7 @@ function load()
     if (localStorage.getItem("gameStored") != null)
 	{
         loadedGame = JSON.parse(localStorage.getItem("gameStored"));
-        if (loadedGame.version == 1)
+        if (loadedGame.version < 2)
         {
             alert("The game has updated with a breaking change since you last played. Your save will now be wiped because this is still in alpha. Sorry!");
             wipe(false);

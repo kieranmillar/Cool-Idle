@@ -79,6 +79,21 @@
   flex-grow: 0;
   flex-shrink: 0;
 }
+#loc_cauldron .cauldron_spell {
+  max-width: 284px;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid black;
+  padding: 2px;
+  margin: 2px;
+}
+#loc_cauldron .cauldron_spell_row {
+  display: flex;
+  flex-direction: row;
+}
+#loc_cauldron .cauldron_spellName {
+  flex: 1 1 0px;
+}
 
 #loc_kingdom {
   width: 100%;

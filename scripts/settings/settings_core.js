@@ -14,6 +14,7 @@ function toggleSetting (setting) {
     }
     displaySettings();
     if (setting == settingEnum.SCINOTATION) {
+        redrawTopBar();
         kingdom_refreshUpgradeCosts();
     }
     save();

@@ -19,37 +19,43 @@ const dungeon_styleEnum = {
 -----
 idNumber: The idNumber according to its position in the array. dungeon_terrainEnum should match this
 name: String containing displayed name.
+description: The description shown in the info panel when you mouse over it.
 imageLink: An array containing the names of the image stored in ../images/dungeon/ , one for each style
 imageCache: An array containing pre-loaded versions of the image used to draw on the canvas, one for each style
 -----*/
-var dungeon_terrain = [
+const dungeon_terrain = [
     {
         idNumber: dungeon_terrainEnum.FLOOR,
         name: "Floor",
+        description: "",
         imageLink: ["floor.png"],
         imageCache: [null]
     },
     {
         idNumber: dungeon_terrainEnum.WALL,
         name: "Wall",
+        description: "",
         imageLink: ["wall.png"],
         imageCache: [null]
     },
     {
         idNumber: dungeon_terrainEnum.PITEDGE,
         name: "Pit Edge",
+        description: "",
         imageLink: ["floor.png"],
         imageCache: [null]
     },
     {
         idNumber: dungeon_terrainEnum.PIT,
         name: "Pit",
+        description: "",
         imageLink: ["floor.png"],
         imageCache: [null]
     },
     {
         idNumber: dungeon_terrainEnum.GATEYELLOW,
         name: "Yellow Gate",
+        description: "A locked yellow gate. Bump into it to spend a yellow key to open it.",
         imageLink: ["gate_yellow.png"],
         imageCache: [null]
     }
@@ -66,7 +72,7 @@ const dungeon_itemEnum = {
     POTIONHUGE: 7
 };
 
-/*Array of data structures for collectable temporary items found in the dungeons
+/*Array of data structures for collectable items found in the dungeons
 -----
 idNumber: The idNumber according to its position in the array. dungeon_itemEnum should match this
 name: String containing displayed treasure name.
@@ -114,7 +120,7 @@ const dungeon_items = [
         imageCache: null,
         effect: function () {
             dungeon_player.hp += 100;
-            dungeon_createDamageNumber(-100, 225, 225);
+            dungeon_createDamageNumber(-100, 275, 275);
         }
     },
     {
@@ -125,7 +131,7 @@ const dungeon_items = [
         imageCache: null,
         effect: function () {
             dungeon_player.hp += 500;
-            dungeon_createDamageNumber(-500, 225, 225);
+            dungeon_createDamageNumber(-500, 275, 275);
         }
     },
     {
@@ -136,7 +142,7 @@ const dungeon_items = [
         imageCache: null,
         effect: function () {
             dungeon_player.hp += 2000;
-            dungeon_createDamageNumber(-2000, 225, 225);
+            dungeon_createDamageNumber(-2000, 275, 275);
         }
     },
     {
@@ -147,7 +153,7 @@ const dungeon_items = [
         imageCache: null,
         effect: function () {
             dungeon_player.hp += 10000;
-            dungeon_createDamageNumber(-10000, 225, 225);
+            dungeon_createDamageNumber(-10000, 275, 275);
         }
     },
     {
@@ -158,7 +164,7 @@ const dungeon_items = [
         imageCache: null,
         effect: function () {
             dungeon_player.hp += 50000;
-            dungeon_createDamageNumber(-50000, 225, 225);
+            dungeon_createDamageNumber(-50000, 275, 275);
         }
     }
 ];
@@ -210,7 +216,7 @@ hp: The enemy's HP
 atk: The enemy's ATK
 def: The enemy's DEF
 -----*/
-var dungeon_enemies = [
+const dungeon_enemies = [
     {
         idNumber: dungeon_enemyEnum.TRAININGDUMMY,
         name: "Training Dummy",
@@ -224,7 +230,7 @@ var dungeon_enemies = [
     {
         idNumber: dungeon_enemyEnum.ARMEDTRAININGDUMMY,
         name: "Armed Training Dummy",
-        description: "A regular training dummy, but with a small kinfe taped to the front.",
+        description: "You thought these dummies were dangerous before? This one has a knife taped to the front of it!",
         imageLink: "armedtrainingdummy.png",
         imageCache: null,
         hp: 30,
@@ -251,14 +257,14 @@ width: The width of the dungeon layout in cells
 style: Which terrain style this dungeon uses
 outOfBounds: What terrain piece you want to display if trying to draw an area that is out of bounds
 layout: An array of the dungeon's layout. See the relevant data arrays for more details:
---0-9: terrain structures
---10-99: temporary boost items
---100-999: treasures
---1000-9999: enemies
+--0-99: terrain structures
+--100-999: items
+--1000-1999: treasures
+--2000-9999: enemies
 startX: the x position of the player's start location. 0-indexed
 startY: the y position of the player's start location. 0-indexed
 -----*/
-var dungeon_dungeons = [
+const dungeon_dungeons = [
     {
         idNumber: dungeon_dungeonEnum.BOOTCAMP,
         name: "Boot Camp",

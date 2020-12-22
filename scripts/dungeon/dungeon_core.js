@@ -16,10 +16,26 @@ var dungeon_enemyCell = 0;
 var dungeon_busy = false;
 var dungeon_noDamageDealt = 0;
 
+const dungeon_infoPanelEnum = {
+    PREVIOUS: 0,
+    CELL: 1
+}
+
 //This is run once when the game is loaded
 //It creates HTML elements and also calculates things that aren't stored in the game object
 function dungeon_init() {
     dungeon_begin(dungeon_dungeonEnum.BOOTCAMP);
+
+    //Handle the mouse interacting with the canvas
+    dungeon_canvas.addEventListener('mousemove', function(evt) {
+        var rect = dungeon_canvas.getBoundingClientRect();
+        let x = evt.clientX - rect.left;
+        let y = evt.clientY - rect.top;
+        let cellX = dungeon_player.x + Math.floor(x / 50) - 5;
+        let cellY = dungeon_player.y + Math.floor(y / 50) - 5;
+        cell = cellX + cellY * dungeon_dungeons[dungeon_currentDungeon].width;
+        dungeon_mousedOverCell(cell);
+    }, false);
 }
 
 //Start a new dungeon instance. Takes the dungeon idNumber as a parameter
@@ -124,7 +140,7 @@ function dungeon_startCombat (enemyType, cell) {
         }
         dungeon_player.hp -= damage;
         if (damage > 0) {
-            dungeon_createDamageNumber(damage, 225, 225);
+            dungeon_createDamageNumber(damage, 275, 275);
         }
         if (dungeon_player.hp > 0) {
             dungeon_winCombat();
@@ -138,25 +154,15 @@ function dungeon_startCombat (enemyType, cell) {
     }
 }
 
-//Pre-calculate the damage the player will receive in combat. Returns the damage the player will take, or -1 if the player can't deal damage
+//Pre-calculate the expected damage from engaging in combat. Returns the expected damage, or -1 if the player can't deal damage
 function dungeon_calculateBattleResult(enemyType) {
-    let playerDamage = Math.max(0, dungeon_player.atk - dungeon_enemies[dungeon_enemyType].def);
-    let enemyDamage = Math.max(0, dungeon_enemies[dungeon_enemyType].atk - dungeon_player.def);
+    let playerDamage = Math.max(0, dungeon_player.atk - dungeon_enemies[enemyType].def);
+    let enemyDamage = Math.max(0, dungeon_enemies[enemyType].atk - dungeon_player.def);
     if (playerDamage == 0) {
         return -1;
     }
-    let playerHp = dungeon_player.hp;
-    let enemyHp = dungeon_enemies[enemyType].hp;
-    let totalDamage = 0;
-    while (enemyHp > 0 && playerHp > 0) {
-        enemyHp -= playerDamage;
-        if (enemyHp <= 0) {
-            return totalDamage;
-        }
-        playerHp -= enemyDamage;
-        totalDamage += enemyDamage;
-    }
-    return totalDamage;
+    let numberOfHits = Math.max(Math.floor(dungeon_enemies[enemyType].hp / playerDamage) - 1, 0);
+    return enemyDamage * numberOfHits;
 }
 
 //The player attacks in combat
@@ -164,8 +170,8 @@ async function dungeon_playerAttacks() {
     var damage = Math.max(0, dungeon_player.atk - dungeon_enemies[dungeon_enemyType].def);
     if (damage > 0) {
         dungeon_enemyHp -= damage;
-        let enemyX = ((dungeon_enemyCell % dungeon_dungeons[dungeon_currentDungeon].width) - dungeon_player.x)*50 + 225;
-        let enemyY = (Math.floor(dungeon_enemyCell / dungeon_dungeons[dungeon_currentDungeon].width) - dungeon_player.y)*50 + 225;
+        let enemyX = ((dungeon_enemyCell % dungeon_dungeons[dungeon_currentDungeon].width) - dungeon_player.x)*50 + 275;
+        let enemyY = (Math.floor(dungeon_enemyCell / dungeon_dungeons[dungeon_currentDungeon].width) - dungeon_player.y)*50 + 275;
         dungeon_createDamageNumber(damage, enemyX, enemyY);
     }
     if (dungeon_checkForCombatAbort(damage)) {
@@ -190,7 +196,7 @@ async function dungeon_enemyAttacks() {
     var damage = Math.max(0, dungeon_enemies[dungeon_enemyType].atk - dungeon_player.def);
     if (damage > 0) {
         dungeon_player.hp -= damage;
-        dungeon_createDamageNumber(damage, 225, 225);
+        dungeon_createDamageNumber(damage, 275, 275);
     }
     if (dungeon_checkForCombatAbort(damage)) {
         dungeon_busy = false;
@@ -235,4 +241,9 @@ function dungeon_winCombat() {
 function dungeon_loseCombat() {
     dungeon_begin(dungeon_currentDungeon);
     dungeon_redraw ();
+}
+
+//This is called every time you mouse over a dungeon tile. Takes the cell number as an argument
+function dungeon_mousedOverCell(cell) {
+    dungeon_updateInfoPanel(dungeon_infoPanelEnum.CELL, cell);
 }

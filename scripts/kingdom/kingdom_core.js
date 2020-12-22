@@ -18,7 +18,7 @@ function kingdom_init() {
         let x = evt.clientX - rect.left;
         let y = evt.clientY - rect.top;
         cell = Math.floor(x / 40) + (Math.floor(y / 40) * 9);
-        kingdom_mousedOverCell(cell)
+        kingdom_mousedOverCell(cell);
     }, false);
 
     kingdom_canvas.addEventListener('click', function(evt) {
@@ -26,7 +26,7 @@ function kingdom_init() {
         let x = evt.clientX - rect.left;
         let y = evt.clientY - rect.top;
         cell = Math.floor(x / 40) + (Math.floor(y / 40) * 9);
-        kingdom_clickedonCell(cell)
+        kingdom_clickedonCell(cell);
     }, false);
 
     //Dynamically create resource list
@@ -41,8 +41,8 @@ function kingdom_init() {
         resource.valueLink = $("#" + resource.value);
     });
 
-    $("#kingdom_removeBuildingPanel").mouseenter(function () {kingdom_updateinfoPanel(kingdom_infoPanelEnum.REMOVE, 0)});
-    $("#kingdom_claimTilePanel").mouseenter(function () {kingdom_updateinfoPanel(kingdom_infoPanelEnum.CLAIMTILE, 0)});
+    $("#kingdom_removeBuildingPanel").mouseenter(function () {kingdom_updateInfoPanel(kingdom_infoPanelEnum.REMOVE, 0)});
+    $("#kingdom_claimTilePanel").mouseenter(function () {kingdom_updateInfoPanel(kingdom_infoPanelEnum.CLAIMTILE, 0)});
 
     //Dynamically create building list
     kingdom_buildings.forEach(building => {
@@ -399,7 +399,7 @@ const kingdom_infoPanelEnum = {
 function kingdom_mousedOverCell(cell) {
     if (game.kingdom.borders[cell] != kingdom_rangeEnum.OUTOFBORDERS) {
         kingdom_currentCell = cell;
-        kingdom_updateinfoPanel (kingdom_infoPanelEnum.CELL, cell);
+        kingdom_updateInfoPanel (kingdom_infoPanelEnum.CELL, cell);
     }
 }
 
@@ -539,12 +539,12 @@ function kingdom_pickupBuilding(building) {
 
 //This is called if we mouse over a building on the buildings panel (not a placed building on the map!)
 function kingdom_mousedOverBuilding(building) {
-    kingdom_updateinfoPanel (kingdom_infoPanelEnum.BUILDING, building);
+    kingdom_updateInfoPanel (kingdom_infoPanelEnum.BUILDING, building);
 }
 
 //This is called is we mouse over an upgrade on the buildings panel
 function kingdom_mousedOverUpgrade(upgrade) {
-    kingdom_updateinfoPanel (kingdom_infoPanelEnum.UPGRADE, upgrade);
+    kingdom_updateInfoPanel (kingdom_infoPanelEnum.UPGRADE, upgrade);
 }
 
 // Get the scaled cost of a certain resource, based on number of that building already built

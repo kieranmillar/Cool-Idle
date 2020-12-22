@@ -155,7 +155,7 @@ function gainExp (amount) {
         id_maxExp.html(displayNum(getMaxExp()));
         if (activeTab == "kingdom") {
             kingdom_updateResources();
-            kingdom_updateinfoPanel(kingdom_infoPanelEnum.PREVIOUS);
+            kingdom_updateInfoPanel(kingdom_infoPanelEnum.PREVIOUS);
         }
     }
 }

@@ -208,25 +208,35 @@
 						</div>
 					</div>
 					<div id="dungeon_view_dungeon">
-						<div id="dungeon_statsColumn">
-							<div>
-								<button type="button" id="dungeon_moveButton" class="button clickable" onclick="dungeon_move('north')">NORTH</button>
+						<div id="dungeon_statsColumn" class="dungeon_column">
+							<div id="dungeon_moveButtons">
+								<div>
+									<button type="button" class="dungeon_moveButtonCentred button clickable" onclick="dungeon_move('north')">NORTH</button>
+								</div>
+								<div>
+									<button type="button" class="button clickable" onclick="dungeon_move('east')">EAST</button>
+									<button type="button" class="button clickable" onclick="dungeon_move('west')">WEST</button>
+								</div>
+								<div>
+									<button type="button" class="dungeon_moveButtonCentred button clickable" onclick="dungeon_move('south')">SOUTH</button>
+								</div>
+								<p>(Also arrow keys or WASD)</p>
 							</div>
-							<div>
-								<button type="button" id="dungeon_moveButton" class="button clickable" onclick="dungeon_move('east')">EAST</button>
-								<button type="button" id="dungeon_moveButton" class="button clickable" onclick="dungeon_move('west')">WEST</button>
-							</div>
-							<div>
-								<button type="button" id="dungeon_moveButton" class="button clickable" onclick="dungeon_move('south')">SOUTH</button>
-							</div>
-							<p>Or you can use arrow keys or WASD</p>
 							<p>HP: <span id="dungeon_playerHpSpan"></span></p>
+							<p>Attack: <span id="dungeon_playerAtkSpan"></span></p>
+							<p>Defense: <span id="dungeon_playerDefSpan"></span></p>
+							<p>Yellow Keys: <span id="dungeon_playerYkSpan"></span></p>
+							<p>Blue Keys: <span id="dungeon_playerBkSpan"></span></p>
+							<p>Red Keys: <span id="dungeon_playerRkSpan"></span></p>
 						</div>
-						<div id="dungeon_dungeonColumn">
-							<canvas id="dungeon_canvas" width="450" height="450">Your browser doesn't support canvases. I'm afraid you won't be able to play this game. Please upgrade to a better browser.</canvas>
+						<div id="dungeon_dungeonColumn" class="dungeon_column">
+							<canvas id="dungeon_canvas" width="550" height="550">Your browser doesn't support canvases. I'm afraid you won't be able to play this game. Please upgrade to a better browser.</canvas>
 						</div>
-						<div id="dungeon_infoColumn">
-
+						<div id="dungeon_infoColumn" class="dungeon_column">
+							<div id=dungeon_infoPanel>
+								<div id="dungeon_infoTitle" class="dungeon_infoPanel"></div>
+								<div id="dungeon_infoDescription" class="dungeon_infoPanel"></div>
+							</div>
 						</div>
 					</div>
 				</div>

@@ -1,7 +1,17 @@
 const dungeon_playerHpSpan = $("#dungeon_playerHpSpan");
+const dungeon_playerAtkSpan = $("#dungeon_playerAtkSpan");
+const dungeon_playerDefSpan = $("#dungeon_playerDefSpan");
+const dungeon_playerYkSpan = $("#dungeon_playerYkSpan");
+const dungeon_playerBkSpan = $("#dungeon_playerBkSpan");
+const dungeon_playerRkSpan = $("#dungeon_playerRkSpan");
 const dungeon_canvas = document.getElementById("dungeon_canvas"); //JQuery objects are not canvases, so have to resort to old-school JS
+const dungeon_infoTitle = $("#dungeon_infoTitle");
+const dungeon_infoDescription = $("#dungeon_infoDescription");
 
 var dungeon_damageNumbers = [];
+
+var dungeon_infoPanelPreviousType = dungeon_infoPanelEnum.CELL;
+var dungeon_infoPanelPreviousValue = 0;
 
 //Redraws everything
 function dungeon_redraw () {
@@ -9,7 +19,13 @@ function dungeon_redraw () {
 		return;
     }
     dungeon_playerHpSpan.text(dungeon_player.hp);
+    dungeon_playerAtkSpan.text(dungeon_player.atk);
+    dungeon_playerDefSpan.text(dungeon_player.def);
+    dungeon_playerYkSpan.text(dungeon_player.yellowKeys);
+    dungeon_playerBkSpan.text(dungeon_player.blueKeys);
+    dungeon_playerRkSpan.text(dungeon_player.redKeys);
     dungeon_drawCanvas();
+    dungeon_updateInfoPanel(dungeon_infoPanelEnum.PREVIOUS);
 }
 
 //Redraws the canvas
@@ -20,11 +36,11 @@ function dungeon_drawCanvas() {
 	var ctx = dungeon_canvas.getContext("2d");
 	ctx.globalAlpha = 1;
 	ctx.fillStyle = "#FFFFFF";
-    ctx.fillRect(0, 0, 450, 450);
-    for (let j = 0; j < 9; j++) {
-		for (let i = 0; i < 9; i++) {
-            let cellX = dungeon_player.x - 4 + i;
-            let cellY = dungeon_player.y - 4 + j;
+    ctx.fillRect(0, 0, 550, 550);
+    for (let j = 0; j < 11; j++) {
+		for (let i = 0; i < 11; i++) {
+            let cellX = dungeon_player.x - 5 + i;
+            let cellY = dungeon_player.y - 5 + j;
             let cell = cellX  + (cellY * dungeon_dungeons[dungeon_currentDungeon].width);
 			let x = i * 50;
             let y = j * 50;
@@ -65,7 +81,7 @@ function dungeon_drawCanvas() {
             }
         }
     }
-    ctx.drawImage(dungeon_playerImage, 200, 200);
+    ctx.drawImage(dungeon_playerImage, 250, 250);
 }
 
 //Create a damage number and add it to the array
@@ -119,5 +135,78 @@ function dungeon_drawDamageNumbers() {
     }
     if (dungeon_damageNumbers.length == 0) {
         dungeon_redraw();
+    }
+}
+
+//Redraws the infoPanel. Takes two arguments, the infoPanel type, and one optional accompanying value (based on the infoPanel type)
+function dungeon_updateInfoPanel (infoPanelType, value) {
+    if (activeTab != "dungeon") {
+		return;
+    }
+    //Sometimes we just want to refresh the panel with what we had last time
+	if (infoPanelType == dungeon_infoPanelEnum.PREVIOUS) {
+		infoPanelType = dungeon_infoPanelPreviousType;
+		value = dungeon_infoPanelPreviousValue;
+	}
+	else {
+		dungeon_infoPanelPreviousType = infoPanelType;
+		dungeon_infoPanelPreviousValue = value;
+    }
+    if (infoPanelType == dungeon_infoPanelEnum.CELL) {
+        let cell = value;
+        if (cell > 0 && cell < dungeon_dungeons[dungeon_currentDungeon].width * dungeon_dungeons[dungeon_currentDungeon].height) {
+            //Only update if in map bounds
+            let cellValue = dungeon_layout[cell];
+            if (cellValue <= 3) {
+                // Nothing to say about basic terrain features
+                return;
+            }
+            else if (cellValue < 100) {
+                //Other terrain features
+                dungeon_infoTitle.html("<img src='" + dungeon_terrain[cellValue].imageCache[dungeon_dungeons[dungeon_currentDungeon].style].src + "' alt='" + dungeon_terrain[cellValue].name + "'/>" + dungeon_terrain[cellValue].name);
+		        dungeon_infoDescription.html("<p>" + dungeon_terrain[cellValue].description + "</p>");
+            }
+            else if (cellValue < 1000) {
+                //Items
+                let item = cellValue - 100;
+                dungeon_infoTitle.html("<img src='" + dungeon_items[item].imageCache.src + "' alt='" + dungeon_items[item].name + "'/>" + dungeon_items[item].name);
+		        dungeon_infoDescription.html("<p>" + dungeon_items[item].description + "</p>");
+            }
+            else if (cellValue < 2000) {
+                //Treasures
+                let treasure = cellValue - 1000;
+                if (game.dungeon.treasures[treasure] == 0) {
+                    dungeon_infoTitle.html("<img src='" + dungeon_chestClosedImage.src + "' alt='Closed Treasure Chest'/>Unclaimed Treasure");
+		            dungeon_infoDescription.html("<p>Some permanent goodies are waiting for the taking! What could be inside? Bump into this chest to claim its contents!</p>");
+                } else {
+                    dungeon_infoTitle.html("<img src='" + dungeon_chestOpenImage.src + "' alt='Open Treasure Chest'/>Empty Treasure Chest");
+		            dungeon_infoDescription.html("<p>Somebody has already claimed this treasure! It was you, wasn't it?</p>");
+                }
+            }
+            else {
+                //Enemies
+                let enemy = cellValue - 2000;
+
+                dungeon_infoTitle.html("<img src='" + dungeon_enemies[enemy].imageCache.src + "' alt='" + dungeon_enemies[enemy].name + "'/>" + dungeon_enemies[enemy].name);
+
+                let htmlText = "<p>" + dungeon_enemies[enemy].description + "</p><p>HP: " + dungeon_enemies[enemy].hp + "</p><p>Attack: " + dungeon_enemies[enemy].atk + "</p><p>Defense: " + dungeon_enemies[enemy].def + "</p>";
+
+                let predictedDamage = dungeon_calculateBattleResult(enemy);
+                if (predictedDamage == -1) {
+                    htmlText += "<p>You can't hurt this! (Defense too high)</p>";
+                } else {
+                    htmlText += "<p>Predicted damage: " + predictedDamage;
+                    let numberOfHits = Math.max(Math.floor(dungeon_enemies[enemy].hp / (dungeon_player.atk - dungeon_enemies[enemy].def)) - 1, 0);
+                    if (numberOfHits == 0) {
+                        htmlText += "</p>";
+                    } else {
+                        let damageTakenPerHit = Math.max(dungeon_enemies[enemy].atk - dungeon_player.def, 0);
+                        let atkForFasterWin = Math.ceil(dungeon_enemies[enemy].hp / numberOfHits) + dungeon_enemies[enemy].def;
+                        htmlText += " (" + damageTakenPerHit + " x " + numberOfHits + ")</p><p>Attack for faster win: " + atkForFasterWin + " (+" + (atkForFasterWin - dungeon_player.atk) +")</p>";
+                    }
+                }           
+		        dungeon_infoDescription.html(htmlText);
+            }
+        }
     }
 }

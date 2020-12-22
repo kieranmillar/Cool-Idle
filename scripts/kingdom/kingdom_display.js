@@ -20,7 +20,7 @@ function kingdom_redraw () {
 	}
 	kingdom_updateResources ();
 	kingdom_drawCanvas();
-	kingdom_updateinfoPanel(kingdom_infoPanelEnum.PREVIOUS);
+	kingdom_updateInfoPanel(kingdom_infoPanelEnum.PREVIOUS);
 	kingdom_updateBuildings ();
 	kingdom_updateUpgrades ();
 }
@@ -130,7 +130,7 @@ function kingdom_drawCanvas() {
 }
 
 //Redraws the infoPanel. Takes two arguments, the infoPanel type, and one optional accompanying value (based on the infoPanel type)
-function kingdom_updateinfoPanel (infoPanelType, value) {
+function kingdom_updateInfoPanel (infoPanelType, value) {
 	if (activeTab != "kingdom") {
 		return;
 	}
@@ -156,7 +156,7 @@ function kingdom_updateinfoPanel (infoPanelType, value) {
 		kingdom_infoDescription.html(kingdom_upgrades[value].description);
 	}
 	else if (infoPanelType == kingdom_infoPanelEnum.BUILDING) {
-		kingdom_updateinfoPanel_building("", value, kingdom_terrainEnum.PLAINS, false);
+		kingdom_updateInfoPanel_building("", value, kingdom_terrainEnum.PLAINS, false);
 	}
 	else {
 		var terrain = kingdom_landscape[value];
@@ -170,7 +170,7 @@ function kingdom_updateinfoPanel (infoPanelType, value) {
 			kingdom_infoDescription.html(description);
 		}
 		else {
-			kingdom_updateinfoPanel_building(titleText, game.kingdom.constructions[value], terrain, kingdom_failMap[value]);
+			kingdom_updateInfoPanel_building(titleText, game.kingdom.constructions[value], terrain, kingdom_failMap[value]);
 		}
 	}
 }
@@ -182,7 +182,7 @@ building: The id of the building
 terrain: The id of the terrain, used as some buildings have multiple images based on the terrain the are on
 isFailing: Boolean if the building is failing or not, adds an explanation to the top of the description.
 */
-function kingdom_updateinfoPanel_building (initialTitleText, building, terrain, isFailing) {
+function kingdom_updateInfoPanel_building (initialTitleText, building, terrain, isFailing) {
 	kingdom_infoTitle.html(initialTitleText + "<img src = './images/kingdom/" + kingdom_buildings[building].imageLink(terrain) + "' alt='" + kingdom_buildings[building].name + "'>" + kingdom_buildings[building].name);
 	let text = "";
 	if (isFailing) {

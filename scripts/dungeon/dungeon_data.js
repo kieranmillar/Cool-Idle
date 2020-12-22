@@ -55,7 +55,7 @@ const dungeon_terrain = [
     {
         idNumber: dungeon_terrainEnum.GATEYELLOW,
         name: "Yellow Gate",
-        description: "A locked yellow gate. Bump into it to spend a yellow key to open it.",
+        description: "A locked yellow gate. You must spend a yellow key to open it.",
         imageLink: ["gate_yellow.png"],
         imageCache: [null]
     }

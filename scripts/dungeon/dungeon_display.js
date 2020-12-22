@@ -177,7 +177,7 @@ function dungeon_updateInfoPanel (infoPanelType, value) {
                 let treasure = cellValue - 1000;
                 if (game.dungeon.treasures[treasure] == 0) {
                     dungeon_infoTitle.html("<img src='" + dungeon_chestClosedImage.src + "' alt='Closed Treasure Chest'/>Unclaimed Treasure");
-		            dungeon_infoDescription.html("<p>Some permanent goodies are waiting for the taking! What could be inside? Bump into this chest to claim its contents!</p>");
+		            dungeon_infoDescription.html("<p>Some permanent goodies are waiting for the taking! What could be inside?</p>");
                 } else {
                     dungeon_infoTitle.html("<img src='" + dungeon_chestOpenImage.src + "' alt='Open Treasure Chest'/>Empty Treasure Chest");
 		            dungeon_infoDescription.html("<p>Somebody has already claimed this treasure! It was you, wasn't it?</p>");

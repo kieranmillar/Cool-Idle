@@ -67,10 +67,10 @@ function dungeon_move (direction) {
         case 'south':
             dY = 1;
             break;
-        case 'east':
+        case 'west':
             dX = -1;
             break;
-        case 'west':
+        case 'east':
             dX = 1;
             break;
     }

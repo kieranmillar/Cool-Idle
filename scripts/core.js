@@ -226,13 +226,13 @@ function checkKey(event) {
             case "ArrowLeft":
             case "a":
             case "4":
-                dungeon_move('east');
+                dungeon_move('west');
                 break;
             case "Right":
             case "ArrowRight":
             case "d":
             case "6":
-                dungeon_move('west');
+                dungeon_move('east');
                 break;
             case "Up":
             case "ArrowUp":

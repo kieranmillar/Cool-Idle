@@ -215,6 +215,8 @@ imageCache: Containins a pre-loaded version of the image used to draw on the can
 hp: The enemy's HP
 atk: The enemy's ATK
 def: The enemy's DEF
+exp: The amount of EXP given
+coin: The amount of yellow coins given
 -----*/
 const dungeon_enemies = [
     {
@@ -225,7 +227,9 @@ const dungeon_enemies = [
         imageCache: null,
         hp: 30,
         atk: 20,
-        def: 0
+        def: 0,
+        exp: 3,
+        coin: 3
     },
     {
         idNumber: dungeon_enemyEnum.ARMEDTRAININGDUMMY,
@@ -235,7 +239,9 @@ const dungeon_enemies = [
         imageCache: null,
         hp: 30,
         atk: 50,
-        def: 0
+        def: 0,
+        exp: 5,
+        coin: 5
     }
 ];
 

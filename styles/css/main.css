@@ -241,6 +241,9 @@
 #loc_dungeon #dungeon_view_dungeon #dungeon_infoColumn #dungeon_infoPanel .dungeon_infoPanel {
   overflow-wrap: break-word;
 }
+#loc_dungeon #dungeon_view_dungeon #dungeon_infoColumn #dungeon_infoPanel .dungeon_infoPanel .dungeon_infoPanelImage {
+  padding-right: 3px;
+}
 
 body {
   background-color: #FFFFFF;

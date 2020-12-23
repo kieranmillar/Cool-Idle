@@ -187,9 +187,9 @@ function dungeon_updateInfoPanel (infoPanelType, value) {
                 //Enemies
                 let enemy = cellValue - 2000;
 
-                dungeon_infoTitle.html("<img src='" + dungeon_enemies[enemy].imageCache.src + "' alt='" + dungeon_enemies[enemy].name + "'/>" + dungeon_enemies[enemy].name);
+                dungeon_infoTitle.html("<img src='" + dungeon_enemies[enemy].imageCache.src + "' class='dungeon_infoPanelImage' alt='" + dungeon_enemies[enemy].name + "'/>" + dungeon_enemies[enemy].name);
 
-                let htmlText = "<p>" + dungeon_enemies[enemy].description + "</p><p>HP: " + dungeon_enemies[enemy].hp + "</p><p>Attack: " + dungeon_enemies[enemy].atk + "</p><p>Defense: " + dungeon_enemies[enemy].def + "</p>";
+                let htmlText = "<p>" + dungeon_enemies[enemy].description + "</p><p>HP: " + dungeon_enemies[enemy].hp + "</p><p>Attack: " + dungeon_enemies[enemy].atk + "</p><p>Defense: " + dungeon_enemies[enemy].def + "</p><p><img src='./images/exp.png' class='dungeon_infoPanelImage' alt='Experience' />" + dungeon_enemies[enemy].exp + "</p><p><img src='./images/coin_yellow.png' class='dungeon_infoPanelImage' alt='Yellow Coin' />" + dungeon_enemies[enemy].coin;
 
                 let predictedDamage = dungeon_calculateBattleResult(enemy);
                 if (predictedDamage == -1) {

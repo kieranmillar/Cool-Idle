@@ -45,6 +45,10 @@
 
                 .dungeon_infoPanel {
                     overflow-wrap: break-word;
+
+                    .dungeon_infoPanelImage {
+                        padding-right: 3px;
+                    }
                 }
             }
         }

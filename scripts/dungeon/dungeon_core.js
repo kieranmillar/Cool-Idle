@@ -233,6 +233,8 @@ function dungeon_checkForCombatAbort(damage) {
 //The player wins combat
 function dungeon_winCombat() {
     dungeon_layout[dungeon_enemyCell] = dungeon_terrainEnum.FLOOR;
+    gainExp(dungeon_enemies[dungeon_enemyType].exp);
+    gainYellowCoins(dungeon_enemies[dungeon_enemyType].coin);
     dungeon_redraw ();
     dungeon_busy = false;
 }

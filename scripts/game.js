@@ -14,6 +14,7 @@ var game = {
     settings: [0, 1, 0],
     shop: {
         features: [0, 0, 0],
+        cauldron: [0],
         kingdom: [0, 0]
     },
     cauldron: {

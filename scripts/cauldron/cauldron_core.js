@@ -70,6 +70,9 @@ function cauldron_unlocks() {
     if (game.cauldron.spells[cauldron_spellEnum.CRYSTALREFINERY]) {
         cauldron_buildings[cauldron_buildingEnum.CRYSTALBALL].unlocked = true;
     }
+    if (game.shop.cauldron[shop_cauldronEnum.BRAININAJAR]) {
+        cauldron_buildings[cauldron_buildingEnum.BRAININAJAR].unlocked = true;
+    }
 }
 
 //We try and work out the magic income any time something changes and store it, so only the end result is read each tick

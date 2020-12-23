@@ -96,6 +96,43 @@ var shop_item_feature = [
     }
 ]
 
+const shop_cauldronEnum = {
+    BRAININAJAR: 0
+}
+
+/*Array of data structures for cauldron shop items
+-----
+idNumber: The idNumber according to its position in the array. shop_cauldronEnum should match this
+name: String containing the shop item name.
+id: String containing the html id for the container div
+description: String containing the html for the description
+cost: An array of data objects detailing each cost for this item:
+--type: The resource type
+--value: The amount of this resource needed to buy it
+onPurchase: A lambda function with the code of what should happen when the item is purchased, saving the unlock to the game object and subtracting cost is already handled in shop_buy()
+idLink: should be included but set to null. shop_init() will set this to the html container div element so we don't have to search the DOM for it again
+costLink: should be included but set to null. shop_init() will set this to the html span element so we don't have to search the DOM for it again
+-----*/
+var shop_item_cauldron = [
+    {
+        idNumber: shop_cauldronEnum.BRAININAJAR,
+        name: "Brain in a Jar",
+        id: "shop_cauldron_brainInAJar",
+        description: "<p>Unlock a new item that produces kingdom research when purchased.</p>",
+        cost: [
+            {
+                type: shop_costEnum.YELLOWCOINS,
+                value: 2500
+            }
+        ],
+        onPurchase: function () {
+            cauldron_unlocks();
+        },
+        idLink: null,
+        costLink: null
+    }
+]
+
 const shop_kingdomEnum = {
     REMOVE: 0,
     CLAIMTILE: 1

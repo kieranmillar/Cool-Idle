@@ -1,7 +1,8 @@
 const cauldron_buildingEnum = {
     SCEPTER: 0,
     MAGICBOOK: 1,
-    CRYSTALBALL: 2
+    CRYSTALBALL: 2,
+    BRAININAJAR: 3
 }
 
 /*Array of data structures for buildings
@@ -88,20 +89,46 @@ var cauldron_buildings = [
         buttonLink: null,
         descriptionLink: null,
         output: function() {
-            return 40;
+            return 30;
         },
         onPurchase: function() {
-            gainExp(game.cauldron.building[cauldron_buildingEnum.CRYSTALBALL] * 40);
-            gainYellowCoins(game.cauldron.building[cauldron_buildingEnum.CRYSTALBALL] * 40);
-            gainBlueCoins(20);
+            gainExp(game.cauldron.building[cauldron_buildingEnum.CRYSTALBALL] * 30);
+            gainYellowCoins(game.cauldron.building[cauldron_buildingEnum.CRYSTALBALL] * 30);
+            gainBlueCoins(30);
         },
         unlocked: false,
         description: function () {
-            return "<p>Lets you look into the future and steal magic from your future self.</p><p>Generates " + cauldron_buildings[cauldron_buildingEnum.CRYSTALBALL].output() + " ✨Magic per second.</p><p><strong>Current total: " + displayNum(cauldron_buildings[cauldron_buildingEnum.CRYSTALBALL].output() * game.cauldron.building[cauldron_buildingEnum.CRYSTALBALL]) + " (" + cauldron_calculatePercentage(cauldron_buildingEnum.CRYSTALBALL) + "%) ✨Magic p/s.</strong></p><p>On purchase: 40 EXP and 40 Yellow Coins for each crystal ball you own, and 20 Blue Coins.</p>"
+            return "<p>Lets you look into the future and steal magic from your future self.</p><p>Generates " + cauldron_buildings[cauldron_buildingEnum.CRYSTALBALL].output() + " ✨Magic per second.</p><p><strong>Current total: " + displayNum(cauldron_buildings[cauldron_buildingEnum.CRYSTALBALL].output() * game.cauldron.building[cauldron_buildingEnum.CRYSTALBALL]) + " (" + cauldron_calculatePercentage(cauldron_buildingEnum.CRYSTALBALL) + "%) ✨Magic p/s.</strong></p><p>On purchase: 30 EXP and 30 Yellow Coins for each crystal ball you own, and 30 Blue Coins.</p>"
         },
         cost: {
             base: 2000,
             factor: 1.30,
+            link: null,
+        },
+    },
+    {
+        idNumber: cauldron_buildingEnum.BRAININAJAR,
+        name: "Brain in a Jar",
+        id: "cauldron_brainInAJar",
+        imageLink: "brainInAJar.png",
+        idLink: null,
+        valueLink: null,
+        buttonLink: null,
+        descriptionLink: null,
+        output: function() {
+            return 0;
+        },
+        onPurchase: function() {
+            game.kingdom.resource[kingdom_resourceEnum.RESEARCH] += (game.cauldron.building[cauldron_buildingEnum.BRAININAJAR] * 100);
+            gainBlueCoins(10);
+        },
+        unlocked: false,
+        description: function () {
+            return "<p>Harnessing the power of thinking, literally.</p><p>Generates nothing!</p><p>On purchase: 100 Kingdom Research for each brain in a jar you own, and 10 Blue Coins.</p>"
+        },
+        cost: {
+            base: 10000,
+            factor: 1.35,
             link: null,
         },
     }

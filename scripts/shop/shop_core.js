@@ -2,6 +2,7 @@
 //It creates HTML elements for all of the shop items etc. and also calculates things that aren't stored in the game object
 function shop_init() {
     shop_populateItemList(shop_item_feature, "shop_section_features_list", "features");
+    shop_populateItemList(shop_item_cauldron, "shop_section_cauldron_list", "cauldron");
     shop_populateItemList(shop_item_kingdom, "shop_section_kingdom_list", "kingdom");
 }
 
@@ -47,6 +48,10 @@ function shop_buy (category, item) {
         case "features":
             gameArray = game.shop.features;
             itemArray = shop_item_feature;
+            break;
+        case "cauldron":
+            gameArray = game.shop.cauldron;
+            itemArray = shop_item_cauldron;
             break;
         case "kingdom":
             gameArray = game.shop.kingdom;

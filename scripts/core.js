@@ -153,6 +153,10 @@ function gainExp (amount) {
     if (levelledUp) {
         id_level.html(game.level);
         id_maxExp.html(displayNum(getMaxExp()));
+        if (activeTab == "cauldron") {
+            cauldron_calculateOutput();
+            cauldron_redraw();
+        }
         if (activeTab == "kingdom") {
             kingdom_updateResources();
             kingdom_updateInfoPanel(kingdom_infoPanelEnum.PREVIOUS);

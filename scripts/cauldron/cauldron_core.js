@@ -16,7 +16,7 @@ function cauldron_init() {
         htmlText += "<img src = './images/cauldron/" + building.imageLink + "' alt='" + building.name + "' class='cauldron_buildingImage'/>";
         htmlText += "<span class='cauldron_buildingName'>" + building.name + "</span></div>";
         htmlText += "<div class='cauldron_building_row'>";
-        htmlText += "<span class='cauldron_buildingDescription'>" + building.description() + "</span></div>";
+        htmlText += "<span id='" + building.id + "Description' class='cauldron_buildingDescription'>" + building.description() + "</span></div>";
         htmlText += "<div class='cauldron_building_row cauldron_spread_row'>";
         htmlText += "<span id='" + building.id + "Cost'></span>";
         htmlText += "<button type='button' id='" + building.id + "BuildButton' class='cauldron_buildButton button' onclick='cauldron_build(" + building.idNumber + ")' disabled>Conjure</button></div>";
@@ -28,6 +28,7 @@ function cauldron_init() {
         building.idLink = $("#" + building.id);
         building.valueLink = $("#" + building.id + "Stock");
         building.buttonLink = $("#" + building.id + "BuildButton");
+        building.descriptionLink = $("#" + building.id + "Description");
         building.cost.link = $("#" + building.id + "Cost");
     });
 
@@ -63,6 +64,11 @@ function cauldron_tick () {
 function cauldron_unlocks() {
     if (game.cauldron.spells[cauldron_spellEnum.LIBRARY]) {
         cauldron_buildings[cauldron_buildingEnum.MAGICBOOK].unlocked = true;
+        cauldron_spells[cauldron_spellEnum.BOOKSHELVES].unlocked = true;
+        cauldron_spells[cauldron_spellEnum.CRYSTALREFINERY].unlocked = true;
+    }
+    if (game.cauldron.spells[cauldron_spellEnum.CRYSTALREFINERY]) {
+        cauldron_buildings[cauldron_buildingEnum.CRYSTALBALL].unlocked = true;
     }
 }
 

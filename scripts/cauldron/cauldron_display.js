@@ -22,6 +22,7 @@ function cauldron_updateBuildings () {
 	});
 	for (let i = 0; i < cauldron_buildings.length; i++) {
 		if (cauldron_buildings[i].unlocked) {
+			cauldron_buildings[i].descriptionLink.html(cauldron_buildings[i].description());
 			cauldron_buildings[i].valueLink.html(game.cauldron.building[i]);
 			cauldron_buildings[i].cost.link.html("Cost: " + displayNum(cauldron_getBuildingCost(i)) + " ✨Magic");
 			if (cauldron_getBuildingAffordable (i)) {
@@ -58,4 +59,9 @@ function cauldron_updateSpells () {
 			}
 		}
 	}
+}
+
+//Cacluates percentage of total output for display in descriptions
+function cauldron_calculatePercentage(buldingType) {
+	return ((cauldron_buildings[buldingType].output() * game.cauldron.building[buldingType]) / cauldron_magicIncome * 100).toFixed(2);
 }

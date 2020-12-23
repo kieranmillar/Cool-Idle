@@ -69,7 +69,11 @@ const dungeon_itemEnum = {
     POTIONSMALL: 4,
     POTIONMEDIUM: 5,
     POTIONLARGE: 6,
-    POTIONHUGE: 7
+    POTIONHUGE: 7,
+    ATKTINY:8,
+    DEFTINY:9,
+    ATKSMALL:10,
+    DEFSMALL:11
 };
 
 /*Array of data structures for collectable items found in the dungeons
@@ -169,19 +173,64 @@ const dungeon_items = [
             dungeon_player.hp += 50000;
             dungeon_createFloatingText(50000, "#00FF00", 275, 275);
         }
+    },
+    {
+        idNumber: dungeon_itemEnum.ATKTINY,
+        name: "Tiny Attack Gem",
+        description: "Increases your Attack by 1",
+        imageLink: "atk_tiny.png",
+        imageCache: null,
+        effect: function () {
+            dungeon_player.atk += 1;
+            dungeon_createFloatingText("Attack + 1", "#FF0000", 275, 275);
+        }
+    },
+    {
+        idNumber: dungeon_itemEnum.DEFTINY,
+        name: "Tiny Defense Gem",
+        description: "Increases your Defense by 1",
+        imageLink: "def_tiny.png",
+        imageCache: null,
+        effect: function () {
+            dungeon_player.def += 1;
+            dungeon_createFloatingText("Defense + 1", "#0000FF", 275, 275);
+        }
+    },
+    {
+        idNumber: dungeon_itemEnum.ATKSMALL,
+        name: "Small Attack Gem",
+        description: "Increases your Attack by 3",
+        imageLink: "atk_small.png",
+        imageCache: null,
+        effect: function () {
+            dungeon_player.atk += 3;
+            dungeon_createFloatingText("Attack + 3", "#FF0000", 275, 275);
+        }
+    },
+    {
+        idNumber: dungeon_itemEnum.DEFTINY,
+        name: "Tiny Defense Gem",
+        description: "Increases your Defense by 3",
+        imageLink: "def_small.png",
+        imageCache: null,
+        effect: function () {
+            dungeon_player.def += 3;
+            dungeon_createFloatingText("Defense + 3", "#0000FF", 275, 275);
+        }
     }
 ];
 
 const dungeon_treasureEnum = {
     ORIGAMISWORD: 0,
-    BLUECOINS01: 1
+    BLUECOINS01: 1,
+    UNLOCKDUNGEONRIVER: 2
 };
 
 /*Array of data structures for treasures
 -----
 idNumber: The idNumber according to its position in the array. dungeon_treasureEnum should match this
 name: String containing displayed treasure name.
-image: The image of the treasure
+image: The image of the treasure stored in ../images/
 description: The description of the treasure that is shown when you open the chest
 effect: optional - a lambda function with any extra effect that happens immediately upon gaining the treasure.
 -----*/
@@ -190,7 +239,7 @@ const dungeon_treasures = [
         idNumber: dungeon_treasureEnum.ORIGAMISWORD,
         name: "an Origami Sword",
         image: "",
-        description: "This carefully folded sword will deliver painful papercuts to your foes.</p><p>You can only change your equipment outside of a dungeon."
+        description: "This carefully folded sword will deliver painful papercuts to your foes.</p><p><strong>This has been added to your starting equipment inventory.</strong></p><p>Starting equipment can be equiped outside of a dungeon instance and brought into any future dungeon instance. You have unlimited copies, even if you swap equipment inside a dungeon instance, so feel free to use it whenever you want."
     },
     {
         idNumber: dungeon_treasureEnum.BLUECOINS01,
@@ -200,6 +249,12 @@ const dungeon_treasures = [
         effect: function () {
             gainBlueCoins (100);
         }
+    },
+    {
+        idNumber: dungeon_treasureEnum.UNLOCKDUNGEONRIVER,
+        name: "a map to a nearby river",
+        image: "dungeon/map.png",
+        description: "You find a map to a nearby river, alongside a note asking you not to steal the treasure that they've hidden there.</p><p>Unfortunately for them, they didn't ask nicely enough.</p><p><strong>You have unlocked a new dungeon!</strong>"
     }
 ];
 
@@ -231,8 +286,8 @@ const dungeon_enemies = [
         hp: 30,
         atk: 20,
         def: 0,
-        exp: 3,
-        coin: 3
+        exp: 10,
+        coin: 10
     },
     {
         idNumber: dungeon_enemyEnum.ARMEDTRAININGDUMMY,
@@ -243,8 +298,51 @@ const dungeon_enemies = [
         hp: 30,
         atk: 50,
         def: 0,
-        exp: 5,
-        coin: 5
+        exp: 15,
+        coin: 15
+    }
+];
+
+const dungeon_equipmentEnum = {
+    NONE: 0,
+    ORAGAMISWORD: 1
+};
+
+const dungeon_equipmentTypeEnum = {
+    NONE: 0,
+    WEAPON: 1,
+    SHIELD: 2,
+    ACCESSORY: 3
+};
+
+/*Array of data structures for equipment
+-----
+idNumber: The idNumber according to its position in the array. dungeon_equipmentEnum should match this
+name: String containing displayed equipment name.
+description: String containing the description
+imageLink: The name of the image stored in ../images/dungeon/
+imageCache: Containins a pre-loaded version of the image used to draw on the canvas
+type: Equipment type, a value of dungeon_equipmentTypeEnum
+atk: Optional parameter for the amount of passive ATK bonus
+def: Optional parameter for the amount of passive DEF bonus
+-----*/
+const dungeon_equipment = [
+    {
+        idNumber: dungeon_equipmentEnum.NONE,
+        name: "",
+        description: "",
+        imageLink: "",
+        imageCache: null,
+        type: dungeon_equipmentTypeEnum.NONE
+    },
+    {
+        idNumber: dungeon_equipmentEnum.ORAGAMISWORD,
+        name: "Oragami Sword",
+        description: "This carefully folded sword will deliver painful papercuts to your foes.</p><p>Attack + 2</p>",
+        imageLink: "",
+        imageCache: null,
+        type: dungeon_equipmentTypeEnum.WEAPON,
+        atk: 2
     }
 ];
 
@@ -285,33 +383,32 @@ const dungeon_dungeons = [
             dungeon_treasureEnum.ORIGAMISWORD,
             dungeon_treasureEnum.BLUECOINS1
         ],
-        height: 20,
-        width: 20,
+        height: 19,
+        width: 17,
         style: dungeon_styleEnum.BRICK,
         outOfBounds: dungeon_terrainEnum.WALL,
         layout: [
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 4, 0, 0, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 0, 2000, 0, 0, 1, 1, 0, 2000, 0, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 0, 0, 0, 1, 2001, 1, 1, 1, 1, 0, 2001, 0, 1001, 0, 1,
-            1, 1, 1, 1, 1, 0, 100, 0, 1, 0, 0, 0, 0, 103, 0, 1, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2000, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 103, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 1, 1, 1, 1,
-            1, 1, 0, 0, 0, 1, 1, 0, 1, 2001, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1,
-            1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1,
-            1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+            1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 0, 4, 0, 0, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 0, 2000, 0, 0, 1, 1, 0, 2000, 0, 1, 1, 1, 1,
+            1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0,
+            1, 1, 1, 0, 0, 0, 1, 2001, 1, 1, 1, 1, 0, 2001, 0, 1000, 0,
+            1, 1, 1, 0, 100, 0, 1, 0, 0, 0, 0, 103, 0, 1, 0, 0, 0,
+            1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 2000, 1, 1, 1, 1, 1, 1, 1,
+            0, 103, 0, 1, 1, 1, 1, 1, 1, 103, 1, 1, 1, 1, 1, 1, 1,
+            108, 0, 109, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 1, 1, 1,
+            0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1,
+            1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 4, 1, 1, 1,
+            1, 0, 0, 2000, 0, 0, 1, 1, 2001, 1, 1, 1, 0, 0, 0, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1001, 0, 1, 1,
+            1, 1, 1, 1, 0, 0, 0, 1, 2001, 1, 1, 1, 0, 0, 0, 1, 1,
+            1, 1, 1, 1, 0, 1002, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         ],
-        startX: 9,
+        startX: 7,
         startY: 0
     }
 ];

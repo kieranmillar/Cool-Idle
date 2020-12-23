@@ -68,8 +68,8 @@
 					<hr>
 					<h2>Level and Experience</h2>
 
-					<p>The aim of the game is to increase your level. At the top of the screen you will see your level and the experience needed to reach the next level. Interacting with the gameplay features you unlock will lead to ways to gain more experience.</p>
-					<p>As your level goes up, parts of each gameplay feature will become more powerful. Progress in each feature so you can gain experience and improve your level, which will in turn have an impact on all features.</p>
+					<p>The aim of the game is to increase your level. At the top of the screen you will see your level and the EXP needed to reach the next level. Interacting with the gameplay features you unlock will lead to ways to gain more EXP.</p>
+					<p>As your level goes up, parts of each gameplay feature will become more powerful. Progress in each feature so you can gain EXP and improve your level, which will in turn have an impact on all features.</p>
 
 					<hr>
 					<h2>Coins</h2>
@@ -91,15 +91,16 @@
 					<div id="help_kingdom" class="help">
 						<hr>
 						<h2>Kingdom</h2>
-						<p><strong>Level bonus:</strong> All resource gain except exp and coins is multiplied by your level.</p>
-						<p>Build and place buildings which produce resources every second. Use these resources to build more buildings, or unlock upgrades. The output of buildings can often be improved by building them on, or next to, various terrain features or other buildings. The resources produced by buildings can also include experience and coins.</p>
+						<p><strong>Level bonus:</strong> All resource gain except EXP and coins is multiplied by your level.</p>
+						<p>Build and place buildings which produce resources every second. Use these resources to build more buildings, or unlock upgrades. The output of buildings can often be improved by building them on, or next to, various terrain features or other buildings. The resources produced by buildings can also include EXP and coins.</p>
 					</div>
 
 					<div id="help_dungeon" class="help">
 						<hr>
 						<h2>Dungeon</h2>
 						<p><strong>Level bonus:</strong> Each level increases your starting HP by 50.</p>
-						<p>TODO: Write this.</p>
+						<p>Equip adventurers to explore dungeons. Kill monsters to gain yellow coins and EXP. Collect keys to open gates. Bump into things to interact with them or fight. You can move by either clicking on the buttons, or by moving with the arrow keys, WASD, or 8462 on the numpad.</p>
+						<p>Inside a dungeon instance, everything is temporary and will reset when you leave, with one exception, treasure chests. Treasure chests contain rewards that exist outside the dungeon instance, from equipment to equip for future dungeon explorations, to whole new dungeons to explore. Each treasure chest can only be opened once, ever.</p>
 					</div>
 
 				</div>
@@ -228,6 +229,9 @@
 							<p>Yellow Keys: <span id="dungeon_playerYkSpan"></span></p>
 							<p>Blue Keys: <span id="dungeon_playerBkSpan"></span></p>
 							<p>Red Keys: <span id="dungeon_playerRkSpan"></span></p>
+							<p>Weapon: <span id="dungeon_playerWeaponSpan"></span></p>
+							<p>Shield: <span id="dungeon_playerShieldSpan"></span></p>
+							<p>Accessory: <span id="dungeon_playerAccessorySpan"></span></p>
 						</div>
 						<div id="dungeon_dungeonColumn" class="dungeon_column">
 							<canvas id="dungeon_canvas" width="550" height="550">Your browser doesn't support canvases. I'm afraid you won't be able to play this game. Please upgrade to a better browser.</canvas>
@@ -244,8 +248,7 @@
 		</div>
 		<div id="modal">
 			<div id="modal_content">
-				<img id="modal_image"/>
-				<h1 id="modal_title"></h1>
+				<h1><img id="modal_image"/><span id="modal_title"></span></h1>
 				<p id="modal_text"></p>
 			</div>
 		</div>

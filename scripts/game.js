@@ -49,6 +49,9 @@ var game = {
         upgrades: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
     dungeon: {
+        weapon: 0,
+        shield: 0,
+        accessory: 0,
         treasures: [0, 0, 0]
     }
 };

@@ -4,6 +4,9 @@ const dungeon_playerDefSpan = $("#dungeon_playerDefSpan");
 const dungeon_playerYkSpan = $("#dungeon_playerYkSpan");
 const dungeon_playerBkSpan = $("#dungeon_playerBkSpan");
 const dungeon_playerRkSpan = $("#dungeon_playerRkSpan");
+const dungeon_playerWeaponSpan = $("#dungeon_playerWeaponSpan");
+const dungeon_playerShieldSpan = $("#dungeon_playerShieldSpan");
+const dungeon_playerAccessorySpan = $("#dungeon_playerAccessorySpan");
 const dungeon_canvas = document.getElementById("dungeon_canvas"); //JQuery objects are not canvases, so have to resort to old-school JS
 const dungeon_infoTitle = $("#dungeon_infoTitle");
 const dungeon_infoDescription = $("#dungeon_infoDescription");
@@ -24,6 +27,9 @@ function dungeon_redraw () {
     dungeon_playerYkSpan.text(dungeon_player.yellowKeys);
     dungeon_playerBkSpan.text(dungeon_player.blueKeys);
     dungeon_playerRkSpan.text(dungeon_player.redKeys);
+    dungeon_playerWeaponSpan.text(dungeon_equipment[dungeon_player.weapon].name);
+    dungeon_playerShieldSpan.text(dungeon_equipment[dungeon_player.shield].name);
+    dungeon_playerAccessorySpan.text(dungeon_equipment[dungeon_player.accessory].name);
     dungeon_drawCanvas();
     dungeon_updateInfoPanel(dungeon_infoPanelEnum.PREVIOUS);
 }

@@ -6,7 +6,10 @@ var dungeon_player = {
     def: 0,
     yellowKeys: 0,
     blueKeys: 0,
-    redKeys: 0
+    redKeys: 0,
+    weapon: 0,
+    shield: 0,
+    accessory: 0
 };
 var dungeon_currentDungeon;
 var dungeon_layout = [];
@@ -51,6 +54,27 @@ function dungeon_begin(dungeon) {
     dungeon_player.yellowKeys = 0;
     dungeon_player.blueKeys = 0;
     dungeon_player.redKeys = 0;
+    dungeon_player.weapon = game.dungeon.weapon;
+    dungeon_player.shield = game.dungeon.shield;
+    dungeon_player.accessory = game.dungeon.accessory;
+    if (dungeon_equipment[dungeon_player.weapon].hasOwnProperty("atk")) {
+        dungeon_player.atk += dungeon_equipment[dungeon_player.weapon].atk;
+    }
+    if (dungeon_equipment[dungeon_player.shield].hasOwnProperty("atk")) {
+        dungeon_player.atk += dungeon_equipment[dungeon_player.shield].atk;
+    }
+    if (dungeon_equipment[dungeon_player.accessory].hasOwnProperty("atk")) {
+        dungeon_player.atk += dungeon_equipment[dungeon_player.accessory].atk;
+    }
+    if (dungeon_equipment[dungeon_player.weapon].hasOwnProperty("def")) {
+        dungeon_player.def += dungeon_equipment[dungeon_player.weapon].def;
+    }
+    if (dungeon_equipment[dungeon_player.shield].hasOwnProperty("def")) {
+        dungeon_player.def += dungeon_equipment[dungeon_player.shield].def;
+    }
+    if (dungeon_equipment[dungeon_player.accessory].hasOwnProperty("def")) {
+        dungeon_player.def += dungeon_equipment[dungeon_player.accessory].def;
+    }
 }
 
 //Move the player. Takes the direction as a parameter, which is a lowercase string of one of the 4 ordinal directions
@@ -102,7 +126,9 @@ function dungeon_move (direction) {
             let treasure = dungeon_layout[cell] - 1000;
             if (game.dungeon.treasures[treasure] == 0) {
                 game.dungeon.treasures[treasure] = 1;
-                dungeon_treasures[treasure].effect();
+                if (dungeon_treasures[treasure].hasOwnProperty("effect")) {
+                    dungeon_treasures[treasure].effect();
+                }
                 modal_open("You found " + dungeon_treasures[treasure].name, dungeon_treasures[treasure].image, dungeon_treasures[treasure].description);
                 save();
             }

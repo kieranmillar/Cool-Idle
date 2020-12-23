@@ -259,7 +259,7 @@ function modal_open(title, image, content) {
     id_modal.css("display", "block");
     id_modalTitle.text(title);
     id_modalImage.attr("src", "./images/" + image);
-    id_modalText.text(content);
+    id_modalText.html("<p>" + content + "</p>");
 }
 
 //Closes the modal

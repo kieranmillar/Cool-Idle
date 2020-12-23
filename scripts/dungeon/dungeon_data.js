@@ -90,6 +90,7 @@ const dungeon_items = [
         imageCache: null,
         effect: function () {
             dungeon_player.yellowKeys ++;
+            dungeon_createFloatingText("Yellow Keys + 1", "#FFFF00", 275, 275);
         }
     },
     {
@@ -100,6 +101,7 @@ const dungeon_items = [
         imageCache: null,
         effect: function () {
             dungeon_player.blueKeys ++;
+            dungeon_createFloatingText("Blue Keys + 1", "#0000FF", 275, 275);
         }
     },
     {
@@ -110,6 +112,7 @@ const dungeon_items = [
         imageCache: null,
         effect: function () {
             dungeon_player.redKeys ++;
+            dungeon_createFloatingText("Red Keys + 1", "#FF0000", 275, 275);
         }
     },
     {
@@ -120,7 +123,7 @@ const dungeon_items = [
         imageCache: null,
         effect: function () {
             dungeon_player.hp += 100;
-            dungeon_createDamageNumber(-100, 275, 275);
+            dungeon_createFloatingText(100, "#00FF00", 275, 275);
         }
     },
     {
@@ -131,7 +134,7 @@ const dungeon_items = [
         imageCache: null,
         effect: function () {
             dungeon_player.hp += 500;
-            dungeon_createDamageNumber(-500, 275, 275);
+            dungeon_createFloatingText(500, "#00FF00", 275, 275);
         }
     },
     {
@@ -142,7 +145,7 @@ const dungeon_items = [
         imageCache: null,
         effect: function () {
             dungeon_player.hp += 2000;
-            dungeon_createDamageNumber(-2000, 275, 275);
+            dungeon_createFloatingText(2000, "#00FF00", 275, 275);
         }
     },
     {
@@ -153,7 +156,7 @@ const dungeon_items = [
         imageCache: null,
         effect: function () {
             dungeon_player.hp += 10000;
-            dungeon_createDamageNumber(-10000, 275, 275);
+            dungeon_createFloatingText(10000, "#00FF00", 275, 275);
         }
     },
     {
@@ -164,7 +167,7 @@ const dungeon_items = [
         imageCache: null,
         effect: function () {
             dungeon_player.hp += 50000;
-            dungeon_createDamageNumber(-50000, 275, 275);
+            dungeon_createFloatingText(50000, "#00FF00", 275, 275);
         }
     }
 ];

@@ -8,7 +8,7 @@ const dungeon_canvas = document.getElementById("dungeon_canvas"); //JQuery objec
 const dungeon_infoTitle = $("#dungeon_infoTitle");
 const dungeon_infoDescription = $("#dungeon_infoDescription");
 
-var dungeon_damageNumbers = [];
+var dungeon_floatingTextList = [];
 
 var dungeon_infoPanelPreviousType = dungeon_infoPanelEnum.CELL;
 var dungeon_infoPanelPreviousValue = 0;
@@ -84,24 +84,25 @@ function dungeon_drawCanvas() {
     ctx.drawImage(dungeon_playerImage, 250, 250);
 }
 
-//Create a damage number and add it to the array
-function dungeon_createDamageNumber(damage, x, y) {
-    dungeon_damageNumbers.push(new dungeon_damageNumber(damage, x, y));
+//Create floating text and add it to the array
+function dungeon_createFloatingText(text, colour, x, y) {
+    dungeon_floatingTextList.push(new dungeon_floatingText(text, colour, x, y));
 }
 
-//An object that handles drawing damage numbers to the screen. A negative value means healing and is displayed in green.
-class dungeon_damageNumber {
-    constructor(value, x, y) {
+//An object that stores data for each piece of floating text.
+class dungeon_floatingText {
+    constructor(value, colour, x, y) {
         this.value = value;
+        this.colour = colour;
         this.x = x;
         this.y = y;
         this.lifetime = 50;
     }
 }
 
-//Draws damage numbers, if there are any in the array
-function dungeon_drawDamageNumbers() {
-    if (dungeon_damageNumbers.length == 0) {
+//Draws floating text, if there are any in the array
+function dungeon_drawFloatingText() {
+    if (dungeon_floatingTextList.length == 0) {
         return;
     }
     dungeon_redraw();
@@ -114,26 +115,21 @@ function dungeon_drawDamageNumbers() {
     if (game.settings[settingEnum.DUNGEONBATTLESPEED] == 0) {
         speed = 1;
     }
-    dungeon_damageNumbers.forEach(number => {
-        if (number.value > 0) {
-            ctx.fillStyle = "#FF0000";
-        }
-        else {
-            ctx.fillStyle = "#00FF00";
-        }
-        ctx.fillText(Math.abs(number.value), number.x, number.y);
+    dungeon_floatingTextList.forEach(text => {
+        ctx.fillStyle = text.colour;
+        ctx.fillText(text.value, text.x, text.y);
         ctx.fillStyle = "#000000";
-        ctx.strokeText(Math.abs(number.value), number.x, number.y);
-        number.y -= speed;
-        number.lifetime -= speed;
-        if (number.lifetime <= 0) {
+        ctx.strokeText(text.value, text.x, text.y);
+        text.y -= speed;
+        text.lifetime -= speed;
+        if (text.lifetime <= 0) {
             count ++;
         }
     });
     if (count > 0) {
-        dungeon_damageNumbers = dungeon_damageNumbers.slice(count, dungeon_damageNumbers.length);
+        dungeon_floatingTextList = dungeon_floatingTextList.slice(count, dungeon_floatingTextList.length);
     }
-    if (dungeon_damageNumbers.length == 0) {
+    if (dungeon_floatingTextList.length == 0) {
         dungeon_redraw();
     }
 }

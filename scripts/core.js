@@ -49,7 +49,7 @@ function gameLoop () {
         ticksSinceSave ++;
     }
     if (activeTab == "dungeon") {
-        dungeon_drawDamageNumbers();
+        dungeon_drawFloatingText();
     }
     //TODO: Put topbar display code into its own function, so can update whenever we gain or spend exp or coins
     game.previousTick = currentTick;

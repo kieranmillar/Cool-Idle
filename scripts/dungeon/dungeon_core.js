@@ -74,7 +74,6 @@ function dungeon_move (direction) {
             dX = 1;
             break;
     }
-    let move = false;
     let cellX = dungeon_player.x + dX;
     let cellY = dungeon_player.y + dY;
     let cell = cellX  + (cellY * dungeon_dungeons[dungeon_currentDungeon].width);
@@ -83,20 +82,20 @@ function dungeon_move (direction) {
     && cellY >= 0
     && cellY < dungeon_dungeons[dungeon_currentDungeon].height) {
         if (dungeon_layout[cell] == dungeon_terrainEnum.FLOOR) {
-            move = true;
+            dungeon_processMove(dX, dY);
         }
         if (dungeon_layout[cell] == dungeon_terrainEnum.GATEYELLOW) {
             if (dungeon_player.yellowKeys > 0) {
                 dungeon_player.yellowKeys --;
+                dungeon_createFloatingText("Yellow Keys - 1", "#FFFF00", 275, 275);
                 dungeon_layout[cell] = dungeon_terrainEnum.FLOOR;
-                dungeon_redraw ();
             }
         }
         else if (dungeon_layout[cell] >= 100 && dungeon_layout[cell] < 1000) {
             //item
+            dungeon_processMove(dX, dY);
             dungeon_items[dungeon_layout[cell] - 100].effect();
             dungeon_layout[cell] = dungeon_terrainEnum.FLOOR;
-            move = true;
         }
         else if (dungeon_layout[cell] >= 1000 && dungeon_layout[cell] < 2000) {
             //treasure
@@ -106,23 +105,24 @@ function dungeon_move (direction) {
                 dungeon_treasures[treasure].effect();
                 modal_open("You found " + dungeon_treasures[treasure].name, dungeon_treasures[treasure].image, dungeon_treasures[treasure].description);
                 save();
-                dungeon_redraw ();
             }
         }
         else if (dungeon_layout[cell] >= 2000 && dungeon_layout[cell] < 3000) {
             //enemy
             dungeon_startCombat(dungeon_layout[cell] - 2000, cell);
         }
-        if (move) {
-            dungeon_player.x = cellX;
-            dungeon_player.y = cellY;
-            dungeon_damageNumbers.forEach(number => {
-                number.x -= dX * 50;
-                number.y -= dY * 50;
-            });
-            dungeon_redraw ();
-        }
+        dungeon_redraw ();
     }
+}
+
+//Process movement
+function dungeon_processMove(dX, dY) {
+    dungeon_player.x += dX;
+    dungeon_player.y += dY;
+    dungeon_floatingTextList.forEach(text => {
+        text.x -= dX * 50;
+        text.y -= dY * 50;
+    });
 }
 
 //Initiate combat with an enemy. Takes the enemy idNumber and its map cell position as parameters
@@ -140,7 +140,7 @@ function dungeon_startCombat (enemyType, cell) {
         }
         dungeon_player.hp -= damage;
         if (damage > 0) {
-            dungeon_createDamageNumber(damage, 275, 275);
+            dungeon_createFloatingText(damage, "#FF0000", 275, 275);
         }
         if (dungeon_player.hp > 0) {
             dungeon_winCombat();
@@ -172,7 +172,7 @@ async function dungeon_playerAttacks() {
         dungeon_enemyHp -= damage;
         let enemyX = ((dungeon_enemyCell % dungeon_dungeons[dungeon_currentDungeon].width) - dungeon_player.x)*50 + 275;
         let enemyY = (Math.floor(dungeon_enemyCell / dungeon_dungeons[dungeon_currentDungeon].width) - dungeon_player.y)*50 + 275;
-        dungeon_createDamageNumber(damage, enemyX, enemyY);
+        dungeon_createFloatingText(damage, "#FF0000", enemyX, enemyY);
     }
     if (dungeon_checkForCombatAbort(damage)) {
         dungeon_busy = false;
@@ -196,7 +196,7 @@ async function dungeon_enemyAttacks() {
     var damage = Math.max(0, dungeon_enemies[dungeon_enemyType].atk - dungeon_player.def);
     if (damage > 0) {
         dungeon_player.hp -= damage;
-        dungeon_createDamageNumber(damage, 275, 275);
+        dungeon_createFloatingText(damage, "#FF0000", 275, 275);
     }
     if (dungeon_checkForCombatAbort(damage)) {
         dungeon_busy = false;

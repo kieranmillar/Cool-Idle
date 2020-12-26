@@ -19,16 +19,21 @@ var dungeon_enemyCell = 0;
 var dungeon_busy = false;
 var dungeon_noDamageDealt = 0;
 
+const dungeon_modeEnum = {
+    PREPARE: 0,
+    EXPLORE: 1,
+    PUZZLE: 2
+};
+var dungeon_mode = dungeon_modeEnum.PREPARE;
+
 const dungeon_infoPanelEnum = {
     PREVIOUS: 0,
     CELL: 1
-}
+};
 
 //This is run once when the game is loaded
 //It creates HTML elements and also calculates things that aren't stored in the game object
 function dungeon_init() {
-    dungeon_begin(dungeon_dungeonEnum.BOOTCAMP);
-
     //Handle the mouse interacting with the canvas
     dungeon_canvas.addEventListener('mousemove', function(evt) {
         var rect = dungeon_canvas.getBoundingClientRect();
@@ -39,10 +44,26 @@ function dungeon_init() {
         cell = cellX + cellY * dungeon_dungeons[dungeon_currentDungeon].width;
         dungeon_mousedOverCell(cell);
     }, false);
+
+    //Dynamically create dungeon list
+    dungeon_dungeons.forEach(dungeon => {
+        var newElement = $('<div></div>');
+        newElement.attr('id', dungeon.id);
+        newElement.addClass("dungeon_dungeonRow");
+        let htmlText = "<span class='dungeon_dungeonRowName'>" + dungeon.name + "</span>";
+        htmlText += "<span class='dungeon_dungeonRowTreasures'><span id='" + dungeon.id + "Treasures'></span> / " + dungeon.treasures.length + "</span>";
+        htmlText += "<button type='button' class='button clickable' onclick='dungeon_explore(" + dungeon.idNumber + ")'>EXPLORE</button>";
+        htmlText += "<button type='button' class='button clickable' onclick='dungeon_puzzle(" + dungeon.idNumber + ")'>PUZZLE</button>";
+		newElement.html(htmlText);
+        $("#dungeon_dungeonList").append(newElement);
+        dungeon.idLink = $("#" + dungeon.id);
+        dungeon.treasureLink = $("#" + dungeon.id + "Treasures");
+    });
 }
 
-//Start a new dungeon instance. Takes the dungeon idNumber as a parameter
-function dungeon_begin(dungeon) {
+//Start a new dungeon instance in explore mode. Takes the dungeon idNumber as a parameter
+function dungeon_explore(dungeon) {
+    dungeon_mode = dungeon_modeEnum.EXPLORE;
     dungeon_busy = false;
     dungeon_currentDungeon = dungeon;
     dungeon_layout = dungeon_dungeons[dungeon].layout.slice();
@@ -54,26 +75,69 @@ function dungeon_begin(dungeon) {
     dungeon_player.yellowKeys = 0;
     dungeon_player.blueKeys = 0;
     dungeon_player.redKeys = 0;
-    dungeon_player.weapon = game.dungeon.weapon;
-    dungeon_player.shield = game.dungeon.shield;
-    dungeon_player.accessory = game.dungeon.accessory;
-    if (dungeon_equipment[dungeon_player.weapon].hasOwnProperty("atk")) {
-        dungeon_player.atk += dungeon_equipment[dungeon_player.weapon].atk;
+    dungeon_player.weapon = dungeon_equipmentEnum.NONE;
+    dungeon_player.shield = dungeon_equipmentEnum.NONE;
+    dungeon_player.accessory = dungeon_equipmentEnum.NONE;
+    dungeon_swapEquipment(game.dungeon.weapon);
+    dungeon_swapEquipment(game.dungeon.shield);
+    dungeon_swapEquipment(game.dungeon.accessory);
+    dungeon_redraw();
+}
+
+//Start a new dungeon instance in puzzle mode. Takes the dungeon idNumber as a parameter
+function dungeon_puzzle(dungeon) {
+    dungeon_mode = dungeon_modeEnum.PUZZLE;
+    dungeon_busy = false;
+    dungeon_currentDungeon = dungeon;
+    dungeon_layout = dungeon_dungeons[dungeon].layout.slice();
+    dungeon_player.x = dungeon_dungeons[dungeon].startX;
+    dungeon_player.y = dungeon_dungeons[dungeon].startY;
+    dungeon_player.hp = dungeon_dungeons[dungeon].puzzleHp;
+    dungeon_player.atk = dungeon_dungeons[dungeon].puzzleAtk;
+    dungeon_player.def = dungeon_dungeons[dungeon].puzzleDef;
+    dungeon_player.yellowKeys = 0;
+    dungeon_player.blueKeys = 0;
+    dungeon_player.redKeys = 0;
+    dungeon_player.weapon = dungeon_equipmentEnum.NONE;
+    dungeon_player.shield = dungeon_equipmentEnum.NONE;
+    dungeon_player.accessory = dungeon_equipmentEnum.NONE;
+    dungeon_swapEquipment(dungeon_dungeons[dungeon].puzzleWeapon);
+    dungeon_swapEquipment(dungeon_dungeons[dungeon].puzzleShield);
+    dungeon_swapEquipment(dungeon_dungeons[dungeon].puzzleAccessory);
+    dungeon_redraw();
+}
+
+//Swap an equipment item. Argument is the equipment from dungeon_equipmentEnum
+function dungeon_swapEquipment(equipment) {
+    let oldEquip;
+    switch (dungeon_equipment[equipment].type) {
+        case dungeon_equipmentTypeEnum.WEAPON:
+            oldEquip = dungeon_player.weapon;
+            dungeon_player.weapon = equipment;
+            break;
+        case dungeon_equipmentTypeEnum.SHIELD:
+            oldEquip = dungeon_player.shield;
+            dungeon_player.shield = equipment;
+            break;
+        case dungeon_equipmentTypeEnum.ACCESSORY:
+            oldEquip = dungeon_player.accessory;
+            dungeon_player.accessory = equipment;
+            break;
+        case dungeon_equipmentTypeEnum.NONE:
+        default:
+            oldEquip = dungeon_equipmentEnum.NONE;
     }
-    if (dungeon_equipment[dungeon_player.shield].hasOwnProperty("atk")) {
-        dungeon_player.atk += dungeon_equipment[dungeon_player.shield].atk;
+    if (dungeon_equipment[oldEquip].hasOwnProperty("atk")) {
+        dungeon_player.atk -= dungeon_equipment[oldEquip].atk;
     }
-    if (dungeon_equipment[dungeon_player.accessory].hasOwnProperty("atk")) {
-        dungeon_player.atk += dungeon_equipment[dungeon_player.accessory].atk;
+    if (dungeon_equipment[equipment].hasOwnProperty("atk")) {
+        dungeon_player.atk += dungeon_equipment[equipment].atk;
     }
-    if (dungeon_equipment[dungeon_player.weapon].hasOwnProperty("def")) {
-        dungeon_player.def += dungeon_equipment[dungeon_player.weapon].def;
+    if (dungeon_equipment[oldEquip].hasOwnProperty("def")) {
+        dungeon_player.def -= dungeon_equipment[oldEquip].def;
     }
-    if (dungeon_equipment[dungeon_player.shield].hasOwnProperty("def")) {
-        dungeon_player.def += dungeon_equipment[dungeon_player.shield].def;
-    }
-    if (dungeon_equipment[dungeon_player.accessory].hasOwnProperty("def")) {
-        dungeon_player.def += dungeon_equipment[dungeon_player.accessory].def;
+    if (dungeon_equipment[equipment].hasOwnProperty("def")) {
+        dungeon_player.def += dungeon_equipment[equipment].def;
     }
 }
 
@@ -261,14 +325,27 @@ function dungeon_winCombat() {
     dungeon_layout[dungeon_enemyCell] = dungeon_terrainEnum.FLOOR;
     gainExp(dungeon_enemies[dungeon_enemyType].exp);
     gainYellowCoins(dungeon_enemies[dungeon_enemyType].coin);
-    dungeon_redraw ();
+    dungeon_redraw();
     dungeon_busy = false;
 }
 
 //The player loses combat
 function dungeon_loseCombat() {
-    dungeon_begin(dungeon_currentDungeon);
-    dungeon_redraw ();
+    switch (dungeon_mode) {
+        case dungeon_modeEnum.EXPLORE:
+            dungeon_explore(dungeon_currentDungeon);
+            break;
+        case dungeon_modeEnum.PUZZLE:
+            dungeon_puzzle(dungeon_currentDungeon);
+            break;
+    }
+    dungeon_redraw();
+}
+
+//Leave an active dungeon instance
+function dungeon_leave() {
+    dungeon_mode = dungeon_modeEnum.PREPARE;
+    dungeon_redraw();
 }
 
 //This is called every time you mouse over a dungeon tile. Takes the cell number as an argument

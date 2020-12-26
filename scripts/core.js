@@ -260,15 +260,15 @@ function checkKey(event) {
 
 //Opens the modal and sets what it shhould display
 function modal_open(title, image, content) {
-    id_modal.css("display", "block");
     id_modalTitle.text(title);
     id_modalImage.attr("src", "./images/" + image);
     id_modalText.html("<p>" + content + "</p>");
+    id_modal.show();
 }
 
 //Closes the modal
 function modal_close() {
-    id_modal.css("display", "none");
+    id_modal.hide();
 }
 
 //A helpful function for delaying things for e.g. animations

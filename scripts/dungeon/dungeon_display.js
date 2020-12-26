@@ -1,3 +1,5 @@
+const dungeon_view_prepare = $("#dungeon_view_prepare");
+const dungeon_view_dungeon = $("#dungeon_view_dungeon");
 const dungeon_playerHpSpan = $("#dungeon_playerHpSpan");
 const dungeon_playerAtkSpan = $("#dungeon_playerAtkSpan");
 const dungeon_playerDefSpan = $("#dungeon_playerDefSpan");
@@ -21,6 +23,46 @@ function dungeon_redraw () {
 	if (activeTab != "dungeon") {
 		return;
     }
+    if (dungeon_mode == dungeon_modeEnum.PREPARE) {
+        dungeon_view_prepare.show();
+        dungeon_view_dungeon.hide();
+        dungeon_drawDungeonList();
+    } else {
+        dungeon_view_prepare.hide();
+        dungeon_view_dungeon.show();
+        dungeon_updatePlayerStats();
+        dungeon_drawCanvas();
+        dungeon_updateInfoPanel(dungeon_infoPanelEnum.PREVIOUS);
+    }
+}
+
+//Draws the list of dungeons
+function dungeon_drawDungeonList() {
+    if (activeTab != "dungeon") {
+		return;
+    }
+    for (let i = 0; i < dungeon_dungeons.length; i++) {
+		if (dungeon_dungeons[i].unlocked) {
+            dungeon_dungeons[i].idLink.show();
+            let treasureCount = 0;
+            dungeon_dungeons[i].treasures.forEach (treasure => {
+                if (game.dungeon.treasures[treasure]) {
+                    treasureCount++;
+                }
+            });
+            dungeon_dungeons[i].treasureLink.text(treasureCount);
+        }
+        else {
+            dungeon_dungeons[i].idLink.hide();
+        }
+	}
+}
+
+//Redraws the player stats
+function dungeon_updatePlayerStats() {
+    if (activeTab != "dungeon") {
+		return;
+    }
     dungeon_playerHpSpan.text(dungeon_player.hp);
     dungeon_playerAtkSpan.text(dungeon_player.atk);
     dungeon_playerDefSpan.text(dungeon_player.def);
@@ -30,8 +72,6 @@ function dungeon_redraw () {
     dungeon_playerWeaponSpan.text(dungeon_equipment[dungeon_player.weapon].name);
     dungeon_playerShieldSpan.text(dungeon_equipment[dungeon_player.shield].name);
     dungeon_playerAccessorySpan.text(dungeon_equipment[dungeon_player.accessory].name);
-    dungeon_drawCanvas();
-    dungeon_updateInfoPanel(dungeon_infoPanelEnum.PREVIOUS);
 }
 
 //Redraws the canvas
@@ -111,7 +151,7 @@ function dungeon_drawFloatingText() {
     if (dungeon_floatingTextList.length == 0) {
         return;
     }
-    dungeon_redraw();
+    dungeon_drawCanvas();
     var ctx = dungeon_canvas.getContext("2d");
     ctx.font = "30px Comic Sans MS";
     ctx.textAlign = "center";
@@ -136,7 +176,7 @@ function dungeon_drawFloatingText() {
         dungeon_floatingTextList = dungeon_floatingTextList.slice(count, dungeon_floatingTextList.length);
     }
     if (dungeon_floatingTextList.length == 0) {
-        dungeon_redraw();
+        dungeon_drawCanvas();
     }
 }
 

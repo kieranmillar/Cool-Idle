@@ -70,10 +70,11 @@ const dungeon_itemEnum = {
     POTIONMEDIUM: 5,
     POTIONLARGE: 6,
     POTIONHUGE: 7,
-    ATKTINY:8,
-    DEFTINY:9,
-    ATKSMALL:10,
-    DEFSMALL:11
+    ATKTINY: 8,
+    DEFTINY: 9,
+    ATKSMALL: 10,
+    DEFSMALL: 11,
+    ORAGAMISWORD: 12
 };
 
 /*Array of data structures for collectable items found in the dungeons
@@ -208,7 +209,7 @@ const dungeon_items = [
         }
     },
     {
-        idNumber: dungeon_itemEnum.DEFTINY,
+        idNumber: dungeon_itemEnum.DEFSMALL,
         name: "Tiny Defense Gem",
         description: "Increases your Defense by 3",
         imageLink: "def_small.png",
@@ -216,6 +217,16 @@ const dungeon_items = [
         effect: function () {
             dungeon_player.def += 3;
             dungeon_createFloatingText("Defense + 3", "#0000FF", 275, 275);
+        }
+    },
+    {
+        idNumber: dungeon_itemEnum.ORAGAMISWORD,
+        name: "Oragami Sword",
+        description: "This carefully folded sword will deliver painful papercuts to your foes.</p><p>Weapon</p><p>Attack + 2",
+        imageLink: "oragami_sword.png",
+        imageCache: null,
+        effect: function () {
+            dungeon_swapEquipment(dungeon_equipmentEnum.ORAGAMISWORD);
         }
     }
 ];
@@ -233,13 +244,15 @@ name: String containing displayed treasure name.
 image: The image of the treasure stored in ../images/
 description: The description of the treasure that is shown when you open the chest
 effect: optional - a lambda function with any extra effect that happens immediately upon gaining the treasure.
+puzzleDrop: A dungeon_itemEnum of the item dropped by collecting the puzzle piece replacing this treasure in Puzzle Mode
 -----*/
 const dungeon_treasures = [
     {
         idNumber: dungeon_treasureEnum.ORIGAMISWORD,
         name: "an Origami Sword",
-        image: "",
-        description: "This carefully folded sword will deliver painful papercuts to your foes.</p><p><strong>This has been added to your starting equipment inventory.</strong></p><p>Starting equipment can be equiped outside of a dungeon instance and brought into any future dungeon instance. You have unlimited copies, even if you swap equipment inside a dungeon instance, so feel free to use it whenever you want."
+        image: "dungeon/oragami_sword.png",
+        description: "This carefully folded sword will deliver painful papercuts to your foes.</p><p><strong>This has been added to your starting equipment inventory.</strong></p><p>Starting equipment can be equiped outside of a dungeon instance and brought into any future dungeon instance. You have unlimited copies, even if you swap equipment inside a dungeon instance, so feel free to use it whenever you want.",
+        puzzleDrop: dungeon_itemEnum.ORAGAMISWORD
     },
     {
         idNumber: dungeon_treasureEnum.BLUECOINS01,
@@ -248,13 +261,15 @@ const dungeon_treasures = [
         description: "You found a cache of 100 blue coins!",
         effect: function () {
             gainBlueCoins (100);
-        }
+        },
+        puzzleDrop: dungeon_itemEnum.POTIONTINY
     },
     {
         idNumber: dungeon_treasureEnum.UNLOCKDUNGEONRIVER,
         name: "a map to a nearby river",
         image: "dungeon/map.png",
-        description: "You find a map to a nearby river, alongside a note asking you not to steal the treasure that they've hidden there.</p><p>Unfortunately for them, they didn't ask nicely enough.</p><p><strong>You have unlocked a new dungeon!</strong>"
+        description: "You find a map to a nearby river, alongside a note asking you not to steal the treasure that they've hidden there.</p><p>Unfortunately for them, they didn't ask nicely enough.</p><p><strong>You have unlocked a new dungeon!</strong>",
+        puzzleDrop: dungeon_itemEnum.ATKSMALL
     }
 ];
 
@@ -305,7 +320,8 @@ const dungeon_enemies = [
 
 const dungeon_equipmentEnum = {
     NONE: 0,
-    ORAGAMISWORD: 1
+    ORAGAMISWORD: 1,
+    PAPERBAG: 2
 };
 
 const dungeon_equipmentTypeEnum = {
@@ -338,11 +354,20 @@ const dungeon_equipment = [
     {
         idNumber: dungeon_equipmentEnum.ORAGAMISWORD,
         name: "Oragami Sword",
-        description: "This carefully folded sword will deliver painful papercuts to your foes.</p><p>Attack + 2</p>",
-        imageLink: "",
+        description: "This carefully folded sword will deliver painful papercuts to your foes.</p><p>Attack + 2",
+        imageLink: "oragami_sword.png",
         imageCache: null,
         type: dungeon_equipmentTypeEnum.WEAPON,
         atk: 2
+    },
+    {
+        idNumber: dungeon_equipmentEnum.PAPERBAG,
+        name: "Paper Bag",
+        description: "Let's see your opponent fight their way past this!</p><p>Defense + 3",
+        imageLink: "",
+        imageCache: null,
+        type: dungeon_equipmentTypeEnum.SHIELD,
+        def: 3
     }
 ];
 
@@ -357,6 +382,7 @@ name: String containing displayed dungeon name.
 id: String containing the html id for the container div in the dungeon list
 idLink: should be included but set to null. dungeon_init() will set this to the html container div element so we don't have to search the DOM for it again
 treasureLink: should be included but set to null. dungeon_init() will set this to the html container div element so we don't have to search the DOM for it again
+puzzleLink: should be included but set to null. dungeon_init() will set this to the html button element so we don't have to search the DOM for it again
 unlocked: Boolean if the dungeon has been unlocked. This should show the unlock state at the start of a new game, dungeon_unlocks() may change it later
 treasures: An array of treasures that can be found in this dungeon
 height: The height of the dungeon layout in cells
@@ -370,6 +396,12 @@ layout: An array of the dungeon's layout. See the relevant data arrays for more 
 --2000-9999: enemies
 startX: the x position of the player's start location. 0-indexed
 startY: the y position of the player's start location. 0-indexed
+puzzleHp: the base hp value for the player in Puzzle Mode
+puzzleAtk: the base attack value for the player in Puzzle Mode
+puzzleDef: the base defense value for the player in Puzzle Mode
+puzzleWeapon: the starting weapon for the player in Puzzle Mode
+puzzleShield: the starting shield for the player in Puzzle Mode
+puzzleAccessory: the starting accessory for the player in Puzzle Mode
 -----*/
 const dungeon_dungeons = [
     {
@@ -378,19 +410,21 @@ const dungeon_dungeons = [
         id: "dungeon_bootcamp",
         idLink: null,
         treasureLink: null,
+        puzzleLink: null,
         unlocked: true,
         treasures: [
             dungeon_treasureEnum.ORIGAMISWORD,
-            dungeon_treasureEnum.BLUECOINS1
+            dungeon_treasureEnum.BLUECOINS01,
+            dungeon_treasureEnum.UNLOCKDUNGEONRIVER
         ],
         height: 19,
         width: 17,
         style: dungeon_styleEnum.BRICK,
         outOfBounds: dungeon_terrainEnum.WALL,
         layout: [
-            1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 103, 0, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 4, 0, 0, 0, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 103, 0, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 0, 4, 0, 0, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 0, 2000, 0, 0, 1, 1, 0, 2000, 0, 1, 1, 1, 1,
             1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0,
@@ -398,17 +432,23 @@ const dungeon_dungeons = [
             1, 1, 1, 0, 100, 0, 1, 0, 0, 0, 0, 103, 0, 1, 0, 0, 0,
             1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 2000, 1, 1, 1, 1, 1, 1, 1,
-            0, 103, 0, 1, 1, 1, 1, 1, 1, 103, 1, 1, 1, 1, 1, 1, 1,
-            108, 0, 109, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 1, 1, 1,
-            0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1,
+            0, 100, 0, 1, 1, 1, 1, 1, 1, 103, 1, 1, 1, 1, 1, 1, 1,
+            108, 0, 109, 1, 1, 0, 0, 0, 0, 0, 2000, 0, 2000, 0, 1, 1, 1,
+            0, 103, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1,
             1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 4, 1, 1, 1,
             1, 0, 0, 2000, 0, 0, 1, 1, 2001, 1, 1, 1, 0, 0, 0, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1001, 0, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 103, 1, 1, 1, 0, 1001, 0, 1, 1,
             1, 1, 1, 1, 0, 0, 0, 1, 2001, 1, 1, 1, 0, 0, 0, 1, 1,
             1, 1, 1, 1, 0, 1002, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         ],
         startX: 7,
-        startY: 0
+        startY: 0,
+        puzzleHp: 250,
+        puzzleAtk: 5,
+        puzzleDef: 0,
+        puzzleWeapon: dungeon_equipmentEnum.NONE,
+        puzzleShield: dungeon_equipmentEnum.PAPERBAG,
+        puzzleAccessory: dungeon_equipmentEnum.NONE
     }
 ];

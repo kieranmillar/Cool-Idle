@@ -14,7 +14,7 @@
 		content="Kieran Millar" />
 		
 		<meta name="revised"
-		content="Kieran Millar, 23/12/2020" />
+		content="Kieran Millar, 26/12/2020" />
 		
 		<link rel="stylesheet" type="text/css" href="styles/css/main.css">
 		
@@ -207,10 +207,20 @@
 				<div id="loc_dungeon" class="location">
 					<div id="dungeon_view_prepare">
 						<div id="dungeon_dungeonList">
-
 						</div>
 						<div id="dungeon_loadout">
-
+							<p>HP: <span id="dungeon_loadoutHpSpan"></span></p>
+							<p>Attack: <span id="dungeon_loadoutAtkSpan"></span></p>
+							<p>Defense: <span id="dungeon_loadoutDefSpan"></span></p>
+							<p>Weapon: <span id="dungeon_loadoutWeaponSpan"></span></p>
+							<p>Shield: <span id="dungeon_loadoutShieldSpan"></span></p>
+							<p>Accessory: <span id="dungeon_loadoutAccessorySpan"></span></p>
+							<h3>Weapons</h3>
+							<div id="dungeon_loadoutWeapons"></div>
+							<h3>Shields</h3>
+							<div id="dungeon_loadoutShields"></div>
+							<h3>Accessories</h3>
+							<div id="dungeon_loadoutAccessories"></div>
 						</div>
 					</div>
 					<div id="dungeon_view_dungeon">
@@ -237,6 +247,9 @@
 							<p>Weapon: <span id="dungeon_playerWeaponSpan"></span></p>
 							<p>Shield: <span id="dungeon_playerShieldSpan"></span></p>
 							<p>Accessory: <span id="dungeon_playerAccessorySpan"></span></p>
+							<div>
+								<button type="button" class="button clickable" onclick="dungeon_leave()">Leave Dungeon</button>
+							</div>
 						</div>
 						<div id="dungeon_dungeonColumn" class="dungeon_column">
 							<canvas id="dungeon_canvas" width="550" height="550">Your browser doesn't support canvases. I'm afraid you won't be able to play this game. Please upgrade to a better browser.</canvas>
@@ -255,6 +268,7 @@
 			<div id="modal_content">
 				<h1><img id="modal_image"/><span id="modal_title"></span></h1>
 				<p id="modal_text"></p>
+				<button type="button" class="button clickable" onclick="modal_close()">OK</button>
 			</div>
 		</div>
 

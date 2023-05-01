@@ -152,8 +152,14 @@ function gainExp(amount) {
     if (levelledUp) {
         id_level.html(game.level);
         id_maxExp.html(displayNum(getMaxExp()));
+
+        cauldron_calculateOutput();
+        kingdom_calculateOutput();
+        if (dungeon_mode == dungeon_modeEnum.PREPARE) {
+            dungeon_player.hp = game.level * 50;
+        }
+
         if (activeTab == "cauldron") {
-            cauldron_calculateOutput();
             cauldron_redraw();
         }
         if (activeTab == "kingdom") {
@@ -161,9 +167,6 @@ function gainExp(amount) {
             kingdom_updateInfoPanel(kingdom_infoPanelEnum.PREVIOUS);
         }
         if (activeTab == "dungeon") {
-            if (dungeon_mode == dungeon_modeEnum.PREPARE) {
-                dungeon_player.hp = game.level * 50;
-            }
             dungeon_redraw();
         }
     }

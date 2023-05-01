@@ -252,6 +252,9 @@ const dungeon_treasures = [
         name: "an Origami Sword",
         image: "dungeon/oragami_sword.png",
         description: "This carefully folded sword will deliver painful papercuts to your foes.</p><p><strong>This has been added to your starting equipment inventory.</strong></p><p>Starting equipment can be equiped outside of a dungeon instance and brought into any future dungeon instance. You have unlimited copies, even if you swap equipment inside a dungeon instance, so feel free to use it whenever you want.",
+        effect: function () {
+            dungeon_unlocks();
+        },
         puzzleDrop: dungeon_itemEnum.ORAGAMISWORD
     },
     {
@@ -269,6 +272,9 @@ const dungeon_treasures = [
         name: "a map to a nearby river",
         image: "dungeon/map.png",
         description: "You find a map to a nearby river, alongside a note asking you not to steal the treasure that they've hidden there.</p><p>Unfortunately for them, they didn't ask nicely enough.</p><p><strong>You have unlocked a new dungeon!</strong>",
+        effect: function () {
+            dungeon_unlocks();
+        },
         puzzleDrop: dungeon_itemEnum.ATKSMALL
     }
 ];

@@ -4,28 +4,28 @@ var dungeon_chestClosedImage;
 var dungeon_chestOpenImage;
 
 //Executes all of the following methods.
-function preloadImages () {
-    return new Promise (resolve => {
+function preloadImages() {
+    return new Promise(resolve => {
         let kingdomTerrain = preloadKingdomTerrainImages();
         let kingdomBuilding = preloadKingdomBuildingImages();
         let dungeonTerrain = preloadDungeonTerrainImages();
         let dungeonItem = preloadDungeonItemImages();
         let dungeonEnemy = preloadDungeonEnemyImages();
         Promise.all([kingdomTerrain, kingdomBuilding, dungeonTerrain, dungeonItem, dungeonEnemy])
-        .then(() => {
-            console.log("All images preloaded");
-            resolve("All images preloaded");
-        });
+            .then(() => {
+                console.log("All images preloaded");
+                resolve("All images preloaded");
+            });
     });
 }
 
 //Pre-loads the terrain images for the kingdom feature so they can be drawn onto a canvas
 function preloadKingdomTerrainImages() {
-    return new Promise (resolve => {
+    return new Promise(resolve => {
         let startTime = Date.now();
 
         let imageLoadedCallback = function () {
-            count ++;
+            count++;
             if (count == kingdom_terrain.length) {
                 console.log("Kingdom terrain images preloaded - " + (Date.now() - startTime));
                 resolve("Kingdom terrain images preloaded");
@@ -43,11 +43,11 @@ function preloadKingdomTerrainImages() {
 
 //Pre-loads the building images for the kingdom feature so they can be drawn onto a canvas
 function preloadKingdomBuildingImages() {
-    return new Promise (resolve => {
+    return new Promise(resolve => {
         let startTime = Date.now();
 
         let imageLoadedCallback = function () {
-            count ++;
+            count++;
             if (count == maxCount) {
                 console.log("Kingdom building images preloaded - " + (Date.now() - startTime));
                 resolve("Kingdom building images preloaded");
@@ -59,17 +59,17 @@ function preloadKingdomBuildingImages() {
         let maxCount = 2; // +1 for fail image
         for (let i = 1; i < kingdom_buildings.length; i++) {
             if (kingdom_buildings[i].singleImage) {
-                maxCount ++;
+                maxCount++;
             }
             else {
                 if (kingdom_buildings[i].hasOwnProperty("imageCachePlains")) {
-                    maxCount ++;
+                    maxCount++;
                 }
                 if (kingdom_buildings[i].hasOwnProperty("imageCacheHills")) {
-                    maxCount ++;
+                    maxCount++;
                 }
                 if (kingdom_buildings[i].hasOwnProperty("imageCacheForest")) {
-                    maxCount ++;
+                    maxCount++;
                 }
             }
         }
@@ -83,9 +83,9 @@ function preloadKingdomBuildingImages() {
             }
             else {
                 if (kingdom_buildings[i].hasOwnProperty("imageCachePlains")) {
-                kingdom_buildings[i].imageCachePlains = new Image();
-                kingdom_buildings[i].imageCachePlains.onload = imageLoadedCallback;
-                kingdom_buildings[i].imageCachePlains.src = './images/kingdom/' + kingdom_buildings[i].imageLink(kingdom_terrainEnum.PLAINS);
+                    kingdom_buildings[i].imageCachePlains = new Image();
+                    kingdom_buildings[i].imageCachePlains.onload = imageLoadedCallback;
+                    kingdom_buildings[i].imageCachePlains.src = './images/kingdom/' + kingdom_buildings[i].imageLink(kingdom_terrainEnum.PLAINS);
                 }
                 if (kingdom_buildings[i].hasOwnProperty("imageCacheHills")) {
                     kingdom_buildings[i].imageCacheHills = new Image();
@@ -107,11 +107,11 @@ function preloadKingdomBuildingImages() {
 
 //Pre-loads the terrain images for the dungeon feature so they can be drawn onto a canvas
 function preloadDungeonTerrainImages() {
-    return new Promise (resolve => {
+    return new Promise(resolve => {
         let startTime = Date.now();
 
         let imageLoadedCallback = function () {
-            count ++;
+            count++;
             if (count == (dungeon_terrain.length * DUNGEON_TOTALSTYLES) + 3) {//+3 for player and chest images
                 console.log("Dungeon terrain images preloaded - " + (Date.now() - startTime));
                 resolve("Dungeon terrain images preloaded");
@@ -143,11 +143,11 @@ function preloadDungeonTerrainImages() {
 
 //Pre-loads the item images for the dungeon feature so they can be drawn onto a canvas
 function preloadDungeonItemImages() {
-    return new Promise (resolve => {
+    return new Promise(resolve => {
         let startTime = Date.now();
 
         let imageLoadedCallback = function () {
-            count ++;
+            count++;
             if (count == dungeon_items.length) {
                 console.log("Dungeon item images preloaded - " + (Date.now() - startTime));
                 resolve("Dungeon item images preloaded");
@@ -165,11 +165,11 @@ function preloadDungeonItemImages() {
 
 //Pre-loads the enemy images for the dungeon feature so they can be drawn onto a canvas
 function preloadDungeonEnemyImages() {
-    return new Promise (resolve => {
+    return new Promise(resolve => {
         let startTime = Date.now();
 
         let imageLoadedCallback = function () {
-            count ++;
+            count++;
             if (count == dungeon_enemies.length) {
                 console.log("Dungeon enemy images preloaded - " + (Date.now() - startTime));
                 resolve("Dungeon enemy images preloaded");

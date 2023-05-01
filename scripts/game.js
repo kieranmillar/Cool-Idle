@@ -6,8 +6,8 @@
 var game = {
     version: 2,
     previousTick: 0,
-	exp: 0,
-	level: 1,
+    exp: 0,
+    level: 1,
     yellowCoins: 0,
     blueCoins: 0,
     greenCoins: 0,
@@ -50,27 +50,23 @@ var game = {
         upgrades: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
     dungeon: {
-        weapon: 0,
-        shield: 0,
-        accessory: 0,
+        weapon: dungeon_equipmentEnum.NONE,
+        shield: dungeon_equipmentEnum.NONE,
+        accessory: dungeon_equipmentEnum.NONE,
         treasures: [0, 0, 0]
     }
 };
 
 //Save the game to local storage
-function save()
-{
-	localStorage.setItem("gameStored", JSON.stringify(game));
+function save() {
+    localStorage.setItem("gameStored", JSON.stringify(game));
 }
 
 //Load the game from local storage
-function load()
-{
-    if (localStorage.getItem("gameStored") != null)
-	{
+function load() {
+    if (localStorage.getItem("gameStored") != null) {
         loadedGame = JSON.parse(localStorage.getItem("gameStored"));
-        if (loadedGame.version < 2)
-        {
+        if (loadedGame.version < 2) {
             alert("The game has updated with a breaking change since you last played. Your save will now be wiped because this is still in alpha. Sorry!");
             wipe(false);
             return;
@@ -78,7 +74,7 @@ function load()
         $.extend(true, game, loadedGame);
     }
     else {
-        game.previousTick = getTick(); 
+        game.previousTick = getTick();
     }
 }
 
@@ -87,12 +83,11 @@ function wipe(ask) {
     if (ask) {
         var confirmation = confirm("Are you sure you want to permanently erase your savefile?");
     }
-    else
-    {
+    else {
         var confirmation = true;
     }
-	if(confirmation === true){
-		localStorage.clear();
-		location.reload(); 
-	}
+    if (confirmation === true) {
+        localStorage.clear();
+        location.reload();
+    }
 }

@@ -13,7 +13,7 @@ var kingdom_claimedTiles = 0;
 //It creates HTML elements for all of the resources/buildings etc. and also calculates things that aren't stored in the game object
 function kingdom_init() {
     //Handle the mouse interacting with the canvas
-    kingdom_canvas.addEventListener('mousemove', function(evt) {
+    kingdom_canvas.addEventListener('mousemove', function (evt) {
         var rect = kingdom_canvas.getBoundingClientRect();
         let x = evt.clientX - rect.left;
         let y = evt.clientY - rect.top;
@@ -21,7 +21,7 @@ function kingdom_init() {
         kingdom_mousedOverCell(cell);
     }, false);
 
-    kingdom_canvas.addEventListener('click', function(evt) {
+    kingdom_canvas.addEventListener('click', function (evt) {
         var rect = kingdom_canvas.getBoundingClientRect();
         let x = evt.clientX - rect.left;
         let y = evt.clientY - rect.top;
@@ -33,16 +33,16 @@ function kingdom_init() {
     kingdom_resources.forEach(resource => {
         var newElement = $('<div></div>');
         newElement.attr('id', resource.id);
-		newElement.addClass("kingdom_resource");
-		newElement.html("<img src = './images/kingdom/" + resource.imageLink + "' alt='" + resource.name + "'/><span id='" + resource.value + "'/></span>");
+        newElement.addClass("kingdom_resource");
+        newElement.html("<img src = './images/kingdom/" + resource.imageLink + "' alt='" + resource.name + "'/><span id='" + resource.value + "'/></span>");
         $("#kingdom_resourcePanel").append(newElement);
         kingdom_resourceClass.push(newElement);
         resource.idLink = $("#" + resource.id);
         resource.valueLink = $("#" + resource.value);
     });
 
-    $("#kingdom_removeBuildingPanel").mouseenter(function () {kingdom_updateInfoPanel(kingdom_infoPanelEnum.REMOVE, 0)});
-    $("#kingdom_claimTilePanel").mouseenter(function () {kingdom_updateInfoPanel(kingdom_infoPanelEnum.CLAIMTILE, 0)});
+    $("#kingdom_removeBuildingPanel").mouseenter(function () { kingdom_updateInfoPanel(kingdom_infoPanelEnum.REMOVE, 0) });
+    $("#kingdom_claimTilePanel").mouseenter(function () { kingdom_updateInfoPanel(kingdom_infoPanelEnum.CLAIMTILE, 0) });
 
     //Dynamically create building list
     kingdom_buildings.forEach(building => {
@@ -52,16 +52,16 @@ function kingdom_init() {
         var newElement = $('<div></div>');
         newElement.attr('id', building.id);
         newElement.addClass("kingdom_building");
-        newElement.mouseenter({ value: building.idNumber }, function (event) {kingdom_mousedOverBuilding(event.data.value)});
+        newElement.mouseenter({ value: building.idNumber }, function (event) { kingdom_mousedOverBuilding(event.data.value) });
         let htmlText = "<div class='kingdom_building_row'><span id='" + building.id + "Stock' class='kingdom_buildingStock'></span><img src = './images/kingdom/" + building.imageLink(kingdom_terrainEnum.PLAINS) + "' alt='" + building.name + "' class='kingdom_buildingImage'/><span class='kingdom_buildingName'>" + building.name + "</span><button type='button' id='" + building.id + "PlaceButton' class='kingdom_placeButton button' onclick='kingdom_pickupBuilding(" + building.idNumber + ")' disabled>Place</button></div>";
         htmlText += "<div class='kingdom_building_row'><span class='kingdom_buildingCost'>";
-        for (let i = 0; i < building.cost.length; i ++) {
+        for (let i = 0; i < building.cost.length; i++) {
             htmlText += "<img src = './images/kingdom/" + kingdom_resources[building.cost[i].type].imageLink + "' alt='" + kingdom_resources[building.cost[i].type].name + "'/><span id='" + building.id + kingdom_resources[building.cost[i].type].name + "Cost'></span>";
             building.cost[i].link = $("#" + building.id + kingdom_resources[building.cost[i].type].name + "Cost");
         }
         htmlText += "</span><button type='button' id='" + building.id + "BuildButton' class='kingdom_buildButton button' onclick='kingdom_build(" + building.idNumber + ")' disabled>Build</button></div>";
         newElement.html(htmlText);
-        
+
         $("#kingdom_buildingList").append(newElement);
         kingdom_buildingClass.push(newElement);
 
@@ -69,7 +69,7 @@ function kingdom_init() {
         building.valueLink = $("#" + building.id + "Stock");
         building.buildButtonLink = $("#" + building.id + "BuildButton");
         building.placeButtonLink = $("#" + building.id + "PlaceButton");
-        for (let i = 0; i < building.cost.length; i ++) {
+        for (let i = 0; i < building.cost.length; i++) {
             building.cost[i].link = $("#" + building.id + kingdom_resources[building.cost[i].type].name + "Cost");
         }
     });
@@ -77,10 +77,10 @@ function kingdom_init() {
     kingdom_buildingClass.push($("#kingdom_claimTilePanel"));
 
     //Calculate building stock
-    kingdom_buildingStock = [ ...game.kingdom.building ];
+    kingdom_buildingStock = [...game.kingdom.building];
     for (let i = 0; i < kingdom_GRIDSIZE; i++) {
         if (game.kingdom.constructions[i] != kingdom_buildingEnum.EMPTY && game.kingdom.constructions[i] != kingdom_buildingEnum.CASTLE) {
-            kingdom_buildingStock [game.kingdom.constructions[i]] --;
+            kingdom_buildingStock[game.kingdom.constructions[i]]--;
         }
     }
 
@@ -89,15 +89,15 @@ function kingdom_init() {
         var newElement = $('<div></div>');
         newElement.attr('id', upgrade.id);
         newElement.addClass("kingdom_upgrade");
-        newElement.mouseenter({ value: upgrade.idNumber }, function (event) {kingdom_mousedOverUpgrade(event.data.value)});
+        newElement.mouseenter({ value: upgrade.idNumber }, function (event) { kingdom_mousedOverUpgrade(event.data.value) });
         let htmlText = "<div class='kingdom_upgrade_row'><span class='kingdom_upgradeName'>" + upgrade.name + "</span><button type='button' id='" + upgrade.id + "UpgradeButton' class='kingdom_upgradeButton button' onclick='kingdom_purchaseUpgrade(" + upgrade.idNumber + ")' disabled>Purchase</button></div>";
         htmlText += "<div class='kingdom_upgrade_row'><span>";
-        for (let i = 0; i < upgrade.cost.length; i ++) {
-            htmlText += "<img src = './images/kingdom/" + kingdom_resources[upgrade.cost[i].type].imageLink + "' alt='" + kingdom_resources[upgrade.cost[i].type].name + "'/><span id='" + upgrade.id + kingdom_resources[upgrade.cost[i].type].name + "Cost'>"+ displayNum(upgrade.cost[i].value) + "</span>";
+        for (let i = 0; i < upgrade.cost.length; i++) {
+            htmlText += "<img src = './images/kingdom/" + kingdom_resources[upgrade.cost[i].type].imageLink + "' alt='" + kingdom_resources[upgrade.cost[i].type].name + "'/><span id='" + upgrade.id + kingdom_resources[upgrade.cost[i].type].name + "Cost'>" + displayNum(upgrade.cost[i].value) + "</span>";
         }
         htmlText += "</span></div>";
-		newElement.html(htmlText);
-        
+        newElement.html(htmlText);
+
         $("#kingdom_upgradeList").append(newElement);
         kingdom_upgradeClass.push(newElement);
 
@@ -113,7 +113,7 @@ function kingdom_init() {
 //We try to calculate as much of this as we can outside of the tick loop using kingdom_calculateOutput()
 //However buildings that consume/convert other resources can change each tick if they run out of resources
 //So we have to handle them here.
-function kingdom_tick () {
+function kingdom_tick() {
     for (let i = 0; i < game.kingdom.resource.length; i++) {
         game.kingdom.resource[i] += kingdom_outputs.resource[i] * game.level;
         kingdom_outputs.resourceDisplay[i] = kingdom_outputs.resource[i];
@@ -167,18 +167,18 @@ function kingdom_unlocks() {
 
 //Running through the entire map to work out what is being generated every tick would be slow.
 //Therefore we try and work out all of the resource incomes any time something changes and store it, so only the end result is read each tick
-function kingdom_calculateOutput () {
+function kingdom_calculateOutput() {
     kingdom_claimedTiles = -9;
     for (let i = 0; i < game.kingdom.borders.length; i++) {
         //Loop through a number of maps that store important info about the kingdom state
         kingdom_failMap[i] = 0;
         kingdom_roadMap[i] = 0;
         if (game.kingdom.borders[i] == 2) {
-            kingdom_claimedTiles ++;
+            kingdom_claimedTiles++;
         }
     }
-    kingdom_calculateRoadMap ();
-    kingdom_calculateFailMap ();
+    kingdom_calculateRoadMap();
+    kingdom_calculateFailMap();
     for (let i = 0; i < kingdom_outputs.resource.length; i++) {
         kingdom_outputs.resource[i] = 0;
     }
@@ -346,7 +346,7 @@ function kingdom_getTerrainSouth(currentTile) {
 //Returns what building is to the South. Returns 0 if at the Southern edge of the map
 function kingdom_getConstructionSouth(currentTile) {
     let southTile = currentTile + 9;
-    if (southTile < kingdom_GRIDSIZE  && kingdom_failMap[southTile] == 0) {
+    if (southTile < kingdom_GRIDSIZE && kingdom_failMap[southTile] == 0) {
         return game.kingdom.constructions[southTile];
     }
     else {
@@ -399,7 +399,7 @@ const kingdom_infoPanelEnum = {
 function kingdom_mousedOverCell(cell) {
     if (game.kingdom.borders[cell] != kingdom_rangeEnum.OUTOFBORDERS) {
         kingdom_currentCell = cell;
-        kingdom_updateInfoPanel (kingdom_infoPanelEnum.CELL, cell);
+        kingdom_updateInfoPanel(kingdom_infoPanelEnum.CELL, cell);
     }
 }
 
@@ -415,13 +415,13 @@ function kingdom_clickedonCell(cell) {
         if (kingdom_placing == -1) {
             kingdom_removeBuilding(cell);
         }
-	}
-	else {
+    }
+    else {
         //the cell is unbuilt terrain
         if (kingdom_placing > 0) {
-            kingdom_place (cell);
+            kingdom_place(cell);
         }
-	}
+    }
 }
 
 //This is called by kingdom_clickedCell if you were trying to claim that tile to add it to our borders
@@ -461,7 +461,7 @@ function kingdom_claimTile(cell) {
         }
     }
     kingdom_placing = 0;
-    kingdom_claimedTiles ++;
+    kingdom_claimedTiles++;
     gainBlueCoins(kingdom_claimedTiles * 10);
     kingdom_redraw();
     save();
@@ -475,7 +475,7 @@ function kingdom_removeBuilding(cell) {
         return;
     }
     game.kingdom.constructions[cell] = kingdom_buildingEnum.EMPTY;
-    kingdom_buildingStock[building] ++;
+    kingdom_buildingStock[building]++;
     kingdom_placing = 0;
     kingdom_calculateOutput();
     kingdom_redraw();
@@ -484,13 +484,13 @@ function kingdom_removeBuilding(cell) {
 
 //Removes all buildings (except the Castle, of course)
 function kingdom_removeAllBuildings() {
-    for (let i = 0; i < game.kingdom.constructions.length; i ++) {
+    for (let i = 0; i < game.kingdom.constructions.length; i++) {
         let building = game.kingdom.constructions[i];
         if (building == kingdom_buildingEnum.CASTLE || building == kingdom_buildingEnum.EMPTY) {
             continue;
         }
         game.kingdom.constructions[i] = kingdom_buildingEnum.EMPTY;
-        kingdom_buildingStock[building] ++;
+        kingdom_buildingStock[building]++;
     }
     kingdom_calculateOutput();
     kingdom_redraw();
@@ -539,22 +539,22 @@ function kingdom_pickupBuilding(building) {
 
 //This is called if we mouse over a building on the buildings panel (not a placed building on the map!)
 function kingdom_mousedOverBuilding(building) {
-    kingdom_updateInfoPanel (kingdom_infoPanelEnum.BUILDING, building);
+    kingdom_updateInfoPanel(kingdom_infoPanelEnum.BUILDING, building);
 }
 
 //This is called is we mouse over an upgrade on the buildings panel
 function kingdom_mousedOverUpgrade(upgrade) {
-    kingdom_updateInfoPanel (kingdom_infoPanelEnum.UPGRADE, upgrade);
+    kingdom_updateInfoPanel(kingdom_infoPanelEnum.UPGRADE, upgrade);
 }
 
 // Get the scaled cost of a certain resource, based on number of that building already built
-function kingdom_getBuildingResourceCost (building, resource) {
+function kingdom_getBuildingResourceCost(building, resource) {
     return Math.floor(kingdom_buildings[building].cost[resource].base * Math.pow(kingdom_buildings[building].cost[resource].factor, game.kingdom.building[building]));
 }
 
 // Returns if you can afford to build a building
-function kingdom_getBuildingAffordable (building) {
-    for (let i = 0; i < kingdom_buildings[building].cost.length; i ++) {
+function kingdom_getBuildingAffordable(building) {
+    for (let i = 0; i < kingdom_buildings[building].cost.length; i++) {
         let playerResource = game.kingdom.resource[kingdom_buildings[building].cost[i].type];
         if (playerResource < kingdom_getBuildingResourceCost(building, i)) {
             return false;
@@ -565,14 +565,14 @@ function kingdom_getBuildingAffordable (building) {
 
 // Build a building, paying its resource cost.
 function kingdom_build(building) {
-    if (!kingdom_getBuildingAffordable (building)) {
+    if (!kingdom_getBuildingAffordable(building)) {
         return;
     }
-    for (let i = 0; i < kingdom_buildings[building].cost.length; i ++) {
+    for (let i = 0; i < kingdom_buildings[building].cost.length; i++) {
         game.kingdom.resource[kingdom_buildings[building].cost[i].type] -= kingdom_getBuildingResourceCost(building, i);
     }
-    game.kingdom.building[building] ++;
-    kingdom_buildingStock[building] ++;
+    game.kingdom.building[building]++;
+    kingdom_buildingStock[building]++;
     kingdom_calculateOutput();
     kingdom_redraw();
     save();
@@ -581,13 +581,13 @@ function kingdom_build(building) {
 //Try to place a building on a map tile
 function kingdom_place(cell) {
     if (kingdom_placing != 0
-    && game.kingdom.constructions[cell] == kingdom_buildingEnum.EMPTY
-    && game.kingdom.borders[cell] == kingdom_rangeEnum.INBORDERS) {
+        && game.kingdom.constructions[cell] == kingdom_buildingEnum.EMPTY
+        && game.kingdom.borders[cell] == kingdom_rangeEnum.INBORDERS) {
         if ((kingdom_buildings[kingdom_placing].aquatic == true && kingdom_terrain[cell] == kingdom_terrainEnum.WATER)
-        || (kingdom_buildings[kingdom_placing].aquatic == false && kingdom_terrain[cell] != kingdom_terrainEnum.WATER)) {
+            || (kingdom_buildings[kingdom_placing].aquatic == false && kingdom_terrain[cell] != kingdom_terrainEnum.WATER)) {
             if (kingdom_buildings[kingdom_placing].canPlace(cell)) {
                 game.kingdom.constructions[cell] = kingdom_placing;
-                kingdom_buildingStock[kingdom_placing] --;
+                kingdom_buildingStock[kingdom_placing]--;
                 kingdom_placing = 0;
                 kingdom_calculateOutput();
                 kingdom_redraw();
@@ -598,8 +598,8 @@ function kingdom_place(cell) {
 }
 
 // Returns if you can afford to purchase an upgrade
-function kingdom_getUpgradeAffordable (upgrade) {
-    for (let i = 0; i < kingdom_upgrades[upgrade].cost.length; i ++) {
+function kingdom_getUpgradeAffordable(upgrade) {
+    for (let i = 0; i < kingdom_upgrades[upgrade].cost.length; i++) {
         let playerResource = game.kingdom.resource[kingdom_upgrades[upgrade].cost[i].type];
         if (playerResource < kingdom_upgrades[upgrade].cost[i].value) {
             return false;
@@ -611,10 +611,10 @@ function kingdom_getUpgradeAffordable (upgrade) {
 // Purchase an upgrade, paying its resource cost
 function kingdom_purchaseUpgrade(upgrade) {
     if (game.kingdom.upgrades[upgrade] == 0) {
-        if (!kingdom_getUpgradeAffordable (upgrade)) {
+        if (!kingdom_getUpgradeAffordable(upgrade)) {
             return;
         }
-        for (let i = 0; i < kingdom_upgrades[upgrade].cost.length; i ++) {
+        for (let i = 0; i < kingdom_upgrades[upgrade].cost.length; i++) {
             game.kingdom.resource[kingdom_upgrades[upgrade].cost[i].type] -= kingdom_upgrades[upgrade].cost[i].value;
         }
         game.kingdom.upgrades[upgrade] = 1;

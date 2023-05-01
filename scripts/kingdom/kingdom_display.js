@@ -14,19 +14,19 @@ var kingdom_infoPanelPreviousType = kingdom_infoPanelEnum.CELL;
 var kingdom_infoPanelPreviousValue = 40;
 
 //Redraws everything
-function kingdom_redraw () {
+function kingdom_redraw() {
 	if (activeTab != "kingdom") {
 		return;
 	}
-	kingdom_updateResources ();
+	kingdom_updateResources();
 	kingdom_drawCanvas();
 	kingdom_updateInfoPanel(kingdom_infoPanelEnum.PREVIOUS);
-	kingdom_updateBuildings ();
-	kingdom_updateUpgrades ();
+	kingdom_updateBuildings();
+	kingdom_updateUpgrades();
 }
 
 //Redraws the resource panel
-function kingdom_updateResources () {
+function kingdom_updateResources() {
 	if (activeTab != "kingdom") {
 		return;
 	}
@@ -46,13 +46,12 @@ function kingdom_updateResources () {
 }
 
 //Returns the html to be displayed for resource value and income. Takes the value and income as arguments. Called by kingdom_updateResources()
-function kingdom_resourceHtml (total, income) {
+function kingdom_resourceHtml(total, income) {
 	if (activeTab != "kingdom") {
 		return;
 	}
 	let text = displayNum(total);
-	if (income != 0)
-	{
+	if (income != 0) {
 		text += " (";
 		if (income > 0) {
 			text += "+";
@@ -64,8 +63,7 @@ function kingdom_resourceHtml (total, income) {
 
 //If the setting to display resorce income multiplied by your level is on, this does that
 function kingdom_resourceIncomeDisplay(value) {
-	if (game.settings[settingEnum.KINGDOMLEVELMULTIPLYDISPLAY])
-	{
+	if (game.settings[settingEnum.KINGDOMLEVELMULTIPLYDISPLAY]) {
 		return displayNum(value * game.level);
 	}
 	else {
@@ -84,7 +82,7 @@ function kingdom_drawCanvas() {
 	ctx.fillRect(0, 0, 360, 360);
 	for (let j = 0; j < 9; j++) {
 		for (let i = 0; i < 9; i++) {
-			let cell = i  + (j * 9);
+			let cell = i + (j * 9);
 			let x = i * 40;
 			let y = j * 40;
 			let b = game.kingdom.borders[cell];
@@ -97,8 +95,7 @@ function kingdom_drawCanvas() {
 			else {
 				ctx.globalAlpha = 1;
 			}
-			if (game.kingdom.constructions[cell] != kingdom_buildingEnum.EMPTY)
-			{
+			if (game.kingdom.constructions[cell] != kingdom_buildingEnum.EMPTY) {
 				if (kingdom_failMap[cell] == 1) {
 					ctx.drawImage(kingdom_buildingFailImage, x, y);
 				}
@@ -121,8 +118,7 @@ function kingdom_drawCanvas() {
 					}
 				}
 			}
-			else
-			{
+			else {
 				ctx.drawImage(kingdom_terrain[kingdom_landscape[cell]].imageCache, x, y);
 			}
 		}
@@ -130,7 +126,7 @@ function kingdom_drawCanvas() {
 }
 
 //Redraws the infoPanel. Takes two arguments, the infoPanel type, and one optional accompanying value (based on the infoPanel type)
-function kingdom_updateInfoPanel (infoPanelType, value) {
+function kingdom_updateInfoPanel(infoPanelType, value) {
 	if (activeTab != "kingdom") {
 		return;
 	}
@@ -182,7 +178,7 @@ building: The id of the building
 terrain: The id of the terrain, used as some buildings have multiple images based on the terrain the are on
 isFailing: Boolean if the building is failing or not, adds an explanation to the top of the description.
 */
-function kingdom_updateInfoPanel_building (initialTitleText, building, terrain, isFailing) {
+function kingdom_updateInfoPanel_building(initialTitleText, building, terrain, isFailing) {
 	kingdom_infoTitle.html(initialTitleText + "<img src = './images/kingdom/" + kingdom_buildings[building].imageLink(terrain) + "' alt='" + kingdom_buildings[building].name + "'>" + kingdom_buildings[building].name);
 	let text = "";
 	if (isFailing) {
@@ -192,7 +188,7 @@ function kingdom_updateInfoPanel_building (initialTitleText, building, terrain, 
 }
 
 //Redraws the buildings in the building panel
-function kingdom_updateBuildings () {
+function kingdom_updateBuildings() {
 	if (activeTab != "kingdom") {
 		return;
 	}
@@ -231,10 +227,10 @@ function kingdom_updateBuildings () {
 	for (let i = 2; i < kingdom_buildings.length; i++) {
 		if (kingdom_buildings[i].unlocked) {
 			kingdom_buildings[i].valueLink.html(kingdom_buildingStock[i]);
-			for (let j = 0; j < kingdom_buildings[i].cost.length; j ++) {
+			for (let j = 0; j < kingdom_buildings[i].cost.length; j++) {
 				kingdom_buildings[i].cost[j].link.html(displayNum(kingdom_getBuildingResourceCost(i, j)));
 			}
-			if (kingdom_getBuildingAffordable (i)) {
+			if (kingdom_getBuildingAffordable(i)) {
 				$(kingdom_buildings[i].buildButtonLink).prop('disabled', false);
 				$(kingdom_buildings[i].buildButtonLink).addClass('clickable');
 			}
@@ -262,7 +258,7 @@ function kingdom_updateBuildings () {
 }
 
 //Redraws the upgrades in the building panel
-function kingdom_updateUpgrades () {
+function kingdom_updateUpgrades() {
 	if (activeTab != "kingdom") {
 		return;
 	}
@@ -272,7 +268,7 @@ function kingdom_updateUpgrades () {
 	for (let i = 0; i < kingdom_upgrades.length; i++) {
 		if (kingdom_upgrades[i].unlocked && game.kingdom.upgrades[i] == 0) {
 			kingdom_upgrades[i].idLink.show();
-			if (kingdom_getUpgradeAffordable (i)) {
+			if (kingdom_getUpgradeAffordable(i)) {
 				$(kingdom_upgrades[i].buttonLink).prop('disabled', false);
 				$(kingdom_upgrades[i].buttonLink).addClass('clickable');
 			}
@@ -285,7 +281,7 @@ function kingdom_updateUpgrades () {
 }
 
 //Redraws the upgrade costs, only needed when toggling a display setting
-function kingdom_refreshUpgradeCosts () {
+function kingdom_refreshUpgradeCosts() {
 	for (let i = 0; i < kingdom_upgrades.length; i++) {
 		kingdom_upgrades[i].cost.forEach(costResource => {
 			$("#" + kingdom_upgrades[i].id + kingdom_resources[costResource.type].name + "Cost").html(displayNum(costResource.value));

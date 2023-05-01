@@ -6,6 +6,23 @@
         overflow-y: auto;
     }
 
+    #dungeon_view_prepare {
+        display: flex;
+        flex-direction: row;
+
+        #dungeon_loadout {
+            width: 250px;
+            height: 100%;
+            flex-grow: 0;
+            flex-shrink: 0;
+            border-right: 1px solid black;
+        }
+
+        #dungeon_dungeonList {
+            flex-grow: 1;
+        }
+    }
+
     #dungeon_view_dungeon {
         display: flex;
         flex-direction: row;
@@ -15,10 +32,6 @@
             height: 100%;
             flex-grow: 0;
             flex-shrink: 0;
-
-            #dungeon_moveButtons {
-                border-bottom: 2px solid black;
-            }
 
             .dungeon_moveButtonCentred {
                 margin-left: 27px;

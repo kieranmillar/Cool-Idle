@@ -79,7 +79,7 @@ var kingdom_resources = [
 
 const kingdom_terrainEnum = {
 	INVALID: 0,
-    PLAINS: 1,
+	PLAINS: 1,
 	FOREST: 2,
 	HILLS: 3,
 	WATER: 4,
@@ -135,28 +135,28 @@ const kingdom_terrain = [
 
 //Stores the map layout. The player cannot change this so no need to store it in the game object.
 const kingdom_landscape = [
-    kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST,
-    
-    kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.WATER, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST,
-    
-    kingdom_terrainEnum.HILLS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.WATER, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS,
-    
-    kingdom_terrainEnum.WATER, kingdom_terrainEnum.WATER, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS,
-    
-    kingdom_terrainEnum.WATER, kingdom_terrainEnum.WATER, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.PLAINS,
-    
-    kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.WATER,
-    
-    kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.WATER, kingdom_terrainEnum.WATER, kingdom_terrainEnum.WATER,
-    
-    kingdom_terrainEnum.HILLS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.WATER, kingdom_terrainEnum.VOLCANO, kingdom_terrainEnum.WATER,
-    
+	kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST,
+
+	kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.WATER, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST,
+
+	kingdom_terrainEnum.HILLS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.WATER, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS,
+
+	kingdom_terrainEnum.WATER, kingdom_terrainEnum.WATER, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS,
+
+	kingdom_terrainEnum.WATER, kingdom_terrainEnum.WATER, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.PLAINS,
+
+	kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.WATER,
+
+	kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.WATER, kingdom_terrainEnum.WATER, kingdom_terrainEnum.WATER,
+
+	kingdom_terrainEnum.HILLS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.FOREST, kingdom_terrainEnum.WATER, kingdom_terrainEnum.VOLCANO, kingdom_terrainEnum.WATER,
+
 	kingdom_terrainEnum.HILLS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.PLAINS, kingdom_terrainEnum.HILLS, kingdom_terrainEnum.WATER, kingdom_terrainEnum.WATER, kingdom_terrainEnum.WATER
 ];
 
 const kingdom_buildingEnum = {
-    EMPTY: 0,
-    CASTLE: 1,
+	EMPTY: 0,
+	CASTLE: 1,
 	WOODCUTTER: 2,
 	SHED: 3,
 	QUARRY: 4,
@@ -209,13 +209,13 @@ var kingdom_buildings = [
 		},
 		singleImage: true,
 		imageCache: null,
-        output: function (cell) {
-            kingdom_outputs.resource[kingdom_resourceEnum.LABOUR] += 1;
-            kingdom_outputs.yellowCoins += 1;
+		output: function (cell) {
+			kingdom_outputs.resource[kingdom_resourceEnum.LABOUR] += 1;
+			kingdom_outputs.yellowCoins += 1;
 			kingdom_outputs.exp += 1;
 		},
 		unlocked: false,
-		description: function() {
+		description: function () {
 			let text = "<p>You rule your kingdom from your trusty castle. This building cannot be removed or relocated.</p><p>Labour + " + kingdom_resourceIncomeDisplay(1) + "</p><p>Yellow Coins + 1</p><p>EXP + 1</p>";
 			return text;
 		}
@@ -233,29 +233,29 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (cell) {
+		output: function (cell) {
 			kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 			if (game.kingdom.upgrades[kingdom_upgradeEnum.WOODCUTTERADJACENCY]) {
 				if (kingdom_getTerrainNorth(cell) == kingdom_terrainEnum.FOREST
-				&& kingdom_getConstructionNorth(cell) == kingdom_buildingEnum.EMPTY) {
+					&& kingdom_getConstructionNorth(cell) == kingdom_buildingEnum.EMPTY) {
 					kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 				}
 				if (kingdom_getTerrainEast(cell) == kingdom_terrainEnum.FOREST
-				&& kingdom_getConstructionEast(cell) == kingdom_buildingEnum.EMPTY) {
+					&& kingdom_getConstructionEast(cell) == kingdom_buildingEnum.EMPTY) {
 					kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 				}
 				if (kingdom_getTerrainSouth(cell) == kingdom_terrainEnum.FOREST
-				&& kingdom_getConstructionSouth(cell) == kingdom_buildingEnum.EMPTY) {
+					&& kingdom_getConstructionSouth(cell) == kingdom_buildingEnum.EMPTY) {
 					kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 				}
 				if (kingdom_getTerrainWest(cell) == kingdom_terrainEnum.FOREST
-				&& kingdom_getConstructionWest(cell) == kingdom_buildingEnum.EMPTY) {
+					&& kingdom_getConstructionWest(cell) == kingdom_buildingEnum.EMPTY) {
 					kingdom_outputs.resource[kingdom_resourceEnum.WOOD] += 1;
 				}
 			}
 		},
 		unlocked: true,
-		description: function() {
+		description: function () {
 			let text = "<p>How much wood could a woodcutter cut if the woodcutter could cut wood?</p><p><strong>Can only be placed on forest.</strong></p><p>Wood + " + kingdom_resourceIncomeDisplay(1) + "</p>";
 			if (game.kingdom.upgrades[kingdom_upgradeEnum.WOODCUTTERADJACENCY]) {
 				text += "<p>Wood + " + kingdom_resourceIncomeDisplay(1) + " for each adjacent unoccupied forest.</p>";
@@ -304,13 +304,13 @@ var kingdom_buildings = [
 				kingdom_failMap[cell] = 1;
 			}
 		},
-        output: function (cell) {
+		output: function (cell) {
 			if (kingdom_roadMap[cell] == 1) {
 				kingdom_outputs.resource[kingdom_resourceEnum.RESEARCH] += 1;
 			}
 		},
 		unlocked: true,
-		description: function() {
+		description: function () {
 			return "<p>All of the best ideas happen when working alone in a shed, unless they involve the use of power tools.</p>" + kingdom_getCastleAdjacentRequirementText() + "<p>Research + " + kingdom_resourceIncomeDisplay(1) + "</p>";
 		},
 		cost: [
@@ -345,11 +345,11 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (cell) {
+		output: function (cell) {
 			kingdom_outputs.resource[kingdom_resourceEnum.STONE] += 1;
 		},
 		unlocked: false,
-		description: function() {
+		description: function () {
 			return "<p>It's like hunting for buried treasure, if you consider all rocks to be treasure.</p><p><strong>Can only be placed on hills.</strong></p><p>Stone + " + kingdom_resourceIncomeDisplay(1) + "</p>";
 		},
 		cost: [
@@ -388,20 +388,20 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (cell) {
+		output: function (cell) {
 			let x = 1;
 			if (game.kingdom.upgrades[kingdom_upgradeEnum.SAWMILLEFFICIENCY]) {
 				if (kingdom_getConstructionNorth(cell) == kingdom_buildingEnum.WOODCUTTER
-				|| kingdom_getConstructionEast(cell) == kingdom_buildingEnum.WOODCUTTER
-				|| kingdom_getConstructionSouth(cell) == kingdom_buildingEnum.WOODCUTTER
-				|| kingdom_getConstructionWest(cell) == kingdom_buildingEnum.WOODCUTTER) {
+					|| kingdom_getConstructionEast(cell) == kingdom_buildingEnum.WOODCUTTER
+					|| kingdom_getConstructionSouth(cell) == kingdom_buildingEnum.WOODCUTTER
+					|| kingdom_getConstructionWest(cell) == kingdom_buildingEnum.WOODCUTTER) {
 					x = 2;
 				}
 			}
 			kingdom_outputs.conversion.sawmill += x;
 		},
 		unlocked: false,
-		description: function() {
+		description: function () {
 			let text = "<p>This building is a cut above the rest.</p><p>Converts " + kingdom_resourceIncomeDisplay(1) + " Wood into " + kingdom_resourceIncomeDisplay(1) + " Planks</p>";
 			if (game.kingdom.upgrades[kingdom_upgradeEnum.SAWMILLEFFICIENCY]) {
 				text += "<p>Doubled effect if adjacent to at least one Woodcutter's Hut.</p>";
@@ -450,20 +450,20 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (cell) {
+		output: function (cell) {
 			let x = 1;
 			if (game.kingdom.upgrades[kingdom_upgradeEnum.HAPPYCITIZENS]) {
 				if (kingdom_getConstructionNorth(cell) == kingdom_buildingEnum.PUB
-				|| kingdom_getConstructionEast(cell) == kingdom_buildingEnum.PUB
-				|| kingdom_getConstructionSouth(cell) == kingdom_buildingEnum.PUB
-				|| kingdom_getConstructionWest(cell) == kingdom_buildingEnum.PUB) {
+					|| kingdom_getConstructionEast(cell) == kingdom_buildingEnum.PUB
+					|| kingdom_getConstructionSouth(cell) == kingdom_buildingEnum.PUB
+					|| kingdom_getConstructionWest(cell) == kingdom_buildingEnum.PUB) {
 					x = 2;
 				}
 			}
 			kingdom_outputs.resource[kingdom_resourceEnum.LABOUR] += x;
 		},
 		unlocked: false,
-		description: function() {
+		description: function () {
 			let text = "<p>A place for your worker drones to live. I mean citizens.</p><p>Labour + " + kingdom_resourceIncomeDisplay(1) + "</p>";
 			if (game.kingdom.upgrades[kingdom_upgradeEnum.HAPPYCITIZENS]) {
 				text += "<p>Doubled effect if adjacent to at least one Pub.</p>";
@@ -524,7 +524,7 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (cell) {
+		output: function (cell) {
 			let x = 1;
 			if (kingdom_roadMap[cell] == 1) {
 				x = 2;
@@ -532,7 +532,7 @@ var kingdom_buildings = [
 			kingdom_outputs.resource[kingdom_resourceEnum.MILITARY] += x;
 		},
 		unlocked: false,
-		description: function() {
+		description: function () {
 			return "<p>This building trains missionaries to spread the word of how great your leadership is, which encourages nearby lands to willingly join your side. Any claims otherwise are biased propoganda from our enemies.</p><p>Military + " + kingdom_resourceIncomeDisplay(1) + "</p><p>Doubled effect " + kingdom_getCastleAdjacentBonusText() + "</p>";
 		},
 		cost: [
@@ -589,7 +589,7 @@ var kingdom_buildings = [
 			}
 		},
 		unlocked: false,
-		description: function() {
+		description: function () {
 			return "<p>Follow the grey stone road.</p><p>Any building adjacent to a road counts as being adjacent to the Castle, provided the road ultimately links back to the Castle.</p><p>Any road that does not link back to the Castle has no effect.</p>" + kingdom_getCastleAdjacentRequirementText();
 		},
 		cost: [
@@ -624,11 +624,11 @@ var kingdom_buildings = [
 		valueLink: null,
 		buildButtonLink: null,
 		placeButtonLink: null,
-        output: function (cell) {
+		output: function (cell) {
 			kingdom_outputs.yellowCoins += 1;
 		},
 		unlocked: false,
-		description: function() {
+		description: function () {
 			return "<p>The worthless gold mined from these hills is smelted down into a much more valuable substance, pure Yellow.</p><p><strong>Can only be placed on hills.</strong></p><p>Yellow coins + 1</p>";
 		},
 		cost: [
@@ -684,13 +684,13 @@ var kingdom_buildings = [
 				kingdom_failMap[cell] = 1;
 			}
 		},
-        output: function (cell) {
+		output: function (cell) {
 			if (kingdom_roadMap[cell] == 1) {
 				kingdom_outputs.exp += 1;
 			}
 		},
 		unlocked: false,
-		description: function() {
+		description: function () {
 			return "<p>A Kingdom's success can be gauged entirely on one metric, the number of pubs.</p>" + kingdom_getCastleAdjacentRequirementText() + "<p>EXP + 1</p>";
 		},
 		cost: [
@@ -742,10 +742,10 @@ function kingdom_getCastleAdjacentBonusText() {
 
 //This object stores the data for income each tick.
 var kingdom_outputs = {
-    yellowCoins: 0,
+	yellowCoins: 0,
 	exp: 0,
 	resource: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    conversion: {
+	conversion: {
 		sawmill: 0
 	},
 	resourceDisplay: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]

@@ -34,10 +34,10 @@ var cauldron_buildings = [
         valueLink: null,
         buttonLink: null,
         descriptionLink: null,
-        output: function() {
+        output: function () {
             return game.level;
         },
-        onPurchase: function() {
+        onPurchase: function () {
             gainExp(game.cauldron.building[cauldron_buildingEnum.SCEPTER]);
             gainYellowCoins(game.cauldron.building[cauldron_buildingEnum.SCEPTER]);
             gainBlueCoins(1);
@@ -61,10 +61,10 @@ var cauldron_buildings = [
         valueLink: null,
         buttonLink: null,
         descriptionLink: null,
-        output: function() {
+        output: function () {
             return 5 + (5 * game.cauldron.spells[cauldron_spellEnum.BOOKSHELVES]);
         },
-        onPurchase: function() {
+        onPurchase: function () {
             gainExp(game.cauldron.building[cauldron_buildingEnum.MAGICBOOK] * 5);
             gainYellowCoins(game.cauldron.building[cauldron_buildingEnum.MAGICBOOK] * 5);
             gainBlueCoins(5);
@@ -88,10 +88,10 @@ var cauldron_buildings = [
         valueLink: null,
         buttonLink: null,
         descriptionLink: null,
-        output: function() {
+        output: function () {
             return 30;
         },
-        onPurchase: function() {
+        onPurchase: function () {
             gainExp(game.cauldron.building[cauldron_buildingEnum.CRYSTALBALL] * 30);
             gainYellowCoins(game.cauldron.building[cauldron_buildingEnum.CRYSTALBALL] * 30);
             gainBlueCoins(30);
@@ -115,10 +115,10 @@ var cauldron_buildings = [
         valueLink: null,
         buttonLink: null,
         descriptionLink: null,
-        output: function() {
+        output: function () {
             return 0;
         },
-        onPurchase: function() {
+        onPurchase: function () {
             game.kingdom.resource[kingdom_resourceEnum.RESEARCH] += (game.cauldron.building[cauldron_buildingEnum.BRAININAJAR] * 100);
             gainBlueCoins(10);
         },

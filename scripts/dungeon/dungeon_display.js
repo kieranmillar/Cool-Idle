@@ -1,4 +1,13 @@
 const dungeon_view_prepare = $("#dungeon_view_prepare");
+const dungeon_loadoutHpSpan = $("#dungeon_loadoutHpSpan");
+const dungeon_loadoutAtkSpan = $("#dungeon_loadoutAtkSpan");
+const dungeon_loadoutDefSpan = $("#dungeon_loadoutDefSpan");
+const dungeon_loadoutWeaponSpan = $("#dungeon_loadoutWeaponSpan");
+const dungeon_loadoutShieldSpan = $("#dungeon_loadoutShieldSpan");
+const dungeon_loadoutAccessorySpan = $("#dungeon_loadoutAccessorySpan");
+const dungeon_loadoutWeapons = $("#dungeon_loadoutWeapons");
+const dungeon_loadoutShields = $("#dungeon_loadoutShields");
+const dungeon_loadoutAccessories = $("#dungeon_loadoutAccessories");
 const dungeon_view_dungeon = $("#dungeon_view_dungeon");
 const dungeon_playerHpSpan = $("#dungeon_playerHpSpan");
 const dungeon_playerAtkSpan = $("#dungeon_playerAtkSpan");
@@ -19,13 +28,15 @@ var dungeon_infoPanelPreviousType = dungeon_infoPanelEnum.CELL;
 var dungeon_infoPanelPreviousValue = 0;
 
 //Redraws everything
-function dungeon_redraw () {
-	if (activeTab != "dungeon") {
-		return;
+function dungeon_redraw() {
+    if (activeTab != "dungeon") {
+        return;
     }
     if (dungeon_mode == dungeon_modeEnum.PREPARE) {
         dungeon_view_prepare.show();
         dungeon_view_dungeon.hide();
+        dungeon_drawPrepareStats();
+        dungeon_drawPrepareEquipment();
         dungeon_drawDungeonList();
     } else {
         dungeon_view_prepare.hide();
@@ -36,16 +47,42 @@ function dungeon_redraw () {
     }
 }
 
+//Draws the stats on the prepare screen
+function dungeon_drawPrepareStats() {
+    if (activeTab != "dungeon") {
+        return;
+    }
+    dungeon_loadoutHpSpan.text(dungeon_player.hp);
+    dungeon_loadoutAtkSpan.text(dungeon_player.atk);
+    dungeon_loadoutDefSpan.text(dungeon_player.def);
+    dungeon_loadoutWeaponSpan.text(dungeon_equipment[dungeon_player.weapon].name);
+    dungeon_loadoutShieldSpan.text(dungeon_equipment[dungeon_player.shield].name);
+    dungeon_loadoutAccessorySpan.text(dungeon_equipment[dungeon_player.accessory].name);
+}
+
+//Draws the equipment list on the prepare screen
+function dungeon_drawPrepareEquipment() {
+    if (activeTab != "dungeon") {
+        return;
+    }
+    dungeon_equipmentClass.forEach(equipment => {
+        equipment.hide();
+    });
+    for (let equip of dungeon_ownedEquipment) {
+        dungeon_equipment[equip].idLink.show();
+    }
+}
+
 //Draws the list of dungeons
 function dungeon_drawDungeonList() {
     if (activeTab != "dungeon") {
-		return;
+        return;
     }
     for (let i = 0; i < dungeon_dungeons.length; i++) {
-		if (dungeon_dungeons[i].unlocked) {
+        if (dungeon_dungeons[i].unlocked) {
             dungeon_dungeons[i].idLink.show();
             let treasureCount = 0;
-            dungeon_dungeons[i].treasures.forEach (treasure => {
+            dungeon_dungeons[i].treasures.forEach(treasure => {
                 if (game.dungeon.treasures[treasure]) {
                     treasureCount++;
                 }
@@ -55,13 +92,13 @@ function dungeon_drawDungeonList() {
         else {
             dungeon_dungeons[i].idLink.hide();
         }
-	}
+    }
 }
 
 //Redraws the player stats
 function dungeon_updatePlayerStats() {
     if (activeTab != "dungeon") {
-		return;
+        return;
     }
     dungeon_playerHpSpan.text(dungeon_player.hp);
     dungeon_playerAtkSpan.text(dungeon_player.atk);
@@ -77,23 +114,23 @@ function dungeon_updatePlayerStats() {
 //Redraws the canvas
 function dungeon_drawCanvas() {
     if (activeTab != "dungeon") {
-		return;
+        return;
     }
-	var ctx = dungeon_canvas.getContext("2d");
-	ctx.globalAlpha = 1;
-	ctx.fillStyle = "#FFFFFF";
+    var ctx = dungeon_canvas.getContext("2d");
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "#FFFFFF";
     ctx.fillRect(0, 0, 550, 550);
     for (let j = 0; j < 11; j++) {
-		for (let i = 0; i < 11; i++) {
+        for (let i = 0; i < 11; i++) {
             let cellX = dungeon_player.x - 5 + i;
             let cellY = dungeon_player.y - 5 + j;
-            let cell = cellX  + (cellY * dungeon_dungeons[dungeon_currentDungeon].width);
-			let x = i * 50;
+            let cell = cellX + (cellY * dungeon_dungeons[dungeon_currentDungeon].width);
+            let x = i * 50;
             let y = j * 50;
             if (cellX >= 0
-            && cellX < dungeon_dungeons[dungeon_currentDungeon].width
-            && cellY >= 0
-            && cellY < dungeon_dungeons[dungeon_currentDungeon].height) {
+                && cellX < dungeon_dungeons[dungeon_currentDungeon].width
+                && cellY >= 0
+                && cellY < dungeon_dungeons[dungeon_currentDungeon].height) {
                 if (dungeon_layout[cell] < 100) {
                     //terrain
                     ctx.drawImage(dungeon_terrain[dungeon_terrainEnum.FLOOR].imageCache[dungeon_dungeons[dungeon_currentDungeon].style], x, y);
@@ -169,7 +206,7 @@ function dungeon_drawFloatingText() {
         text.y -= speed;
         text.lifetime -= speed;
         if (text.lifetime <= 0) {
-            count ++;
+            count++;
         }
     });
     if (count > 0) {
@@ -181,18 +218,18 @@ function dungeon_drawFloatingText() {
 }
 
 //Redraws the infoPanel. Takes two arguments, the infoPanel type, and one optional accompanying value (based on the infoPanel type)
-function dungeon_updateInfoPanel (infoPanelType, value) {
+function dungeon_updateInfoPanel(infoPanelType, value) {
     if (activeTab != "dungeon") {
-		return;
+        return;
     }
     //Sometimes we just want to refresh the panel with what we had last time
-	if (infoPanelType == dungeon_infoPanelEnum.PREVIOUS) {
-		infoPanelType = dungeon_infoPanelPreviousType;
-		value = dungeon_infoPanelPreviousValue;
-	}
-	else {
-		dungeon_infoPanelPreviousType = infoPanelType;
-		dungeon_infoPanelPreviousValue = value;
+    if (infoPanelType == dungeon_infoPanelEnum.PREVIOUS) {
+        infoPanelType = dungeon_infoPanelPreviousType;
+        value = dungeon_infoPanelPreviousValue;
+    }
+    else {
+        dungeon_infoPanelPreviousType = infoPanelType;
+        dungeon_infoPanelPreviousValue = value;
     }
     if (infoPanelType == dungeon_infoPanelEnum.CELL) {
         let cell = value;
@@ -206,23 +243,23 @@ function dungeon_updateInfoPanel (infoPanelType, value) {
             else if (cellValue < 100) {
                 //Other terrain features
                 dungeon_infoTitle.html("<img src='" + dungeon_terrain[cellValue].imageCache[dungeon_dungeons[dungeon_currentDungeon].style].src + "' alt='" + dungeon_terrain[cellValue].name + "'/>" + dungeon_terrain[cellValue].name);
-		        dungeon_infoDescription.html("<p>" + dungeon_terrain[cellValue].description + "</p>");
+                dungeon_infoDescription.html("<p>" + dungeon_terrain[cellValue].description + "</p>");
             }
             else if (cellValue < 1000) {
                 //Items
                 let item = cellValue - 100;
                 dungeon_infoTitle.html("<img src='" + dungeon_items[item].imageCache.src + "' alt='" + dungeon_items[item].name + "'/>" + dungeon_items[item].name);
-		        dungeon_infoDescription.html("<p>" + dungeon_items[item].description + "</p>");
+                dungeon_infoDescription.html("<p>" + dungeon_items[item].description + "</p>");
             }
             else if (cellValue < 2000) {
                 //Treasures
                 let treasure = cellValue - 1000;
                 if (game.dungeon.treasures[treasure] == 0) {
                     dungeon_infoTitle.html("<img src='" + dungeon_chestClosedImage.src + "' alt='Closed Treasure Chest'/>Unclaimed Treasure");
-		            dungeon_infoDescription.html("<p>Some permanent goodies are waiting for the taking! What could be inside?</p>");
+                    dungeon_infoDescription.html("<p>Some permanent goodies are waiting for the taking! What could be inside?</p>");
                 } else {
                     dungeon_infoTitle.html("<img src='" + dungeon_chestOpenImage.src + "' alt='Open Treasure Chest'/>Empty Treasure Chest");
-		            dungeon_infoDescription.html("<p>Somebody has already claimed this treasure! It was you, wasn't it?</p>");
+                    dungeon_infoDescription.html("<p>Somebody has already claimed this treasure! It was you, wasn't it?</p>");
                 }
             }
             else {
@@ -244,10 +281,10 @@ function dungeon_updateInfoPanel (infoPanelType, value) {
                     } else {
                         let damageTakenPerHit = Math.max(dungeon_enemies[enemy].atk - dungeon_player.def, 0);
                         let atkForFasterWin = Math.ceil(dungeon_enemies[enemy].hp / numberOfHits) + dungeon_enemies[enemy].def;
-                        htmlText += " (" + damageTakenPerHit + " x " + numberOfHits + ")</p><p>Attack for faster win: " + atkForFasterWin + " (+" + (atkForFasterWin - dungeon_player.atk) +")</p>";
+                        htmlText += " (" + damageTakenPerHit + " x " + numberOfHits + ")</p><p>Attack for faster win: " + atkForFasterWin + " (+" + (atkForFasterWin - dungeon_player.atk) + ")</p>";
                     }
-                }           
-		        dungeon_infoDescription.html(htmlText);
+                }
+                dungeon_infoDescription.html(htmlText);
             }
         }
     }

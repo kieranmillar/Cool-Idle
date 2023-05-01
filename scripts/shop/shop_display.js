@@ -2,7 +2,7 @@ const shop_section_cauldron = $('#shop_section_cauldron');
 const shop_section_kingdom = $('#shop_section_kingdom');
 
 //Drawing Cool-Mart
-function shop_redraw () {
+function shop_redraw() {
     for (let i = 0; i < shop_item_feature.length; i++) {
         if (game.shop.features[i]) {
             shop_item_feature[i].idLink.addClass('purchased');

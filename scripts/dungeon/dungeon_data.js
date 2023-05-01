@@ -94,7 +94,7 @@ const dungeon_items = [
         imageLink: "key_yellow.png",
         imageCache: null,
         effect: function () {
-            dungeon_player.yellowKeys ++;
+            dungeon_player.yellowKeys++;
             dungeon_createFloatingText("Yellow Keys + 1", "#FFFF00", 275, 275);
         }
     },
@@ -105,7 +105,7 @@ const dungeon_items = [
         imageLink: "key_yellow.png",
         imageCache: null,
         effect: function () {
-            dungeon_player.blueKeys ++;
+            dungeon_player.blueKeys++;
             dungeon_createFloatingText("Blue Keys + 1", "#0000FF", 275, 275);
         }
     },
@@ -116,7 +116,7 @@ const dungeon_items = [
         imageLink: "key_yellow.png",
         imageCache: null,
         effect: function () {
-            dungeon_player.redKeys ++;
+            dungeon_player.redKeys++;
             dungeon_createFloatingText("Red Keys + 1", "#FF0000", 275, 275);
         }
     },
@@ -260,7 +260,7 @@ const dungeon_treasures = [
         image: "coin_blue.png",
         description: "You found a cache of 100 blue coins!",
         effect: function () {
-            gainBlueCoins (100);
+            gainBlueCoins(100);
         },
         puzzleDrop: dungeon_itemEnum.POTIONTINY
     },
@@ -338,6 +338,7 @@ name: String containing displayed equipment name.
 description: String containing the description
 imageLink: The name of the image stored in ../images/dungeon/
 imageCache: Containins a pre-loaded version of the image used to draw on the canvas
+idLink: should be included but set to null. dungeon_init() will set this to the html container div element so we don't have to search the DOM for it again
 type: Equipment type, a value of dungeon_equipmentTypeEnum
 atk: Optional parameter for the amount of passive ATK bonus
 def: Optional parameter for the amount of passive DEF bonus
@@ -349,6 +350,7 @@ const dungeon_equipment = [
         description: "",
         imageLink: "",
         imageCache: null,
+        idLink: null,
         type: dungeon_equipmentTypeEnum.NONE
     },
     {
@@ -357,15 +359,17 @@ const dungeon_equipment = [
         description: "This carefully folded sword will deliver painful papercuts to your foes.</p><p>Attack + 2",
         imageLink: "oragami_sword.png",
         imageCache: null,
+        idLink: null,
         type: dungeon_equipmentTypeEnum.WEAPON,
         atk: 2
     },
     {
         idNumber: dungeon_equipmentEnum.PAPERBAG,
         name: "Paper Bag",
-        description: "Let's see your opponent fight their way past this!</p><p>Defense + 3",
+        description: "Lets see your opponent fight their way past this!</p><p>Defense + 3",
         imageLink: "",
         imageCache: null,
+        idLink: null,
         type: dungeon_equipmentTypeEnum.SHIELD,
         def: 3
     }

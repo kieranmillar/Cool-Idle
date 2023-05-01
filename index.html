@@ -1,293 +1,336 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>
-			Cool Idle
-		</title>
-	
-		<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-		
-		<meta name="description"
-		content="Cool Idle" />
-		
-		<meta name="author"
-		content="Kieran Millar" />
-		
-		<meta name="revised"
-		content="Kieran Millar, 26/12/2020" />
-		
-		<link rel="stylesheet" type="text/css" href="styles/css/main.css">
-		
-		<link rel="icon" type="image/png" href="../favicon.png" />
-		
-		<script src="./jquery.min.js"></script>
-		
-	</head>
-	<body>
-		<div id="loading">Cool Idle is loading! Be cool!</div>
-		<div id="game">
-			<div id="topbar">
-				<div id="title">
-					<h1>Cool Idle</h1>
-					<h2>
-						A game by
-						<br>
-						Kieran Millar
-					</h2>
+
+<head>
+	<title>
+		Cool Idle
+	</title>
+
+	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+
+	<meta name="description" content="Cool Idle" />
+
+	<meta name="author" content="Kieran Millar" />
+
+	<meta name="revised" content="Kieran Millar, 26/12/2020" />
+
+	<link rel="stylesheet" type="text/css" href="styles/css/main.css">
+
+	<link rel="icon" type="image/png" href="../favicon.png" />
+
+	<script src="./jquery.min.js"></script>
+
+</head>
+
+<body>
+	<div id="loading">Cool Idle is loading! Be cool!</div>
+	<div id="game">
+		<div id="topbar">
+			<div id="title">
+				<h1>Cool Idle</h1>
+				<h2>
+					A game by
+					<br>
+					Kieran Millar
+				</h2>
+			</div>
+			<div id="expBar">
+				<div id="topbar_levelRow">
+					<span id="topbar_level">Level: <span id="level"></span></span>
+					<span class="topbar_coin"><img src="./images/coin_yellow.png" alt="Yellow Coins" /><span
+							id="yellowCoins"></span></span>
+					<span class="topbar_coin"><img src="./images/coin_blue.png" alt="Blue Coins" /><span
+							id="blueCoins"></span></span>
+					<span class="topbar_coin"><img src="./images/coin_green.png" alt="Green Coins" /><span
+							id="greenCoins"></span></span>
 				</div>
-				<div id="expBar">
-					<div id="topbar_levelRow">
-						<span id="topbar_level">Level: <span id="level"></span></span>
-						<span class="topbar_coin"><img src="./images/coin_yellow.png" alt= "Yellow Coins"/><span id="yellowCoins"></span></span>
-						<span class="topbar_coin"><img src="./images/coin_blue.png" alt= "Blue Coins"/><span id="blueCoins"></span></span>
-						<span class="topbar_coin"><img src="./images/coin_green.png" alt= "Green Coins"/><span id="greenCoins"></span></span>
-					</div>
-					<div>
-						<img src="./images/exp.png" alt= "Exp"/>
-						<span id="exp"></span> / <span id="maxExp"></span>
-					</div>
-					<progress id="expProgress" value="0" max="1"></progress>
+				<div>
+					<img src="./images/exp.png" alt="Exp" />
+					<span id="exp"></span> / <span id="maxExp"></span>
+				</div>
+				<progress id="expProgress" value="0" max="1"></progress>
+			</div>
+		</div>
+		<div id="tabs">
+			<h3 id="tab_help" class="tab active" onclick="goToLocation('help')">Help</h3>
+			<h3 id="tab_settings" class="tab" onclick="goToLocation('settings')">Settings</h3>
+			<h3 id="tab_shop" class="tab" onclick="goToLocation('shop')">Cool-Mart</h3>
+			<h3 id="tab_cauldron" class="tab" onclick="goToLocation('cauldron')">Cauldron</h3>
+			<h3 id="tab_kingdom" class="tab" onclick="goToLocation('kingdom')">Kingdom</h3>
+			<h3 id="tab_dungeon" class="tab" onclick="goToLocation('dungeon')">Dungeon</h3>
+		</div>
+		<div id="locations">
+			<div id="loc_help" class="location">
+				<p><strong>This game is currently in early development, and you should frequently delete your save file
+						in the settings screen as major breaking changes frequently occur.</strong></p>
+				<p>Welcome to Cool Idle!</p>
+				<p>Click on the tabs above to swap locations.</p>
+				<p>This page tells you all you need to know to play the game. Come back as you unlock more gameplay
+					features to learn how they work!</p>
+				<p>You are currently playing version <span id="version"></span>.</p>
+
+				<hr>
+				<h2>Level and Experience</h2>
+
+				<p>The aim of the game is to increase your level. At the top of the screen you will see your level and
+					the EXP needed to reach the next level. Interacting with the gameplay features you unlock will lead
+					to ways to gain more EXP.</p>
+				<p>As your level goes up, parts of each gameplay feature will become more powerful. Progress in each
+					feature so you can gain EXP and improve your level, which will in turn have an impact on all
+					features.</p>
+
+				<hr>
+				<h2>Coins</h2>
+				<p>At the top of your screen you will find 3 types of coins:</p>
+				<ul>
+					<li>Yellow coins: A common currency you can earn in each feature.</li>
+					<li>Blue coins: A rarer currency that you only earn in features by performing more difficult tasks.
+					</li>
+					<li>Green coins: These coins can only be earned by levelling up. When you level up you earn a number
+						of green coins equal to the level you just completed, e.g. when levelling up from level 4 to
+						level 5, you earn 4 green coins.</li>
+				</ul>
+				<p>Coins are spent in Cool-Mart to unlock and upgrade game features!</p>
+
+				<div id="help_cauldron" class="help">
+					<hr>
+					<h2>Cauldron</h2>
+					<p><strong>Level bonus:</strong> Each scepter's base magic gain is equal to your level.</p>
+					<p>Gain magic over time. Spend the magic on items that produce more magic over time, or on powerful
+						spells that can also improve things in other features.</p>
+				</div>
+
+				<div id="help_kingdom" class="help">
+					<hr>
+					<h2>Kingdom</h2>
+					<p><strong>Level bonus:</strong> All resource gain except EXP and coins is multiplied by your level.
+					</p>
+					<p>Build and place buildings which produce resources every second. Use these resources to build more
+						buildings, or unlock upgrades. The output of buildings can often be improved by building them
+						on, or next to, various terrain features or other buildings. The resources produced by buildings
+						can also include EXP and coins.</p>
+				</div>
+
+				<div id="help_dungeon" class="help">
+					<hr>
+					<h2>Dungeon</h2>
+					<p><strong>Level bonus:</strong> Each level increases your starting HP by 50.</p>
+					<p>Equip adventurers to explore dungeons. Kill monsters to gain yellow coins and EXP. Collect keys
+						to open gates. Bump into things to interact with them or fight. You can move by either clicking
+						on the buttons, or by moving with the arrow keys, WASD, or 8462 on the numpad.</p>
+					<p>Inside a dungeon instance, everything is temporary and will reset when you leave, with one
+						exception, treasure chests. Treasure chests contain rewards that exist outside the dungeon
+						instance, from equipment to equip for future dungeon explorations, to whole new dungeons to
+						explore. Each treasure chest can only be opened once, ever.</p>
+				</div>
+
+			</div>
+
+			<div id="loc_settings" class="location">
+				<p id="setting_sciNotation"><input type="checkbox" id="setting_sciNotationBox"
+						onclick="toggleSetting(settingEnum.SCINOTATION)"> Display large numbers with scientific notation
+					instead of prefixes.</input></p>
+				<p id="setting_kingdomLevelMultiplyDisplay"><input type="checkbox"
+						id="setting_kingdomLevelMultiplyDisplayBox"
+						onclick="toggleSetting(settingEnum.KINGDOMLEVELMULTIPLYDISPLAY)"> Show Kingdom resource incomes
+					multiplied by your level instead of base values (turning this off does not impact the resources
+					earned, only how it is displayed).</input></p>
+				<form id="setting_dungeonBattleSpeedSettings">
+					<p>Dungeon battle speed:</p>
+					<p><input type="radio" id="setting_dungeonBattleSpeedSlow" onclick="setting_changeDungeonSpeed(0)">
+						Slow</p>
+					<p><input type="radio" id="setting_dungeonBattleSpeedFast" onclick="setting_changeDungeonSpeed(1)">
+						Fast</p>
+					<p><input type="radio" id="setting_dungeonBattleSpeedInstant"
+							onclick="setting_changeDungeonSpeed(2)"> Instant</p>
+				</form>
+				<button type="button" onclick="save()">
+					Manually save the game (autosaves every 20 seconds or after you do something important)
+				</button>
+				<button type="button" onclick="wipe(true)">
+					Delete save file and hard reset (Don't press this!)
+				</button>
+			</div>
+
+			<div id="loc_shop" class="location">
+				<div id="shop_section_features">
+					<h1>Features</h1>
+					<div id="shop_section_features_list" class="shop_section"></div>
+				</div>
+				<div id="shop_section_cauldron">
+					<hr>
+					<h1>Cauldron</h1>
+					<div id="shop_section_cauldron_list" class="shop_section"></div>
+				</div>
+				<div id="shop_section_kingdom">
+					<hr>
+					<h1>Kingdom</h1>
+					<div id="shop_section_kingdom_list" class="shop_section"></div>
 				</div>
 			</div>
-			<div id="tabs">
-				<h3 id="tab_help" class="tab active" onclick="goToLocation('help')">Help</h3>
-				<h3 id="tab_settings" class="tab" onclick="goToLocation('settings')">Settings</h3>
-				<h3 id="tab_shop" class="tab" onclick="goToLocation('shop')">Cool-Mart</h3>
-				<h3 id="tab_cauldron" class="tab" onclick="goToLocation('cauldron')">Cauldron</h3>
-				<h3 id="tab_kingdom" class="tab" onclick="goToLocation('kingdom')">Kingdom</h3>
-				<h3 id="tab_dungeon" class="tab" onclick="goToLocation('dungeon')">Dungeon</h3>
+
+			<div id="loc_cauldron" class="location">
+				<div id="cauldron_magicPanel" class="cauldron_column">
+					<h3>✨Magic: <span id="cauldron_magic"></span> (+<span id="cauldron_magicIncome"></span>)</h3>
+				</div>
+				<div id="cauldron_buildingPanel" class="cauldron_column">
+					<h3>Magical Items</h3>
+					<div id="cauldron_buildingList"></div>
+				</div>
+				<div id="cauldron_spellPanel" class="cauldron_column">
+					<h3>Spells</h3>
+					<div id="cauldron_spellList"></div>
+				</div>
 			</div>
-			<div id="locations">
-				<div id="loc_help" class="location">
-					<p><strong>This game is currently in early development, and you should frequently delete your save file in the settings screen as major breaking changes frequently occur.</strong></p>
-					<p>Welcome to Cool Idle!</p>
-					<p>Click on the tabs above to swap locations.</p>
-					<p>This page tells you all you need to know to play the game. Come back as you unlock more gameplay features to learn how they work!</p>
-					<p>You are currently playing version <span id="version"></span>.</p>
 
-					<hr>
-					<h2>Level and Experience</h2>
-
-					<p>The aim of the game is to increase your level. At the top of the screen you will see your level and the EXP needed to reach the next level. Interacting with the gameplay features you unlock will lead to ways to gain more EXP.</p>
-					<p>As your level goes up, parts of each gameplay feature will become more powerful. Progress in each feature so you can gain EXP and improve your level, which will in turn have an impact on all features.</p>
-
-					<hr>
-					<h2>Coins</h2>
-					<p>At the top of your screen you will find 3 types of coins:</p>
-					<ul>
-						<li>Yellow coins: A common currency you can earn in each feature.</li>
-						<li>Blue coins: A rarer currency that you only earn in features by performing more difficult tasks.</li>
-						<li>Green coins: These coins can only be earned by levelling up. When you level up you earn a number of green coins equal to the level you just completed, e.g. when levelling up from level 4 to level 5, you earn 4 green coins.</li>
-					</ul>
-					<p>Coins are spent in Cool-Mart to unlock and upgrade game features!</p>
-
-					<div id="help_cauldron" class="help">
-						<hr>
-						<h2>Cauldron</h2>
-						<p><strong>Level bonus:</strong> Each scepter's base magic gain is equal to your level.</p>
-						<p>Gain magic over time. Spend the magic on items that produce more magic over time, or on powerful spells that can also improve things in other features.</p>
+			<div id="loc_kingdom" class="location">
+				<div id="kingdom_resourcePanel" class="kingdom_column">
+					<div class="kingdom_resource">
+						<img src="./images/exp.png" alt="Experience" />
+						<span id="kingdom_exp_amount"></span>
 					</div>
-
-					<div id="help_kingdom" class="help">
-						<hr>
-						<h2>Kingdom</h2>
-						<p><strong>Level bonus:</strong> All resource gain except EXP and coins is multiplied by your level.</p>
-						<p>Build and place buildings which produce resources every second. Use these resources to build more buildings, or unlock upgrades. The output of buildings can often be improved by building them on, or next to, various terrain features or other buildings. The resources produced by buildings can also include EXP and coins.</p>
-					</div>
-
-					<div id="help_dungeon" class="help">
-						<hr>
-						<h2>Dungeon</h2>
-						<p><strong>Level bonus:</strong> Each level increases your starting HP by 50.</p>
-						<p>Equip adventurers to explore dungeons. Kill monsters to gain yellow coins and EXP. Collect keys to open gates. Bump into things to interact with them or fight. You can move by either clicking on the buttons, or by moving with the arrow keys, WASD, or 8462 on the numpad.</p>
-						<p>Inside a dungeon instance, everything is temporary and will reset when you leave, with one exception, treasure chests. Treasure chests contain rewards that exist outside the dungeon instance, from equipment to equip for future dungeon explorations, to whole new dungeons to explore. Each treasure chest can only be opened once, ever.</p>
-					</div>
-
-				</div>
-
-				<div id="loc_settings" class="location">
-					<p id="setting_sciNotation"><input type="checkbox" id="setting_sciNotationBox" onclick="toggleSetting(settingEnum.SCINOTATION)"> Display large numbers with scientific notation instead of prefixes.</input></p>
-					<p id="setting_kingdomLevelMultiplyDisplay"><input type="checkbox" id="setting_kingdomLevelMultiplyDisplayBox" onclick="toggleSetting(settingEnum.KINGDOMLEVELMULTIPLYDISPLAY)"> Show Kingdom resource incomes multiplied by your level instead of base values (turning this off does not impact the resources earned, only how it is displayed).</input></p>
-					<form id="setting_dungeonBattleSpeedSettings">
-						<p>Dungeon battle speed:</p>
-						<p><input type="radio" id="setting_dungeonBattleSpeedSlow" onclick="setting_changeDungeonSpeed(0)"> Slow</p>
-						<p><input type="radio" id="setting_dungeonBattleSpeedFast" onclick="setting_changeDungeonSpeed(1)"> Fast</p>
-						<p><input type="radio" id="setting_dungeonBattleSpeedInstant" onclick="setting_changeDungeonSpeed(2)"> Instant</p>
-					  </form> 
-					<button type="button" onclick="save()">
-						Manually save the game (autosaves every 20 seconds or after you do something important)
-					</button>
-					<button type="button" onclick="wipe(true)">
-						Delete save file and hard reset (Don't press this!)
-					</button>
-				</div>
-
-				<div id="loc_shop" class="location">
-					<div id="shop_section_features">
-						<h1>Features</h1>
-						<div id="shop_section_features_list" class="shop_section"></div>
-					</div>
-					<div id="shop_section_cauldron">
-						<hr>
-						<h1>Cauldron</h1>
-						<div id="shop_section_cauldron_list" class="shop_section"></div>
-					</div>
-					<div id="shop_section_kingdom">
-						<hr>
-						<h1>Kingdom</h1>
-						<div id="shop_section_kingdom_list" class="shop_section"></div>
+					<div class="kingdom_resource">
+						<img src="./images/coin_yellow.png" alt="Yellow Coin" />
+						<span id="kingdom_yellowcoin_amount"></span>
 					</div>
 				</div>
-
-				<div id="loc_cauldron" class="location">
-					<div id="cauldron_magicPanel" class="cauldron_column">
-						<h3>✨Magic: <span id="cauldron_magic"></span> (+<span id="cauldron_magicIncome"></span>)</h3>
+				<div id="kingdom_mainArea" class="kingdom_column">
+					<div id="kingdom_canvas_container">
+						<canvas id="kingdom_canvas" width="360" height="360">Your browser doesn't support canvases. I'm
+							afraid you won't be able to play this game. Please upgrade to a better browser.</canvas>
 					</div>
-					<div id="cauldron_buildingPanel" class="cauldron_column">
-						<h3>Magical Items</h3>
-						<div id="cauldron_buildingList"></div>
-					</div>
-					<div id="cauldron_spellPanel" class="cauldron_column">
-						<h3>Spells</h3>
-						<div id="cauldron_spellList"></div>
+					<div id="kingdom_infoPanel">
+						<div id="kingdom_infoTitle" class="kingdom_infoPanel"></div>
+						<div id="kingdom_infoDescription" class="kingdom_infoPanel"></div>
 					</div>
 				</div>
+				<div id="kingdom_purchasePanel" class="kingdom_column">
+					<div id="kingdom_removeBuildingPanel" class="kingdom_building">
+						<div class="kingdom_building_row">
+							<img src="./images/kingdom/bulldozer.png" alt="Remove Building"
+								class='kingdom_buildingImage' />
+							<span class="kingdom_buildingName">Remove Building</span>
+							<button type="button" class="button clickable" onclick="kingdom_removeAllBuildings()">Remove
+								All</button>
+							<button type="button" id="kingdom_removeButton" class="button clickable"
+								onclick="kingdom_pickupRemoveBuilding()">Remove</button>
+						</div>
+					</div>
+					<div id="kingdom_claimTilePanel" class="kingdom_building">
+						<div class="kingdom_building_row">
+							<img src="./images/kingdom/swords.png" alt="Claim Tile" class='kingdom_buildingImage' />
+							<span class="kingdom_buildingName">Claim Tile</span>
+							<button type="button" id="kingdom_claimTileButton" class="button"
+								onclick="kingdom_pickupClaimTile()">Claim Tile</button>
+						</div>
+						<div class="kingdom_building_row">
+							<span class="kingdom_buildingCost">
+								<img src="./images/kingdom/resource_labour.png" alt="Labour" />
+								<span id="kingdom_claimTileLabourCost"></span>
+								<img src="./images/kingdom/resource_military.png" alt="Military" />
+								<span id="kingdom_claimTileMilitaryCost"></span>
+							</span>
+						</div>
+					</div>
+					<h3>Buildings</h3>
+					<div id="kingdom_buildingList"></div>
+					<h3>Upgrades</h3>
+					<div id="kingdom_upgradeList"></div>
+				</div>
+			</div>
 
-				<div id="loc_kingdom" class="location">
-					<div id="kingdom_resourcePanel" class="kingdom_column">
-						<div class="kingdom_resource">
-							<img src="./images/exp.png" alt="Experience" />
-							<span id="kingdom_exp_amount"></span>
-						</div>
-						<div class="kingdom_resource">
-							<img src="./images/coin_yellow.png" alt="Yellow Coin" />
-							<span id="kingdom_yellowcoin_amount"></span>
-						</div>
+			<div id="loc_dungeon" class="location">
+				<div id="dungeon_view_prepare">
+					<div id="dungeon_loadout">
+						<p>HP: <span id="dungeon_loadoutHpSpan"></span></p>
+						<p>Attack: <span id="dungeon_loadoutAtkSpan"></span></p>
+						<p>Defense: <span id="dungeon_loadoutDefSpan"></span></p>
+						<p>Weapon: <span id="dungeon_loadoutWeaponSpan"></span></p>
+						<p>Shield: <span id="dungeon_loadoutShieldSpan"></span></p>
+						<p>Accessory: <span id="dungeon_loadoutAccessorySpan"></span></p>
+						<h3>Weapons</h3>
+						<div id="dungeon_loadoutWeapons"></div>
+						<h3>Shields</h3>
+						<div id="dungeon_loadoutShields"></div>
+						<h3>Accessories</h3>
+						<div id="dungeon_loadoutAccessories"></div>
 					</div>
-					<div id="kingdom_mainArea" class="kingdom_column">
-						<div id="kingdom_canvas_container">
-							<canvas id="kingdom_canvas" width="360" height="360">Your browser doesn't support canvases. I'm afraid you won't be able to play this game. Please upgrade to a better browser.</canvas>
-						</div>
-						<div id="kingdom_infoPanel">
-							<div id="kingdom_infoTitle" class="kingdom_infoPanel"></div>
-							<div id="kingdom_infoDescription" class="kingdom_infoPanel"></div>
-						</div>
-					</div>
-					<div id="kingdom_purchasePanel" class="kingdom_column">
-						<div id="kingdom_removeBuildingPanel" class="kingdom_building">
-							<div class="kingdom_building_row">
-								<img src="./images/kingdom/bulldozer.png" alt= "Remove Building" class='kingdom_buildingImage'/>
-								<span class="kingdom_buildingName">Remove Building</span>
-								<button type="button" class="button clickable" onclick="kingdom_removeAllBuildings()">Remove All</button>
-								<button type="button" id="kingdom_removeButton" class="button clickable" onclick="kingdom_pickupRemoveBuilding()">Remove</button>
-							</div>
-						</div>
-						<div id="kingdom_claimTilePanel" class="kingdom_building">
-							<div class="kingdom_building_row">
-								<img src="./images/kingdom/swords.png" alt= "Claim Tile" class='kingdom_buildingImage'/>
-								<span class="kingdom_buildingName">Claim Tile</span>
-								<button type="button" id="kingdom_claimTileButton" class="button" onclick="kingdom_pickupClaimTile()">Claim Tile</button>
-							</div>
-							<div class="kingdom_building_row">
-								<span class="kingdom_buildingCost">
-									<img src="./images/kingdom/resource_labour.png" alt="Labour"/>
-									<span id="kingdom_claimTileLabourCost"></span>
-									<img src="./images/kingdom/resource_military.png" alt="Military"/>
-									<span id="kingdom_claimTileMilitaryCost"></span>
-								</span>
-							</div>
-						</div>
-						<h3>Buildings</h3>
-						<div id="kingdom_buildingList"></div>
-						<h3>Upgrades</h3>
-						<div id="kingdom_upgradeList"></div>
+					<div id="dungeon_dungeonList">
 					</div>
 				</div>
-
-				<div id="loc_dungeon" class="location">
-					<div id="dungeon_view_prepare">
-						<div id="dungeon_dungeonList">
-						</div>
-						<div id="dungeon_loadout">
-							<p>HP: <span id="dungeon_loadoutHpSpan"></span></p>
-							<p>Attack: <span id="dungeon_loadoutAtkSpan"></span></p>
-							<p>Defense: <span id="dungeon_loadoutDefSpan"></span></p>
-							<p>Weapon: <span id="dungeon_loadoutWeaponSpan"></span></p>
-							<p>Shield: <span id="dungeon_loadoutShieldSpan"></span></p>
-							<p>Accessory: <span id="dungeon_loadoutAccessorySpan"></span></p>
-							<h3>Weapons</h3>
-							<div id="dungeon_loadoutWeapons"></div>
-							<h3>Shields</h3>
-							<div id="dungeon_loadoutShields"></div>
-							<h3>Accessories</h3>
-							<div id="dungeon_loadoutAccessories"></div>
-						</div>
-					</div>
-					<div id="dungeon_view_dungeon">
-						<div id="dungeon_statsColumn" class="dungeon_column">
-							<div id="dungeon_moveButtons">
-								<div>
-									<button type="button" class="dungeon_moveButtonCentred button clickable" onclick="dungeon_move('north')">NORTH</button>
-								</div>
-								<div>
-									<button type="button" class="button clickable" onclick="dungeon_move('west')">WEST</button>
-									<button type="button" class="button clickable" onclick="dungeon_move('east')">EAST</button>
-								</div>
-								<div>
-									<button type="button" class="dungeon_moveButtonCentred button clickable" onclick="dungeon_move('south')">SOUTH</button>
-								</div>
-								<p>(Also arrow keys or WASD)</p>
-							</div>
-							<p>HP: <span id="dungeon_playerHpSpan"></span></p>
-							<p>Attack: <span id="dungeon_playerAtkSpan"></span></p>
-							<p>Defense: <span id="dungeon_playerDefSpan"></span></p>
-							<p>Yellow Keys: <span id="dungeon_playerYkSpan"></span></p>
-							<p>Blue Keys: <span id="dungeon_playerBkSpan"></span></p>
-							<p>Red Keys: <span id="dungeon_playerRkSpan"></span></p>
-							<p>Weapon: <span id="dungeon_playerWeaponSpan"></span></p>
-							<p>Shield: <span id="dungeon_playerShieldSpan"></span></p>
-							<p>Accessory: <span id="dungeon_playerAccessorySpan"></span></p>
+				<div id="dungeon_view_dungeon">
+					<div id="dungeon_statsColumn" class="dungeon_column">
+						<p>HP: <span id="dungeon_playerHpSpan"></span></p>
+						<p>Attack: <span id="dungeon_playerAtkSpan"></span></p>
+						<p>Defense: <span id="dungeon_playerDefSpan"></span></p>
+						<p>Yellow Keys: <span id="dungeon_playerYkSpan"></span></p>
+						<p>Blue Keys: <span id="dungeon_playerBkSpan"></span></p>
+						<p>Red Keys: <span id="dungeon_playerRkSpan"></span></p>
+						<p>Weapon: <span id="dungeon_playerWeaponSpan"></span></p>
+						<p>Shield: <span id="dungeon_playerShieldSpan"></span></p>
+						<p>Accessory: <span id="dungeon_playerAccessorySpan"></span></p>
+						<hr>
+						<button type="button" class="button clickable" onclick="dungeon_leave()">Leave
+							Dungeon</button>
+						<hr>
+						<div id="dungeon_moveButtons">
 							<div>
-								<button type="button" class="button clickable" onclick="dungeon_leave()">Leave Dungeon</button>
+								<button type="button" class="dungeon_moveButtonCentred button clickable"
+									onclick="dungeon_move('north')">NORTH</button>
 							</div>
-						</div>
-						<div id="dungeon_dungeonColumn" class="dungeon_column">
-							<canvas id="dungeon_canvas" width="550" height="550">Your browser doesn't support canvases. I'm afraid you won't be able to play this game. Please upgrade to a better browser.</canvas>
-						</div>
-						<div id="dungeon_infoColumn" class="dungeon_column">
-							<div id=dungeon_infoPanel>
-								<div id="dungeon_infoTitle" class="dungeon_infoPanel"></div>
-								<div id="dungeon_infoDescription" class="dungeon_infoPanel">Hover your mouse over things to find out more. Bump into things to interact with them.</div>
+							<div>
+								<button type="button" class="button clickable"
+									onclick="dungeon_move('west')">WEST</button>
+								<button type="button" class="button clickable"
+									onclick="dungeon_move('east')">EAST</button>
 							</div>
+							<div>
+								<button type="button" class="dungeon_moveButtonCentred button clickable"
+									onclick="dungeon_move('south')">SOUTH</button>
+							</div>
+							<p>(Also arrow keys or WASD)</p>
+						</div>
+					</div>
+					<div id="dungeon_dungeonColumn" class="dungeon_column">
+						<canvas id="dungeon_canvas" width="550" height="550">Your browser doesn't support canvases. I'm
+							afraid you won't be able to play this game. Please upgrade to a better browser.</canvas>
+					</div>
+					<div id="dungeon_infoColumn" class="dungeon_column">
+						<div id=dungeon_infoPanel>
+							<div id="dungeon_infoTitle" class="dungeon_infoPanel"></div>
+							<div id="dungeon_infoDescription" class="dungeon_infoPanel">Hover your mouse over things to
+								find out more. Bump into things to interact with them.</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div id="modal">
-			<div id="modal_content">
-				<h1><img id="modal_image"/><span id="modal_title"></span></h1>
-				<p id="modal_text"></p>
-				<button type="button" class="button clickable" onclick="modal_close()">OK</button>
-			</div>
+	</div>
+	<div id="modal">
+		<div id="modal_content">
+			<h1><img id="modal_image" /><span id="modal_title"></span></h1>
+			<p id="modal_text"></p>
+			<button type="button" class="button clickable" onclick="modal_close()">OK</button>
 		</div>
+	</div>
 
-		<script src="./scripts/cauldron/cauldron_data.js"></script>
-		<script src="./scripts/cauldron/cauldron_core.js"></script>
-		<script src="./scripts/cauldron/cauldron_display.js"></script>
-		<script src="./scripts/kingdom/kingdom_data.js"></script>
-		<script src="./scripts/kingdom/kingdom_core.js"></script>
-		<script src="./scripts/kingdom/kingdom_display.js"></script>
-		<script src="./scripts/dungeon/dungeon_data.js"></script>
-		<script src="./scripts/dungeon/dungeon_core.js"></script>
-		<script src="./scripts/dungeon/dungeon_display.js"></script>
-		<script src="./scripts/shop/shop_data.js"></script>
-		<script src="./scripts/shop/shop_core.js"></script>
-		<script src="./scripts/shop/shop_display.js"></script>
-		<script src="./scripts/settings/settings_core.js"></script>
-		<script src="./scripts/settings/settings_display.js"></script>
-		<script src="./scripts/preloadImages.js"></script>
-		<script src="./scripts/game.js"></script>
-		<script src="./scripts/core.js"></script>
-	</body>
+	<script src="./scripts/cauldron/cauldron_data.js"></script>
+	<script src="./scripts/cauldron/cauldron_core.js"></script>
+	<script src="./scripts/cauldron/cauldron_display.js"></script>
+	<script src="./scripts/kingdom/kingdom_data.js"></script>
+	<script src="./scripts/kingdom/kingdom_core.js"></script>
+	<script src="./scripts/kingdom/kingdom_display.js"></script>
+	<script src="./scripts/dungeon/dungeon_data.js"></script>
+	<script src="./scripts/dungeon/dungeon_core.js"></script>
+	<script src="./scripts/dungeon/dungeon_display.js"></script>
+	<script src="./scripts/shop/shop_data.js"></script>
+	<script src="./scripts/shop/shop_core.js"></script>
+	<script src="./scripts/shop/shop_display.js"></script>
+	<script src="./scripts/settings/settings_core.js"></script>
+	<script src="./scripts/settings/settings_display.js"></script>
+	<script src="./scripts/preloadImages.js"></script>
+	<script src="./scripts/game.js"></script>
+	<script src="./scripts/core.js"></script>
+</body>
+
 </html>

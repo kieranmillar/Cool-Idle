@@ -21,7 +21,7 @@ function cauldron_init() {
         htmlText += "<span id='" + building.id + "Cost'></span>";
         htmlText += "<button type='button' id='" + building.id + "BuildButton' class='cauldron_buildButton button' onclick='cauldron_build(" + building.idNumber + ")' disabled>Conjure</button></div>";
         newElement.html(htmlText);
-    
+
         $("#cauldron_buildingList").append(newElement);
         cauldron_buildingClass.push(newElement);
 
@@ -42,8 +42,8 @@ function cauldron_init() {
         htmlText += "<div class='cauldron_spell_row cauldron_spread_row'>";
         htmlText += "<div>Cost: " + displayNum(spell.cost) + " ✨Magic</div>";
         htmlText += "<button type='button' id='" + spell.id + "SpellButton' class='cauldron_spellButton button' onclick='cauldron_castSpell(" + spell.idNumber + ")' disabled>Cast</button></div>";
-		newElement.html(htmlText);
-        
+        newElement.html(htmlText);
+
         $("#cauldron_spellList").append(newElement);
         cauldron_spellClass.push(newElement);
 
@@ -56,7 +56,7 @@ function cauldron_init() {
 }
 
 //This is called by the game loop to trigger all of the once per second updates this feature requires
-function cauldron_tick () {
+function cauldron_tick() {
     game.cauldron.magic += cauldron_magicIncome;
 }
 
@@ -76,7 +76,7 @@ function cauldron_unlocks() {
 }
 
 //We try and work out the magic income any time something changes and store it, so only the end result is read each tick
-function cauldron_calculateOutput () {
+function cauldron_calculateOutput() {
     cauldron_magicIncome = 0;
     for (i = 0; i < cauldron_buildings.length; i++) {
         if (cauldron_buildings[i].hasOwnProperty('output')) {
@@ -86,13 +86,13 @@ function cauldron_calculateOutput () {
 }
 
 // Get the scaled cost of a building, based on number of that building already built
-function cauldron_getBuildingCost (building) {
+function cauldron_getBuildingCost(building) {
     return Math.floor(cauldron_buildings[building].cost.base * Math.pow(cauldron_buildings[building].cost.factor, game.cauldron.building[building]));
 }
 
 // Returns if you can afford to build a building
-function cauldron_getBuildingAffordable (building) {
-    if (game.cauldron.magic < cauldron_getBuildingCost (building)) {
+function cauldron_getBuildingAffordable(building) {
+    if (game.cauldron.magic < cauldron_getBuildingCost(building)) {
         return false;
     }
     return true;
@@ -100,11 +100,11 @@ function cauldron_getBuildingAffordable (building) {
 
 // Build a building, paying its cost.
 function cauldron_build(building) {
-    if (!cauldron_getBuildingAffordable (building)) {
+    if (!cauldron_getBuildingAffordable(building)) {
         return;
     }
     game.cauldron.magic -= cauldron_getBuildingCost(building);
-    game.cauldron.building[building] ++;
+    game.cauldron.building[building]++;
     if (cauldron_buildings[building].hasOwnProperty('onPurchase')) {
         cauldron_buildings[building].onPurchase();
     }
@@ -114,7 +114,7 @@ function cauldron_build(building) {
 }
 
 // Returns if you can afford to purchase a spell
-function cauldron_getSpellAffordable (spell) {
+function cauldron_getSpellAffordable(spell) {
     if (game.cauldron.magic < cauldron_spells[spell].cost) {
         return false;
     }
@@ -126,7 +126,7 @@ function cauldron_castSpell(spell) {
     if (game.cauldron.spells[spell]) {
         return;
     }
-    if (!cauldron_getSpellAffordable (spell)) {
+    if (!cauldron_getSpellAffordable(spell)) {
         return;
     }
     game.cauldron.magic -= cauldron_spells[spell].cost;

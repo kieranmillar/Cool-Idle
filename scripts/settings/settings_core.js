@@ -5,7 +5,7 @@ const settingEnum = {
 }
 
 //Toggle settings
-function toggleSetting (setting) {
+function toggleSetting(setting) {
     if (game.settings[setting] == 0) {
         game.settings[setting] = 1;
     }
@@ -21,7 +21,7 @@ function toggleSetting (setting) {
 }
 
 //Change the dungeon battle speed
-function setting_changeDungeonSpeed (value) {
+function setting_changeDungeonSpeed(value) {
     game.settings[settingEnum.DUNGEONBATTLESPEED] = value;
     displaySettings();
     save();

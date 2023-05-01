@@ -18,29 +18,29 @@ function shop_populateItemList(itemArray, sectionId, category) {
         var newElement = $('<div></div>');
         newElement.attr('id', item.id);
         newElement.addClass("shop_item");
-        newElement.click({ value: count }, function (event) {shop_buy(category, event.data.value)});
+        newElement.click({ value: count }, function (event) { shop_buy(category, event.data.value) });
         let htmlText = "<h2>" + item.name + "</h2>" + item.description + "<span id='" + item.id + "Cost' class='cost'>Cost: ";
         if (item.cost.length == 0) {
             htmlText += "Free!";
         }
         else {
-            for (let i = 0; i < item.cost.length; i ++) {
+            for (let i = 0; i < item.cost.length; i++) {
                 htmlText += "<img src = './images/" + shop_costs[item.cost[i].type].imageLink + "' alt='" + shop_costs[item.cost[i].type].name + "'/>" + item.cost[i].value;
             }
         }
         htmlText += "</span>";
         newElement.html(htmlText);
-        
+
         $("#" + sectionId).append(newElement);
 
         item.idLink = $("#" + item.id);
         item.costLink = $("#" + item.id + "Cost");
-        count ++;
+        count++;
     });
 }
 
 //Buying items from Cool-Mart
-function shop_buy (category, item) {
+function shop_buy(category, item) {
     //In Javascript arrays are passed by reference so we can perform the same code on different arrays:
     let gameArray;
     let itemArray;
@@ -59,11 +59,11 @@ function shop_buy (category, item) {
             break;
     }
     //Is this already purchased?
-    if(gameArray[item] == 1) {
+    if (gameArray[item] == 1) {
         return;
     }
     //Can we afford to buy this?
-    for (let i = 0; i < itemArray[item].cost.length; i ++) {
+    for (let i = 0; i < itemArray[item].cost.length; i++) {
         switch (itemArray[item].cost[i].type) {
             case shop_costEnum.YELLOWCOINS:
                 if (game.yellowCoins < itemArray[item].cost[i].value) {
@@ -84,7 +84,7 @@ function shop_buy (category, item) {
     }
     gameArray[item] = 1;
     itemArray[item].onPurchase();
-    for (let i = 0; i < itemArray[item].cost.length; i ++) {
+    for (let i = 0; i < itemArray[item].cost.length; i++) {
         switch (itemArray[item].cost[i].type) {
             case shop_costEnum.YELLOWCOINS:
                 spendYellowCoins(itemArray[item].cost[i].value);

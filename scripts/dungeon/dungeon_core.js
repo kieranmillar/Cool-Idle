@@ -1,3 +1,5 @@
+var dungeon_equipmentClass = [];
+
 var dungeon_player = {
     x: 0,
     y: 0,
@@ -18,6 +20,7 @@ var dungeon_enemyType = 0;
 var dungeon_enemyCell = 0;
 var dungeon_busy = false;
 var dungeon_noDamageDealt = 0;
+var dungeon_ownedEquipment = [];
 
 const dungeon_modeEnum = {
     PREPARE: 0,
@@ -35,7 +38,7 @@ const dungeon_infoPanelEnum = {
 //It creates HTML elements and also calculates things that aren't stored in the game object
 function dungeon_init() {
     //Handle the mouse interacting with the canvas
-    dungeon_canvas.addEventListener('mousemove', function(evt) {
+    dungeon_canvas.addEventListener('mousemove', function (evt) {
         var rect = dungeon_canvas.getBoundingClientRect();
         let x = evt.clientX - rect.left;
         let y = evt.clientY - rect.top;
@@ -44,6 +47,30 @@ function dungeon_init() {
         cell = cellX + cellY * dungeon_dungeons[dungeon_currentDungeon].width;
         dungeon_mousedOverCell(cell);
     }, false);
+
+    //Dynamically create equipment list
+    dungeon_equipment.forEach(equipment => {
+        if (equipment.type != dungeon_equipmentTypeEnum.NONE) {
+            var newElement = $('<div></div>');
+            newElement.attr('id', "dungeon_equipment_" + equipment.idNumber);
+            let htmlText = "<span>" + equipment.name + "</span>";
+            htmlText += "<button type='button' class='button clickable' onclick='dungeon_assignEquipment(" + equipment.idNumber + ")'>EQUIP</button>";
+            newElement.html(htmlText);
+            switch (equipment.type) {
+                case dungeon_equipmentTypeEnum.WEAPON:
+                    dungeon_loadoutWeapons.append(newElement);
+                    break;
+                case dungeon_equipmentTypeEnum.SHIELD:
+                    dungeon_loadoutShields.append(newElement);
+                    break;
+                case dungeon_equipmentTypeEnum.ACCESSORY:
+                    dungeon_loadoutAccessories.append(newElement);
+                    break;
+            }
+            equipment.idLink = $("#dungeon_equipment_" + equipment.idNumber);
+            dungeon_equipmentClass.push(newElement);
+        }
+    });
 
     //Dynamically create dungeon list
     dungeon_dungeons.forEach(dungeon => {
@@ -54,11 +81,37 @@ function dungeon_init() {
         htmlText += "<span class='dungeon_dungeonRowTreasures'><span id='" + dungeon.id + "Treasures'></span> / " + dungeon.treasures.length + "</span>";
         htmlText += "<button type='button' class='button clickable' onclick='dungeon_explore(" + dungeon.idNumber + ")'>EXPLORE</button>";
         htmlText += "<button type='button' class='button clickable' onclick='dungeon_puzzle(" + dungeon.idNumber + ")'>PUZZLE</button>";
-		newElement.html(htmlText);
+        newElement.html(htmlText);
         $("#dungeon_dungeonList").append(newElement);
         dungeon.idLink = $("#" + dungeon.id);
         dungeon.treasureLink = $("#" + dungeon.id + "Treasures");
     });
+
+    dungeon_unlocks();
+    dungeon_prepare();
+}
+
+//Work out what should be unlocked
+function dungeon_unlocks() {
+    dungeon_ownedEquipment = [];
+    if (game.dungeon.treasures[dungeon_treasureEnum.ORIGAMISWORD]) {
+        dungeon_ownedEquipment.push(dungeon_equipmentEnum.ORAGAMISWORD);
+    }
+}
+
+//Set up the dungeon player data for the prepare screen
+function dungeon_prepare() {
+    dungeon_mode = dungeon_modeEnum.PREPARE;
+    dungeon_player.hp = game.level * 50;
+    dungeon_player.atk = 5;
+    dungeon_player.def = 0;
+    dungeon_player.weapon = dungeon_equipmentEnum.NONE;
+    dungeon_player.shield = dungeon_equipmentEnum.NONE;
+    dungeon_player.accessory = dungeon_equipmentEnum.NONE;
+    dungeon_swapEquipment(game.dungeon.weapon);
+    dungeon_swapEquipment(game.dungeon.shield);
+    dungeon_swapEquipment(game.dungeon.accessory);
+    dungeon_redraw();
 }
 
 //Start a new dungeon instance in explore mode. Takes the dungeon idNumber as a parameter
@@ -107,6 +160,16 @@ function dungeon_puzzle(dungeon) {
     dungeon_redraw();
 }
 
+//Assign new equipment during preparation
+function dungeon_assignEquipment(equipment) {
+    dungeon_swapEquipment(equipment);
+    game.dungeon.weapon = dungeon_player.weapon;
+    game.dungeon.shield = dungeon_player.shield;
+    game.dungeon.accessory = dungeon_player.accessory;
+    dungeon_redraw();
+    save();
+}
+
 //Swap an equipment item. Argument is the equipment from dungeon_equipmentEnum
 function dungeon_swapEquipment(equipment) {
     let oldEquip;
@@ -142,7 +205,7 @@ function dungeon_swapEquipment(equipment) {
 }
 
 //Move the player. Takes the direction as a parameter, which is a lowercase string of one of the 4 ordinal directions
-function dungeon_move (direction) {
+function dungeon_move(direction) {
     if (dungeon_busy) {
         return;
     }
@@ -164,17 +227,17 @@ function dungeon_move (direction) {
     }
     let cellX = dungeon_player.x + dX;
     let cellY = dungeon_player.y + dY;
-    let cell = cellX  + (cellY * dungeon_dungeons[dungeon_currentDungeon].width);
+    let cell = cellX + (cellY * dungeon_dungeons[dungeon_currentDungeon].width);
     if (cellX >= 0
-    && cellX < dungeon_dungeons[dungeon_currentDungeon].width
-    && cellY >= 0
-    && cellY < dungeon_dungeons[dungeon_currentDungeon].height) {
+        && cellX < dungeon_dungeons[dungeon_currentDungeon].width
+        && cellY >= 0
+        && cellY < dungeon_dungeons[dungeon_currentDungeon].height) {
         if (dungeon_layout[cell] == dungeon_terrainEnum.FLOOR) {
             dungeon_processMove(dX, dY);
         }
         if (dungeon_layout[cell] == dungeon_terrainEnum.GATEYELLOW) {
             if (dungeon_player.yellowKeys > 0) {
-                dungeon_player.yellowKeys --;
+                dungeon_player.yellowKeys--;
                 dungeon_createFloatingText("Yellow Keys - 1", "#FFFF00", 275, 275);
                 dungeon_layout[cell] = dungeon_terrainEnum.FLOOR;
             }
@@ -201,7 +264,7 @@ function dungeon_move (direction) {
             //enemy
             dungeon_startCombat(dungeon_layout[cell] - 2000, cell);
         }
-        dungeon_redraw ();
+        dungeon_redraw();
     }
 }
 
@@ -216,7 +279,7 @@ function dungeon_processMove(dX, dY) {
 }
 
 //Initiate combat with an enemy. Takes the enemy idNumber and its map cell position as parameters
-function dungeon_startCombat (enemyType, cell) {
+function dungeon_startCombat(enemyType, cell) {
     dungeon_busy = true;
     dungeon_enemyType = enemyType;
     dungeon_enemyCell = cell;
@@ -260,8 +323,8 @@ async function dungeon_playerAttacks() {
     var damage = Math.max(0, dungeon_player.atk - dungeon_enemies[dungeon_enemyType].def);
     if (damage > 0) {
         dungeon_enemyHp -= damage;
-        let enemyX = ((dungeon_enemyCell % dungeon_dungeons[dungeon_currentDungeon].width) - dungeon_player.x)*50 + 275;
-        let enemyY = (Math.floor(dungeon_enemyCell / dungeon_dungeons[dungeon_currentDungeon].width) - dungeon_player.y)*50 + 275;
+        let enemyX = ((dungeon_enemyCell % dungeon_dungeons[dungeon_currentDungeon].width) - dungeon_player.x) * 50 + 275;
+        let enemyY = (Math.floor(dungeon_enemyCell / dungeon_dungeons[dungeon_currentDungeon].width) - dungeon_player.y) * 50 + 275;
         dungeon_createFloatingText(damage, "#FF0000", enemyX, enemyY);
     }
     if (dungeon_checkForCombatAbort(damage)) {
@@ -269,9 +332,9 @@ async function dungeon_playerAttacks() {
         return;
     }
     if (dungeon_enemyHp > 0) {
-        let sleepTime = 200;
+        let sleepTime = 50;
         if (game.settings[settingEnum.DUNGEONBATTLESPEED] == 0) {
-            sleepTime = 500;
+            sleepTime = 250;
         }
         await sleep(sleepTime);
         dungeon_enemyAttacks();
@@ -308,7 +371,7 @@ async function dungeon_enemyAttacks() {
 //Check to see if combat should be aborted because both the enemy and player dealt no damage to each other. Takes the damage dealt as a parameter
 function dungeon_checkForCombatAbort(damage) {
     if (damage == 0) {
-        dungeon_noDamageDealt ++;
+        dungeon_noDamageDealt++;
         if (dungeon_noDamageDealt == 2) {
             dungeon_busy = false;
             return true;
@@ -344,7 +407,7 @@ function dungeon_loseCombat() {
 
 //Leave an active dungeon instance
 function dungeon_leave() {
-    dungeon_mode = dungeon_modeEnum.PREPARE;
+    dungeon_prepare();
     dungeon_redraw();
 }
 

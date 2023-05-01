@@ -18,16 +18,16 @@ var id_modalText = $("#modal_text");
 
 //A tick is the current date and time, in seconds.
 function getTick() {
-    return Math.floor (Date.now() / 1000);
+    return Math.floor(Date.now() / 1000);
 }
 
 //This function executes 50 times per second.
 //Ticks represent full seconds. Most game logic runs once per tick, while some smooth drawing will occur each execution.
-function gameLoop () {
-	let currentTick = getTick();
+function gameLoop() {
+    let currentTick = getTick();
     ticks = currentTick - game.previousTick;
-	if (ticks > maxTicks) {
-		ticks = maxTicks; // TODO: Replace with offline calculation eventually
+    if (ticks > maxTicks) {
+        ticks = maxTicks; // TODO: Replace with offline calculation eventually
     }
     while (ticks > 0) { //If the game is running slowly, we should perform multiple second's worth of updates at once
         // Per second stuff goes here
@@ -45,8 +45,8 @@ function gameLoop () {
                 kingdom_updateUpgrades();
             }
         }
-        ticks --;
-        ticksSinceSave ++;
+        ticks--;
+        ticksSinceSave++;
     }
     if (activeTab == "dungeon") {
         dungeon_drawFloatingText();
@@ -60,40 +60,39 @@ function gameLoop () {
 }
 
 //Swapping between feature tabs
-function goToLocation (location)
-{
+function goToLocation(location) {
     activeTab = location;
     $(".location").hide();
     $(".tab").removeClass("active");
-	switch (location) {
-		case "help":
+    switch (location) {
+        case "help":
             $("#loc_help").show();
             $("#tab_help").addClass("active");
             break;
         case "settings":
             $("#loc_settings").show();
             $("#tab_settings").addClass("active");
-            displaySettings ();
+            displaySettings();
             break;
-		case "shop":
+        case "shop":
             $("#loc_shop").show();
             $("#tab_shop").addClass("active");
-            shop_redraw ();
+            shop_redraw();
             break;
         case "cauldron":
             $("#loc_cauldron").show();
             $("#tab_cauldron").addClass("active");
-            cauldron_redraw ();
+            cauldron_redraw();
             break;
-		case "kingdom":
+        case "kingdom":
             $("#loc_kingdom").show();
             $("#tab_kingdom").addClass("active");
-            kingdom_redraw ();
+            kingdom_redraw();
             break;
         case "dungeon":
             $("#loc_dungeon").show();
             $("#tab_dungeon").addClass("active");
-            dungeon_redraw ();
+            dungeon_redraw();
             break;
     }
 }
@@ -126,7 +125,7 @@ function redrawTopBar() {
     id_maxExp.html(displayNum(getMaxExp()));
     id_expProgress.attr({
         "value": game.exp,
-        "max": getMaxExp ()
+        "max": getMaxExp()
     });
     id_yellowCoins.html(displayNum(game.yellowCoins));
     id_blueCoins.html(displayNum(game.blueCoins));
@@ -134,21 +133,21 @@ function redrawTopBar() {
 }
 
 //Call this every time you want to gain Exp as it also handles levelling up and drawing
-function gainExp (amount) {
+function gainExp(amount) {
     game.exp += amount;
     let levelledUp = false;
     if (game.exp >= getMaxExp()) {
         levelledUp = true;
     }
     while (game.exp >= getMaxExp()) {
-        gainGreenCoins (game.level);
+        gainGreenCoins(game.level);
         game.exp -= getMaxExp();
-        game.level ++;
+        game.level++;
     }
     id_exp.html(displayNum(game.exp));
     id_expProgress.attr({
         "value": game.exp,
-        "max": getMaxExp ()
+        "max": getMaxExp()
     });
     if (levelledUp) {
         id_level.html(game.level);
@@ -161,39 +160,45 @@ function gainExp (amount) {
             kingdom_updateResources();
             kingdom_updateInfoPanel(kingdom_infoPanelEnum.PREVIOUS);
         }
+        if (activeTab == "dungeon") {
+            if (dungeon_mode == dungeon_modeEnum.PREPARE) {
+                dungeon_player.hp = game.level * 50;
+            }
+            dungeon_redraw();
+        }
     }
 }
 
-function getMaxExp () {
+function getMaxExp() {
     return Math.pow(game.level, 2) * 100;
 }
 
-function gainYellowCoins (amount) {
+function gainYellowCoins(amount) {
     game.yellowCoins += amount;
     id_yellowCoins.html(displayNum(game.yellowCoins));
 }
 
-function spendYellowCoins (amount) {
+function spendYellowCoins(amount) {
     game.yellowCoins -= amount;
     id_yellowCoins.html(displayNum(game.yellowCoins));
 }
 
-function gainBlueCoins (amount) {
+function gainBlueCoins(amount) {
     game.blueCoins += amount;
     id_blueCoins.html(displayNum(game.blueCoins));
 }
 
-function spendBlueCoins (amount) {
+function spendBlueCoins(amount) {
     game.blueCoins -= amount;
     id_blueCoins.html(displayNum(game.blueCoins));
 }
 
-function gainGreenCoins (amount) {
+function gainGreenCoins(amount) {
     game.greenCoins += amount;
     id_greenCoins.html(displayNum(game.greenCoins));
 }
 
-function spendGreenCoins (amount) {
+function spendGreenCoins(amount) {
     game.greenCoins -= amount;
     id_greenCoins.html(displayNum(game.greenCoins));
 }
@@ -203,18 +208,18 @@ function displayNum(num) {
     if (num < 1000) {
         return num;
     }
-	if (game.settings[settingEnum.SCINOTATION]) {
+    if (game.settings[settingEnum.SCINOTATION]) {
         return parseFloat(num).toPrecision(3);
     }
-	for(var i = suffixes.length - 1; i >= 0; i--) {
-		if(Math.abs(num) >= Math.pow(10, 3*i + 3) * 0.99999) {
+    for (var i = suffixes.length - 1; i >= 0; i--) {
+        if (Math.abs(num) >= Math.pow(10, 3 * i + 3) * 0.99999) {
             if (i < 4) {
-                return parseFloat(num/Math.pow(10, 3*i + 3)).toFixed(2) + suffixes[i];
+                return parseFloat(num / Math.pow(10, 3 * i + 3)).toFixed(2) + suffixes[i];
             }
             else {
-                parseFloat(num/Math.pow(10, 3*i + 3)).toFixed(2) + " " + suffixes[i]; //spaces out first four suffixes
+                parseFloat(num / Math.pow(10, 3 * i + 3)).toFixed(2) + " " + suffixes[i]; //spaces out first four suffixes
             }
-		}
+        }
     }
     return parseFloat(num).toFixed(2);
 }
@@ -277,7 +282,7 @@ function sleep(ms) {
 }
 
 //This executes when the whole page has finished loading. This is where the code "starts"
-$(document).ready(function(){
+$(document).ready(function () {
     var preload = preloadImages();
     load();
     shop_init();
@@ -286,17 +291,16 @@ $(document).ready(function(){
     dungeon_init();
     redrawTopBar();
     displayFeatures();
-    goToLocation ("help");
+    goToLocation("help");
     $("#version").html(game.version);
     window.addEventListener('keydown', checkKey, true);
-    id_modal.click(function() {modal_close();});
     preload.then(() => {
         gameLoop();
-        setInterval (gameLoop, 20);
+        setInterval(gameLoop, 20);
         $("#loading").hide();
         $("#game").addClass("flex");
     })
-    .catch(() => {
-        $("#loading").html("Oh no! something went wrong with preloading images! Totally uncool!");
-    });
+        .catch(() => {
+            $("#loading").html("Oh no! something went wrong with preloading images! Totally uncool!");
+        });
 });

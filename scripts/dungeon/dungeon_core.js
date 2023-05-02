@@ -235,10 +235,13 @@ function dungeon_move(direction) {
         && cellX < dungeon_dungeons[dungeon_currentDungeon].width
         && cellY >= 0
         && cellY < dungeon_dungeons[dungeon_currentDungeon].height) {
-        if (dungeon_layout[cell] == dungeon_terrainEnum.FLOOR) {
+        if (dungeon_layout[cell] == dungeon_terrainEnum.WALL) {
+            return;
+        }
+        else if (dungeon_layout[cell] == dungeon_terrainEnum.FLOOR) {
             dungeon_processMove(dX, dY);
         }
-        if (dungeon_layout[cell] == dungeon_terrainEnum.GATEYELLOW) {
+        else if (dungeon_layout[cell] == dungeon_terrainEnum.GATEYELLOW) {
             if (dungeon_player.yellowKeys > 0) {
                 dungeon_player.yellowKeys--;
                 dungeon_createFloatingText("Yellow Keys - 1", "#FFFF00", 275, 275);
@@ -341,7 +344,7 @@ function dungeon_calculateBattleResult(enemyType) {
     if (playerDamage == 0) {
         return -1;
     }
-    let numberOfHits = Math.max(Math.floor(dungeon_enemies[enemyType].hp / playerDamage) - 1, 0);
+    let numberOfHits = Math.max(Math.ceil(dungeon_enemies[enemyType].hp / playerDamage) - 1, 0);
     return enemyDamage * numberOfHits;
 }
 

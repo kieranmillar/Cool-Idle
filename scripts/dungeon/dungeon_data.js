@@ -445,7 +445,7 @@ const dungeon_dungeons = [
         outOfBounds: dungeon_terrainEnum.WALL,
         layout: [
             1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 103, 0, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 4, 0, 0, 0, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 4, 0, 103, 0, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 103, 0, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 0, 4, 0, 0, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 0, 2000, 0, 0, 1, 1, 0, 2000, 0, 1, 1, 1, 1,
@@ -466,7 +466,7 @@ const dungeon_dungeons = [
         ],
         startX: 7,
         startY: 0,
-        puzzleHp: 250,
+        puzzleHp: 300,
         puzzleAtk: 5,
         puzzleDef: 0,
         puzzleWeapon: dungeon_equipmentEnum.NONE,

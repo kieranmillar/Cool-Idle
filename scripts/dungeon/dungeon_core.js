@@ -45,7 +45,7 @@ function dungeon_init() {
         let y = evt.clientY - rect.top;
         let cellX = dungeon_player.x + Math.floor(x / 50) - 5;
         let cellY = dungeon_player.y + Math.floor(y / 50) - 5;
-        cell = cellX + cellY * dungeon_dungeons[dungeon_currentDungeon].width;
+        let cell = cellX + cellY * dungeon_dungeons[dungeon_currentDungeon].width;
         dungeon_mousedOverCell(cell);
     }, false);
 
@@ -81,11 +81,12 @@ function dungeon_init() {
         let htmlText = "<span class='dungeon_dungeonRowName'>" + dungeon.name + "</span>";
         htmlText += "<span class='dungeon_dungeonRowTreasures'><span id='" + dungeon.id + "Treasures'></span> / " + dungeon.treasures.length + "</span>";
         htmlText += "<button type='button' class='button clickable' onclick='dungeon_explore(" + dungeon.idNumber + ")'>EXPLORE</button>";
-        htmlText += "<button type='button' class='button clickable' onclick='dungeon_puzzle(" + dungeon.idNumber + ")'>PUZZLE</button>";
+        htmlText += "<button id='" + dungeon.id + "PuzzleButton' type='button' class='button clickable' onclick='dungeon_puzzle(" + dungeon.idNumber + ")'>PUZZLE</button>";
         newElement.html(htmlText);
         $("#dungeon_dungeonList").append(newElement);
         dungeon.idLink = $("#" + dungeon.id);
         dungeon.treasureLink = $("#" + dungeon.id + "Treasures");
+        dungeon.puzzleLink = $("#" + dungeon.id + "PuzzleButton");
     });
 
     dungeon_unlocks();
@@ -96,7 +97,7 @@ function dungeon_init() {
 function dungeon_unlocks() {
     dungeon_ownedEquipment = [];
     if (game.dungeon.treasures[dungeon_treasureEnum.ORIGAMISWORD]) {
-        dungeon_ownedEquipment.push(dungeon_equipmentEnum.ORAGAMISWORD);
+        dungeon_ownedEquipment.push(dungeon_equipmentEnum.ORIGAMISWORD);
     }
 }
 

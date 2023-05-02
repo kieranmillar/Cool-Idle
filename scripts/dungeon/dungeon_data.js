@@ -75,7 +75,7 @@ const dungeon_itemEnum = {
     DEFTINY: 9,
     ATKSMALL: 10,
     DEFSMALL: 11,
-    ORAGAMISWORD: 12
+    ORIGAMISWORD: 12
 };
 
 /*Array of data structures for collectable items found in the dungeons
@@ -221,13 +221,13 @@ const dungeon_items = [
         }
     },
     {
-        idNumber: dungeon_itemEnum.ORAGAMISWORD,
-        name: "Oragami Sword",
+        idNumber: dungeon_itemEnum.ORIGAMISWORD,
+        name: "Origami Sword",
         description: "This carefully folded sword will deliver painful papercuts to your foes.</p><p>Weapon</p><p>Attack + 2",
-        imageLink: "oragami_sword.png",
+        imageLink: "origami_sword.png",
         imageCache: null,
         effect: function () {
-            dungeon_swapEquipment(dungeon_equipmentEnum.ORAGAMISWORD);
+            dungeon_swapEquipment(dungeon_equipmentEnum.ORIGAMISWORD);
         }
     }
 ];
@@ -252,12 +252,12 @@ const dungeon_treasures = [
     {
         idNumber: dungeon_treasureEnum.ORIGAMISWORD,
         name: "an Origami Sword",
-        image: "dungeon/oragami_sword.png",
+        image: "dungeon/origami_sword.png",
         description: "This carefully folded sword will deliver painful papercuts to your foes.</p><p><strong>This has been added to your starting equipment inventory.</strong></p><p>Starting equipment can be equiped outside of a dungeon instance and brought into any future dungeon instance. You have unlimited copies, even if you swap equipment inside a dungeon instance, so feel free to use it whenever you want.",
         effect: function () {
             dungeon_unlocks();
         },
-        puzzleDrop: dungeon_itemEnum.ORAGAMISWORD
+        puzzleDrop: dungeon_itemEnum.ORIGAMISWORD
     },
     {
         idNumber: dungeon_treasureEnum.BLUECOINS01,
@@ -337,7 +337,7 @@ const dungeon_enemies = [
 
 const dungeon_equipmentEnum = {
     NONE: 0,
-    ORAGAMISWORD: 1,
+    ORIGAMISWORD: 1,
     PAPERBAG: 2
 };
 
@@ -371,10 +371,10 @@ const dungeon_equipment = [
         type: dungeon_equipmentTypeEnum.NONE
     },
     {
-        idNumber: dungeon_equipmentEnum.ORAGAMISWORD,
-        name: "Oragami Sword",
+        idNumber: dungeon_equipmentEnum.ORIGAMISWORD,
+        name: "Origami Sword",
         description: "This carefully folded sword will deliver painful papercuts to your foes.</p><p>Attack + 2",
-        imageLink: "oragami_sword.png",
+        imageLink: "origami_sword.png",
         imageCache: null,
         idLink: null,
         type: dungeon_equipmentTypeEnum.WEAPON,

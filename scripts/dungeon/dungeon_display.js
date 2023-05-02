@@ -88,6 +88,12 @@ function dungeon_drawDungeonList() {
                 }
             });
             dungeon_dungeons[i].treasureLink.text(treasureCount);
+            if (treasureCount == dungeon_dungeons[i].treasures.length) {
+                dungeon_dungeons[i].puzzleLink.show();
+            }
+            else {
+                dungeon_dungeons[i].puzzleLink.hide();
+            }
         }
         else {
             dungeon_dungeons[i].idLink.hide();

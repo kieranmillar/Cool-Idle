@@ -21,6 +21,7 @@ var dungeon_enemyCell = 0;
 var dungeon_busy = false;
 var dungeon_noDamageDealt = 0;
 var dungeon_ownedEquipment = [];
+var dungeon_puzzleProgress = [];
 
 const dungeon_modeEnum = {
     PREPARE: 0,
@@ -157,6 +158,8 @@ function dungeon_puzzle(dungeon) {
     dungeon_swapEquipment(dungeon_dungeons[dungeon].puzzleWeapon);
     dungeon_swapEquipment(dungeon_dungeons[dungeon].puzzleShield);
     dungeon_swapEquipment(dungeon_dungeons[dungeon].puzzleAccessory);
+    dungeon_puzzleProgress = [];
+    dungeon_puzzleProgress = dungeon_puzzleProgress.fill(0, 0, dungeon_treasures.length);
     dungeon_redraw();
 }
 
@@ -251,13 +254,37 @@ function dungeon_move(direction) {
         else if (dungeon_layout[cell] >= 1000 && dungeon_layout[cell] < 2000) {
             //treasure
             let treasure = dungeon_layout[cell] - 1000;
-            if (game.dungeon.treasures[treasure] == 0) {
-                game.dungeon.treasures[treasure] = 1;
-                if (dungeon_treasures[treasure].hasOwnProperty("effect")) {
-                    dungeon_treasures[treasure].effect();
+            if (dungeon_mode == dungeon_modeEnum.EXPLORE) {
+                if (game.dungeon.treasures[treasure] == 0) {
+                    game.dungeon.treasures[treasure] = 1;
+                    if (dungeon_treasures[treasure].hasOwnProperty("effect")) {
+                        dungeon_treasures[treasure].effect();
+                    }
+                    modal_open("You found " + dungeon_treasures[treasure].name, dungeon_treasures[treasure].image, dungeon_treasures[treasure].description);
+                    save();
                 }
-                modal_open("You found " + dungeon_treasures[treasure].name, dungeon_treasures[treasure].image, dungeon_treasures[treasure].description);
-                save();
+            }
+            else {
+                dungeon_puzzleProgress[treasure] = 1;
+                dungeon_layout[cell] = 100 + dungeon_treasures[treasure].puzzleDrop;
+                let puzzleCount = 0;
+                dungeon_dungeons[dungeon_currentDungeon].treasures.forEach(treasure => {
+                    if (dungeon_puzzleProgress[treasure] == 1) {
+                        puzzleCount++;
+                    }
+                });
+                if (puzzleCount == dungeon_dungeons[dungeon_currentDungeon].treasures.length) {
+                    // Completed puzzle mode!
+                    let reward = dungeon_dungeons[dungeon_currentDungeon].puzzleReward;
+                    if (game.dungeon.treasures[reward] == 0) {
+                        game.dungeon.treasures[reward] = 1;
+                        if (dungeon_treasures[reward].hasOwnProperty("effect")) {
+                            dungeon_treasures[reward].effect();
+                        }
+                        modal_open("You found " + dungeon_treasures[reward].name, dungeon_treasures[reward].image, dungeon_treasures[reward].description);
+                        save();
+                    }
+                }
             }
         }
         else if (dungeon_layout[cell] >= 2000 && dungeon_layout[cell] < 3000) {

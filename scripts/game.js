@@ -53,7 +53,7 @@ var game = {
         weapon: dungeon_equipmentEnum.NONE,
         shield: dungeon_equipmentEnum.NONE,
         accessory: dungeon_equipmentEnum.NONE,
-        treasures: [0, 0, 0]
+        treasures: [0, 0, 0, 0]
     }
 };
 

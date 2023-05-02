@@ -2,6 +2,7 @@ var kingdom_buildingFailImage;
 var dungeon_playerImage;
 var dungeon_chestClosedImage;
 var dungeon_chestOpenImage;
+var dungeon_puzzlePieceImage;
 
 //Executes all of the following methods.
 function preloadImages() {
@@ -138,6 +139,10 @@ function preloadDungeonTerrainImages() {
         dungeon_chestOpenImage = new Image();
         dungeon_chestOpenImage.onload = imageLoadedCallback;
         dungeon_chestOpenImage.src = './images/dungeon/chest_open.png';
+
+        dungeon_puzzlePieceImage = new Image();
+        dungeon_puzzlePieceImage.onload = imageLoadedCallback;
+        dungeon_puzzlePieceImage.src = './images/dungeon/puzzle_piece.png';
     });
 }
 

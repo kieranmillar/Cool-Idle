@@ -145,11 +145,16 @@ function dungeon_drawCanvas() {
                     //treasure
                     ctx.drawImage(dungeon_terrain[dungeon_terrainEnum.FLOOR].imageCache[dungeon_dungeons[dungeon_currentDungeon].style], x, y);
                     let treasure = dungeon_layout[cell] - 1000;
-                    if (game.dungeon.treasures[treasure] == 0) {
-                        ctx.drawImage(dungeon_chestClosedImage, x, y);
+                    if (dungeon_mode == dungeon_modeEnum.EXPLORE) {
+                        if (game.dungeon.treasures[treasure] == 0) {
+                            ctx.drawImage(dungeon_chestClosedImage, x, y);
+                        }
+                        else {
+                            ctx.drawImage(dungeon_chestOpenImage, x, y);
+                        }
                     }
                     else {
-                        ctx.drawImage(dungeon_chestOpenImage, x, y);
+                        ctx.drawImage(dungeon_puzzlePieceImage, x, y);
                     }
                 }
                 else if (dungeon_layout[cell] < 3000) {
@@ -254,12 +259,18 @@ function dungeon_updateInfoPanel(infoPanelType, value) {
             else if (cellValue < 2000) {
                 //Treasures
                 let treasure = cellValue - 1000;
-                if (game.dungeon.treasures[treasure] == 0) {
-                    dungeon_infoTitle.html("<img src='" + dungeon_chestClosedImage.src + "' alt='Closed Treasure Chest'/>Unclaimed Treasure");
-                    dungeon_infoDescription.html("<p>Some permanent goodies are waiting for the taking! What could be inside?</p>");
-                } else {
-                    dungeon_infoTitle.html("<img src='" + dungeon_chestOpenImage.src + "' alt='Open Treasure Chest'/>Empty Treasure Chest");
-                    dungeon_infoDescription.html("<p>Somebody has already claimed this treasure! It was you, wasn't it?</p>");
+                if (dungeon_mode == dungeon_modeEnum.EXPLORE) {
+                    if (game.dungeon.treasures[treasure] == 0) {
+                        dungeon_infoTitle.html("<img src='" + dungeon_chestClosedImage.src + "' alt='Closed Treasure Chest'/>Unclaimed Treasure");
+                        dungeon_infoDescription.html("<p>Some permanent goodies are waiting for the taking! What could be inside?</p>");
+                    } else {
+                        dungeon_infoTitle.html("<img src='" + dungeon_chestOpenImage.src + "' alt='Open Treasure Chest'/>Empty Treasure Chest");
+                        dungeon_infoDescription.html("<p>Somebody has already claimed this treasure! It was you, wasn't it?</p>");
+                    }
+                }
+                else {
+                    dungeon_infoTitle.html("<img src='" + dungeon_puzzlePieceImage.src + "' alt='Puzzle Piece'/>Puzzle Piece");
+                    dungeon_infoDescription.html("<p>Collect all the puzle pieces in the same dungeon instance for a reward!</p><p>Each puzzle piece will drop an item when collected. What could this one be holding?</p>");
                 }
             }
             else {

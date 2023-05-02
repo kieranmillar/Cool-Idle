@@ -7,7 +7,8 @@ const dungeon_terrainEnum = {
     GATEBLUE: 5,
     GATERED: 6,
     CHESTCLOSED: 7,
-    CHESTOPEN: 8
+    CHESTOPEN: 8,
+    PUZZLEPIECE: 9
 };
 
 const DUNGEON_TOTALSTYLES = 1;
@@ -234,7 +235,8 @@ const dungeon_items = [
 const dungeon_treasureEnum = {
     ORIGAMISWORD: 0,
     BLUECOINS01: 1,
-    UNLOCKDUNGEONRIVER: 2
+    UNLOCKDUNGEONRIVER: 2,
+    PUZZLEBOOTCAMP: 3
 };
 
 /*Array of data structures for treasures
@@ -244,7 +246,7 @@ name: String containing displayed treasure name.
 image: The image of the treasure stored in ../images/
 description: The description of the treasure that is shown when you open the chest
 effect: optional - a lambda function with any extra effect that happens immediately upon gaining the treasure.
-puzzleDrop: A dungeon_itemEnum of the item dropped by collecting the puzzle piece replacing this treasure in Puzzle Mode
+puzzleDrop: optional - A dungeon_itemEnum of the item dropped by collecting the puzzle piece replacing this treasure in Puzzle Mode.
 -----*/
 const dungeon_treasures = [
     {
@@ -276,6 +278,15 @@ const dungeon_treasures = [
             dungeon_unlocks();
         },
         puzzleDrop: dungeon_itemEnum.ATKSMALL
+    },
+    {
+        idNumber: dungeon_treasureEnum.PUZZLEBOOTCAMP,
+        name: "100 Blue Coins",
+        image: "coin_blue.png",
+        description: "You received 100 blue coins for completing the Boot Camp puzzle!",
+        effect: function () {
+            gainBlueCoins(100);
+        }
     }
 ];
 
@@ -412,6 +423,7 @@ puzzleDef: the base defense value for the player in Puzzle Mode
 puzzleWeapon: the starting weapon for the player in Puzzle Mode
 puzzleShield: the starting shield for the player in Puzzle Mode
 puzzleAccessory: the starting accessory for the player in Puzzle Mode
+puzzleReward: the treasure you receive for completing Puzzle Mode
 -----*/
 const dungeon_dungeons = [
     {
@@ -459,6 +471,7 @@ const dungeon_dungeons = [
         puzzleDef: 0,
         puzzleWeapon: dungeon_equipmentEnum.NONE,
         puzzleShield: dungeon_equipmentEnum.PAPERBAG,
-        puzzleAccessory: dungeon_equipmentEnum.NONE
+        puzzleAccessory: dungeon_equipmentEnum.NONE,
+        puzzleReward: dungeon_treasureEnum.PUZZLEBOOTCAMP
     }
 ];
